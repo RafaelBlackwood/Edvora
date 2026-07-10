@@ -1,0 +1,226 @@
+.app-shell button:not(:disabled) {
+  cursor: pointer;
+}
+
+.app-sidebar,
+.app-topbar,
+.app-bottom-nav {
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+.app-nav-item {
+  min-height: 42px;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  box-shadow: inset 0 1px 0 transparent;
+  isolation: isolate;
+  transition:
+    background 170ms ease,
+    border-color 170ms ease,
+    box-shadow 170ms ease,
+    color 170ms ease,
+    transform 170ms ease;
+}
+
+.app-nav-item::after {
+  position: absolute;
+  inset: 5px auto 5px 0;
+  width: 2px;
+  border-radius: 0 2px 2px 0;
+  background: #8d7cff;
+  box-shadow: 0 0 14px rgba(141, 124, 255, 0.8);
+  content: "";
+  opacity: 0;
+  transform: scaleY(0.45);
+  transition: opacity 170ms ease, transform 170ms ease;
+}
+
+.app-nav-item.is-active {
+  border-color: rgba(139, 125, 255, 0.2);
+  background: rgba(111, 94, 216, 0.2);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 9px 26px rgba(4, 7, 20, 0.2);
+}
+
+.app-nav-item.is-active::after {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+.app-nav-item:focus-visible,
+.app-icon-button:focus-visible,
+.app-avatar-button:focus-visible,
+.app-bottom-item:focus-visible,
+.app-primary-action:focus-visible,
+.glass-interactive:focus-visible {
+  outline: 2px solid #a79cff;
+  outline-offset: 2px;
+}
+
+.app-icon-button,
+.app-avatar-button,
+.app-bottom-item {
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  box-shadow: inset 0 1px 0 transparent;
+  transition:
+    background 170ms ease,
+    border-color 170ms ease,
+    box-shadow 170ms ease,
+    color 170ms ease,
+    transform 170ms ease;
+}
+
+.app-icon-button {
+  min-width: 34px;
+  min-height: 34px;
+}
+
+.app-avatar-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  padding: 2px;
+}
+
+.app-avatar-button img {
+  box-shadow: 0 0 0 1px rgba(139, 125, 255, 0.3);
+}
+
+.app-primary-action {
+  min-height: 38px;
+  border: 1px solid rgba(144, 132, 255, 0.42);
+  border-radius: 8px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 5px 18px rgba(89, 72, 206, 0.18);
+  transition: border-color 170ms ease, box-shadow 170ms ease, filter 170ms ease, transform 170ms ease;
+}
+
+.app-profile-card {
+  border: 1px solid rgba(124, 106, 247, 0.12);
+  border-radius: 8px;
+  transition: background 170ms ease, border-color 170ms ease, box-shadow 170ms ease;
+}
+
+.app-bottom-item {
+  min-width: 50px;
+  min-height: 48px;
+}
+
+.app-bottom-item.is-active {
+  border-color: rgba(139, 125, 255, 0.2);
+  background: rgba(111, 94, 216, 0.18);
+  color: #c6c0ff !important;
+}
+
+.glass-interactive {
+  border: 1px solid rgba(142, 151, 190, 0.18);
+  background: rgba(20, 29, 51, 0.58);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  transition:
+    background 170ms ease,
+    border-color 170ms ease,
+    box-shadow 170ms ease,
+    color 170ms ease,
+    transform 170ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .app-nav-item:hover {
+    border-color: rgba(155, 145, 255, 0.32);
+    background: rgba(111, 94, 216, 0.15);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.09),
+      0 10px 26px rgba(4, 7, 20, 0.3);
+    color: #d9dcf2 !important;
+    transform: translateX(3px);
+  }
+
+  .app-nav-item:hover svg,
+  .app-nav-item:hover span {
+    color: #d7d5ff !important;
+  }
+
+  .app-nav-item:hover::after {
+    opacity: 0.8;
+    transform: scaleY(0.75);
+  }
+
+  .app-nav-item.is-active:hover::after {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+
+  .app-icon-button:hover,
+  .app-avatar-button:hover,
+  .app-bottom-item:hover {
+    border-color: rgba(155, 145, 255, 0.28);
+    background: rgba(112, 99, 190, 0.16);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 8px 22px rgba(3, 6, 18, 0.26);
+    color: #e1e3f3 !important;
+    transform: translateY(-1px);
+  }
+
+  .app-icon-button:hover svg,
+  .app-bottom-item:hover svg,
+  .app-bottom-item:hover span {
+    color: #d7d5ff !important;
+  }
+
+  .app-primary-action:hover {
+    border-color: rgba(185, 177, 255, 0.7);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.25),
+      0 10px 28px rgba(93, 75, 220, 0.34);
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+  }
+
+  .app-profile-card:hover {
+    border-color: rgba(155, 145, 255, 0.24);
+    background: rgba(112, 99, 190, 0.14) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .glass-interactive:hover {
+    border-color: rgba(158, 149, 255, 0.36);
+    background: rgba(92, 79, 166, 0.18);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 12px 30px rgba(3, 6, 18, 0.28);
+    color: #f0f1f8;
+    transform: translateY(-1px);
+  }
+}
+
+@media (max-width: 640px) {
+  .app-bottom-item {
+    min-width: 44px;
+    padding-right: 8px !important;
+    padding-left: 8px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-nav-item,
+  .app-icon-button,
+  .app-avatar-button,
+  .app-bottom-item,
+  .app-primary-action,
+  .app-profile-card,
+  .glass-interactive {
+    transition-duration: 0.01ms !important;
+  }
+}

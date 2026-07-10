@@ -1,0 +1,9 @@
+@import './fonts.css';
+@import './tailwind.css';
+@import './theme.css';
+@import './auth.css';
+@import './dashboard.css';
+@import './interaction.css';
+@import './wishlist.css';
+
+@import './search.css';
