@@ -7,11 +7,16 @@ import {
   universities,
   userProfile,
 } from "../data/mockData";
-import { sanitizeUserText } from "../lib/security";
+import { getSafeExternalUrl, sanitizeUserText } from "../lib/security";
 import { readSessionJson, writeSessionJson } from "../lib/storage";
+import {
+  applicationStatuses,
+  type ApplicationRecord,
+  type ApplicationStatus,
+  type ApplicationUpdate,
+} from "../types/application";
 
 type UniversityId = string;
-type Application = (typeof initialApplications)[number];
 type DocumentItem = (typeof initialDocuments)[number];
 type ChatMessage = (typeof initialChatMessages)[number];
 type UserProfile = typeof userProfile;
@@ -28,7 +33,7 @@ type NewDocumentInput = {
 };
 
 type AppDataState = {
-  applications: Application[];
+  applications: ApplicationRecord[];
   chatMessages: ChatMessage[];
   compareUniversityIds: UniversityId[];
   documents: DocumentItem[];
@@ -45,7 +50,9 @@ type AppDataContextValue = AppDataState & {
   applyToScholarship: (id: string) => void;
   clearChatMessages: () => void;
   clearCompareUniversities: () => void;
-  createApplication: (input: NewApplicationInput) => { ok: boolean; message?: string };
+  createApplication: (input: NewApplicationInput) => { ok: boolean; id?: string; message?: string };
+  deleteApplication: (id: string) => void;
+  duplicateApplication: (id: string) => { ok: boolean; id?: string; message?: string };
   isScholarshipApplied: (id: string) => boolean;
   isScholarshipSaved: (id: string) => boolean;
   isUniversitySaved: (id: UniversityId) => boolean;
@@ -55,6 +62,7 @@ type AppDataContextValue = AppDataState & {
   toggleScholarshipSave: (id: string) => void;
   toggleUniversityCompare: (id: UniversityId) => void;
   toggleUniversitySave: (id: UniversityId) => void;
+  updateApplication: (id: string, updates: ApplicationUpdate) => { ok: boolean; message?: string };
   updateUserProfile: (updates: Partial<UserProfile>) => void;
   wishlistUniversities: typeof universities;
 };
@@ -69,8 +77,83 @@ const ALLOWED_DOCUMENT_TYPES = new Set([
 ]);
 const MAX_DOCUMENT_SIZE = 50 * 1024 * 1024;
 
+const emptyApplicant = {
+  address: "",
+  dateOfBirth: "",
+  email: userProfile.email,
+  firstName: userProfile.name.split(" ")[0] ?? "",
+  lastName: userProfile.name.split(" ").slice(1).join(" "),
+  nationality: userProfile.nationality,
+  phone: "",
+};
+
+const emptyEducation = {
+  degree: userProfile.currentLevel,
+  fieldOfStudy: userProfile.fieldOfStudy,
+  gpa: String(userProfile.gpa),
+  gpaScale: "4.0",
+  graduationYear: "",
+  institution: "",
+};
+
+function defaultApplicationTasks(deadline: string) {
+  return [
+    { completed: true, dueDate: null, id: crypto.randomUUID(), title: "Confirm program and intake" },
+    { completed: false, dueDate: deadline || null, id: crypto.randomUUID(), title: "Complete application form" },
+    { completed: false, dueDate: deadline || null, id: crypto.randomUUID(), title: "Attach required documents" },
+    { completed: false, dueDate: deadline || null, id: crypto.randomUUID(), title: "Review and submit" },
+  ];
+}
+
+function calculateApplicationProgress(application: ApplicationRecord) {
+  const applicantValues = Object.values(application.applicant);
+  const educationValues = Object.values(application.education);
+  const completedTasks = application.tasks.filter((task) => task.completed).length;
+
+  return Math.min(
+    100,
+    Math.round(
+      10 +
+        (applicantValues.filter(Boolean).length / applicantValues.length) * 25 +
+        (educationValues.filter(Boolean).length / educationValues.length) * 20 +
+        Math.min(application.documents.length / 6, 1) * 20 +
+        (application.tasks.length ? completedTasks / application.tasks.length : 0) * 20 +
+        (application.status === "Draft" ? 0 : 5),
+    ),
+  );
+}
+
+function normalizeApplication(record: Partial<ApplicationRecord> & Record<string, unknown>): ApplicationRecord {
+  const status = applicationStatuses.includes(record.status as ApplicationStatus)
+    ? (record.status as ApplicationStatus)
+    : "Draft";
+  const deadline = typeof record.deadline === "string" ? record.deadline : "";
+
+  return {
+    applicant: { ...emptyApplicant, ...(record.applicant ?? {}) },
+    applicationReference: typeof record.applicationReference === "string" ? record.applicationReference : null,
+    deadline,
+    documents: Array.isArray(record.documents)
+      ? record.documents.filter((item): item is string => typeof item === "string")
+      : [],
+    education: { ...emptyEducation, ...(record.education ?? {}) },
+    id: typeof record.id === "string" ? record.id : `a_${crypto.randomUUID()}`,
+    intake: typeof record.intake === "string" ? record.intake : "Fall 2026",
+    lastUpdated: typeof record.lastUpdated === "string" ? record.lastUpdated : new Date().toISOString(),
+    notes: typeof record.notes === "string" ? record.notes : "",
+    portalUrl: typeof record.portalUrl === "string" ? record.portalUrl : "",
+    program: typeof record.program === "string" ? record.program : "",
+    progress: typeof record.progress === "number" ? record.progress : 0,
+    status,
+    submittedDate: typeof record.submittedDate === "string" ? record.submittedDate : null,
+    tasks: Array.isArray(record.tasks) && record.tasks.length ? record.tasks : defaultApplicationTasks(deadline),
+    university: typeof record.university === "string" ? record.university : "University",
+    universityId: typeof record.universityId === "string" ? record.universityId : "",
+  };
+}
+
 const defaultState: AppDataState = {
-  applications: initialApplications,
+  applications: initialApplications.map((application) => normalizeApplication(application as unknown as Partial<ApplicationRecord> & Record<string, unknown>)),
   chatMessages: initialChatMessages,
   compareUniversityIds: ["2", "8"],
   documents: initialDocuments,
@@ -96,7 +179,7 @@ function getInitialState() {
   return {
     ...defaultState,
     ...stored,
-    applications: stored.applications ?? defaultState.applications,
+    applications: (stored.applications ?? defaultState.applications).map((application) => normalizeApplication(application)),
     chatMessages: stored.chatMessages ?? defaultState.chatMessages,
     compareUniversityIds,
     documents: stored.documents ?? defaultState.documents,
@@ -279,27 +362,159 @@ export function AppDataProvider({ children }: { children: React.ReactNode }) {
       return { ok: false, message: "Select a program and intake." };
     }
 
-    const newApplication: Application = {
-      id: `a_${crypto.randomUUID()}`,
+    const today = new Date().toISOString();
+    const tasks = defaultApplicationTasks(university.deadline).map((task, index) => ({
+      ...task,
+      completed: index < 3,
+    }));
+    const newApplication = normalizeApplication({
+      applicant: emptyApplicant,
+      applicationReference: null,
       deadline: university.deadline,
       documents: ["Transcript", "CV", "Motivation Letter", "IELTS Certificate"],
-      notes: `Submitted through Edvora for ${cleanIntake}.`,
+      education: emptyEducation,
+      id: `a_${crypto.randomUUID()}`,
+      intake: cleanIntake,
+      lastUpdated: today,
+      notes: `Created through Edvora for ${cleanIntake}.`,
+      portalUrl: university.website,
       program: cleanProgram,
-      progress: 75,
-      status: "Submitted",
-      submittedDate: new Date().toISOString().slice(0, 10),
+      progress: 0,
+      status: "Draft",
+      submittedDate: null,
+      tasks,
       university: university.name,
       universityId: university.id,
-    };
+    });
+    newApplication.progress = calculateApplicationProgress(newApplication);
 
     commitState((current) => ({
       ...current,
       applications: [newApplication, ...current.applications],
     }));
 
+    return { ok: true, id: newApplication.id };
+  };
+
+  const updateApplication = (id: string, updates: ApplicationUpdate) => {
+    const existing = state.applications.find((application) => application.id === id);
+
+    if (!existing) {
+      return { ok: false, message: "The application could not be found." };
+    }
+
+    const requestedPortal = updates.portalUrl === undefined
+      ? existing.portalUrl
+      : sanitizeUserText(updates.portalUrl, 500);
+    const safePortal = requestedPortal ? getSafeExternalUrl(requestedPortal) : "";
+
+    if (requestedPortal && !safePortal) {
+      return { ok: false, message: "Portal links must use a valid HTTPS address." };
+    }
+
+    const nextStatus =
+      updates.status && applicationStatuses.includes(updates.status)
+        ? updates.status
+        : existing.status;
+    const nextApplication: ApplicationRecord = {
+      ...existing,
+      ...updates,
+      applicant: {
+        ...existing.applicant,
+        ...Object.fromEntries(
+          Object.entries(updates.applicant ?? {}).map(([key, value]) => [
+            key,
+            sanitizeUserText(String(value ?? ""), key === "address" ? 240 : 120),
+          ]),
+        ),
+      },
+      applicationReference:
+        updates.applicationReference === undefined
+          ? existing.applicationReference
+          : sanitizeUserText(updates.applicationReference ?? "", 100) || null,
+      deadline: updates.deadline === undefined ? existing.deadline : sanitizeUserText(updates.deadline, 20),
+      documents:
+        updates.documents === undefined
+          ? existing.documents
+          : updates.documents.map((document) => sanitizeUserText(document, 120)).filter(Boolean),
+      education: {
+        ...existing.education,
+        ...Object.fromEntries(
+          Object.entries(updates.education ?? {}).map(([key, value]) => [
+            key,
+            sanitizeUserText(String(value ?? ""), 140),
+          ]),
+        ),
+      },
+      intake: updates.intake === undefined ? existing.intake : sanitizeUserText(updates.intake, 60),
+      lastUpdated: new Date().toISOString(),
+      notes: updates.notes === undefined ? existing.notes : sanitizeUserText(updates.notes, 2000),
+      portalUrl: safePortal || "",
+      program: updates.program === undefined ? existing.program : sanitizeUserText(updates.program, 160),
+      status: nextStatus,
+      submittedDate:
+        nextStatus === "Draft"
+          ? null
+          : updates.submittedDate ?? existing.submittedDate ?? new Date().toISOString().slice(0, 10),
+      tasks:
+        updates.tasks === undefined
+          ? existing.tasks
+          : updates.tasks.map((task) => ({
+              completed: Boolean(task.completed),
+              dueDate: task.dueDate ? sanitizeUserText(task.dueDate, 20) : null,
+              id: sanitizeUserText(task.id, 100) || crypto.randomUUID(),
+              title: sanitizeUserText(task.title, 160),
+            })).filter((task) => task.title),
+    };
+    nextApplication.progress = calculateApplicationProgress(nextApplication);
+
+    commitState((current) => ({
+      ...current,
+      applications: current.applications.map((application) =>
+        application.id === id ? nextApplication : application,
+      ),
+    }));
+
     return { ok: true };
   };
 
+  const deleteApplication = (id: string) => {
+    commitState((current) => ({
+      ...current,
+      applications: current.applications.filter((application) => application.id !== id),
+    }));
+  };
+
+  const duplicateApplication = (id: string) => {
+    const existing = state.applications.find((application) => application.id === id);
+
+    if (!existing) {
+      return { ok: false, message: "The application could not be found." };
+    }
+
+    const copy = normalizeApplication({
+      ...existing,
+      applicationReference: null,
+      id: `a_${crypto.randomUUID()}`,
+      lastUpdated: new Date().toISOString(),
+      notes: existing.notes ? `Copy of application. ${existing.notes}` : "Copy of application.",
+      status: "Draft",
+      submittedDate: null,
+      tasks: existing.tasks.map((task) => ({
+        ...task,
+        completed: false,
+        id: crypto.randomUUID(),
+      })),
+    });
+    copy.progress = calculateApplicationProgress(copy);
+
+    commitState((current) => ({
+      ...current,
+      applications: [copy, ...current.applications],
+    }));
+
+    return { ok: true, id: copy.id };
+  };
   const addDocument = ({ category, file }: NewDocumentInput) => {
     if (!ALLOWED_DOCUMENT_TYPES.has(file.type)) {
       return { ok: false, message: "Use PDF, Word, JPG, or PNG documents only." };
@@ -387,6 +602,8 @@ export function AppDataProvider({ children }: { children: React.ReactNode }) {
       clearChatMessages,
       clearCompareUniversities,
       createApplication,
+      deleteApplication,
+      duplicateApplication,
       isScholarshipApplied: (id: string) => state.scholarshipApplicationIds.includes(id),
       isScholarshipSaved: (id: string) => state.savedScholarshipIds.includes(id),
       isUniversitySaved: (id: UniversityId) => state.savedUniversityIds.includes(id),
@@ -396,6 +613,7 @@ export function AppDataProvider({ children }: { children: React.ReactNode }) {
       toggleScholarshipSave,
       toggleUniversityCompare,
       toggleUniversitySave,
+      updateApplication,
       updateUserProfile,
       wishlistUniversities: universities.filter((university) => state.savedUniversityIds.includes(university.id)),
     }),

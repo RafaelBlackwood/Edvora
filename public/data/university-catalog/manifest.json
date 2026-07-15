@@ -1,0 +1,1353 @@
+{
+  "catalogScope": "Active ROR organizations classified as education",
+  "countries": [
+    {
+      "country": "Andorra",
+      "countryCode": "AD",
+      "count": 2,
+      "file": "AD.json"
+    },
+    {
+      "country": "United Arab Emirates",
+      "countryCode": "AE",
+      "count": 69,
+      "file": "AE.json"
+    },
+    {
+      "country": "Afghanistan",
+      "countryCode": "AF",
+      "count": 51,
+      "file": "AF.json"
+    },
+    {
+      "country": "Antigua and Barbuda",
+      "countryCode": "AG",
+      "count": 3,
+      "file": "AG.json"
+    },
+    {
+      "country": "Albania",
+      "countryCode": "AL",
+      "count": 33,
+      "file": "AL.json"
+    },
+    {
+      "country": "Armenia",
+      "countryCode": "AM",
+      "count": 20,
+      "file": "AM.json"
+    },
+    {
+      "country": "Angola",
+      "countryCode": "AO",
+      "count": 29,
+      "file": "AO.json"
+    },
+    {
+      "country": "Argentina",
+      "countryCode": "AR",
+      "count": 163,
+      "file": "AR.json"
+    },
+    {
+      "country": "American Samoa",
+      "countryCode": "AS",
+      "count": 2,
+      "file": "AS.json"
+    },
+    {
+      "country": "Austria",
+      "countryCode": "AT",
+      "count": 102,
+      "file": "AT.json"
+    },
+    {
+      "country": "Australia",
+      "countryCode": "AU",
+      "count": 136,
+      "file": "AU.json"
+    },
+    {
+      "country": "Aruba",
+      "countryCode": "AW",
+      "count": 1,
+      "file": "AW.json"
+    },
+    {
+      "country": "Åland",
+      "countryCode": "AX",
+      "count": 1,
+      "file": "AX.json"
+    },
+    {
+      "country": "Azerbaijan",
+      "countryCode": "AZ",
+      "count": 48,
+      "file": "AZ.json"
+    },
+    {
+      "country": "Bosnia and Herzegovina",
+      "countryCode": "BA",
+      "count": 25,
+      "file": "BA.json"
+    },
+    {
+      "country": "Barbados",
+      "countryCode": "BB",
+      "count": 6,
+      "file": "BB.json"
+    },
+    {
+      "country": "Bangladesh",
+      "countryCode": "BD",
+      "count": 199,
+      "file": "BD.json"
+    },
+    {
+      "country": "Belgium",
+      "countryCode": "BE",
+      "count": 86,
+      "file": "BE.json"
+    },
+    {
+      "country": "Burkina Faso",
+      "countryCode": "BF",
+      "count": 19,
+      "file": "BF.json"
+    },
+    {
+      "country": "Bulgaria",
+      "countryCode": "BG",
+      "count": 58,
+      "file": "BG.json"
+    },
+    {
+      "country": "Bahrain",
+      "countryCode": "BH",
+      "count": 13,
+      "file": "BH.json"
+    },
+    {
+      "country": "Burundi",
+      "countryCode": "BI",
+      "count": 15,
+      "file": "BI.json"
+    },
+    {
+      "country": "Benin",
+      "countryCode": "BJ",
+      "count": 22,
+      "file": "BJ.json"
+    },
+    {
+      "country": "Bermuda",
+      "countryCode": "BM",
+      "count": 1,
+      "file": "BM.json"
+    },
+    {
+      "country": "Brunei",
+      "countryCode": "BN",
+      "count": 4,
+      "file": "BN.json"
+    },
+    {
+      "country": "Bolivia",
+      "countryCode": "BO",
+      "count": 53,
+      "file": "BO.json"
+    },
+    {
+      "country": "Bonaire, Sint Eustatius, and Saba",
+      "countryCode": "BQ",
+      "count": 2,
+      "file": "BQ.json"
+    },
+    {
+      "country": "Brazil",
+      "countryCode": "BR",
+      "count": 558,
+      "file": "BR.json"
+    },
+    {
+      "country": "Bahamas",
+      "countryCode": "BS",
+      "count": 3,
+      "file": "BS.json"
+    },
+    {
+      "country": "Bhutan",
+      "countryCode": "BT",
+      "count": 5,
+      "file": "BT.json"
+    },
+    {
+      "country": "Botswana",
+      "countryCode": "BW",
+      "count": 12,
+      "file": "BW.json"
+    },
+    {
+      "country": "Belarus",
+      "countryCode": "BY",
+      "count": 54,
+      "file": "BY.json"
+    },
+    {
+      "country": "Belize",
+      "countryCode": "BZ",
+      "count": 3,
+      "file": "BZ.json"
+    },
+    {
+      "country": "Canada",
+      "countryCode": "CA",
+      "count": 396,
+      "file": "CA.json"
+    },
+    {
+      "country": "DR Congo",
+      "countryCode": "CD",
+      "count": 67,
+      "file": "CD.json"
+    },
+    {
+      "country": "Central African Republic",
+      "countryCode": "CF",
+      "count": 3,
+      "file": "CF.json"
+    },
+    {
+      "country": "Congo Republic",
+      "countryCode": "CG",
+      "count": 4,
+      "file": "CG.json"
+    },
+    {
+      "country": "Switzerland",
+      "countryCode": "CH",
+      "count": 161,
+      "file": "CH.json"
+    },
+    {
+      "country": "Ivory Coast",
+      "countryCode": "CI",
+      "count": 17,
+      "file": "CI.json"
+    },
+    {
+      "country": "Chile",
+      "countryCode": "CL",
+      "count": 98,
+      "file": "CL.json"
+    },
+    {
+      "country": "Cameroon",
+      "countryCode": "CM",
+      "count": 52,
+      "file": "CM.json"
+    },
+    {
+      "country": "China",
+      "countryCode": "CN",
+      "count": 1217,
+      "file": "CN.json"
+    },
+    {
+      "country": "Colombia",
+      "countryCode": "CO",
+      "count": 223,
+      "file": "CO.json"
+    },
+    {
+      "country": "Costa Rica",
+      "countryCode": "CR",
+      "count": 56,
+      "file": "CR.json"
+    },
+    {
+      "country": "Cuba",
+      "countryCode": "CU",
+      "count": 38,
+      "file": "CU.json"
+    },
+    {
+      "country": "Cabo Verde",
+      "countryCode": "CV",
+      "count": 5,
+      "file": "CV.json"
+    },
+    {
+      "country": "Curaçao",
+      "countryCode": "CW",
+      "count": 4,
+      "file": "CW.json"
+    },
+    {
+      "country": "Cyprus",
+      "countryCode": "CY",
+      "count": 45,
+      "file": "CY.json"
+    },
+    {
+      "country": "Czechia",
+      "countryCode": "CZ",
+      "count": 108,
+      "file": "CZ.json"
+    },
+    {
+      "country": "Germany",
+      "countryCode": "DE",
+      "count": 614,
+      "file": "DE.json"
+    },
+    {
+      "country": "Djibouti",
+      "countryCode": "DJ",
+      "count": 1,
+      "file": "DJ.json"
+    },
+    {
+      "country": "Denmark",
+      "countryCode": "DK",
+      "count": 56,
+      "file": "DK.json"
+    },
+    {
+      "country": "Dominica",
+      "countryCode": "DM",
+      "count": 5,
+      "file": "DM.json"
+    },
+    {
+      "country": "Dominican Republic",
+      "countryCode": "DO",
+      "count": 37,
+      "file": "DO.json"
+    },
+    {
+      "country": "Algeria",
+      "countryCode": "DZ",
+      "count": 123,
+      "file": "DZ.json"
+    },
+    {
+      "country": "Ecuador",
+      "countryCode": "EC",
+      "count": 98,
+      "file": "EC.json"
+    },
+    {
+      "country": "Estonia",
+      "countryCode": "EE",
+      "count": 27,
+      "file": "EE.json"
+    },
+    {
+      "country": "Egypt",
+      "countryCode": "EG",
+      "count": 125,
+      "file": "EG.json"
+    },
+    {
+      "country": "Western Sahara",
+      "countryCode": "EH",
+      "count": 1,
+      "file": "EH.json"
+    },
+    {
+      "country": "Eritrea",
+      "countryCode": "ER",
+      "count": 1,
+      "file": "ER.json"
+    },
+    {
+      "country": "Spain",
+      "countryCode": "ES",
+      "count": 213,
+      "file": "ES.json"
+    },
+    {
+      "country": "Ethiopia",
+      "countryCode": "ET",
+      "count": 68,
+      "file": "ET.json"
+    },
+    {
+      "country": "Finland",
+      "countryCode": "FI",
+      "count": 50,
+      "file": "FI.json"
+    },
+    {
+      "country": "Fiji",
+      "countryCode": "FJ",
+      "count": 4,
+      "file": "FJ.json"
+    },
+    {
+      "country": "Micronesia",
+      "countryCode": "FM",
+      "count": 1,
+      "file": "FM.json"
+    },
+    {
+      "country": "Faroe Islands",
+      "countryCode": "FO",
+      "count": 1,
+      "file": "FO.json"
+    },
+    {
+      "country": "France",
+      "countryCode": "FR",
+      "count": 499,
+      "file": "FR.json"
+    },
+    {
+      "country": "Gabon",
+      "countryCode": "GA",
+      "count": 4,
+      "file": "GA.json"
+    },
+    {
+      "country": "United Kingdom",
+      "countryCode": "GB",
+      "count": 586,
+      "file": "GB.json"
+    },
+    {
+      "country": "Grenada",
+      "countryCode": "GD",
+      "count": 1,
+      "file": "GD.json"
+    },
+    {
+      "country": "Georgia",
+      "countryCode": "GE",
+      "count": 65,
+      "file": "GE.json"
+    },
+    {
+      "country": "French Guiana",
+      "countryCode": "GF",
+      "count": 1,
+      "file": "GF.json"
+    },
+    {
+      "country": "Ghana",
+      "countryCode": "GH",
+      "count": 123,
+      "file": "GH.json"
+    },
+    {
+      "country": "Gibraltar",
+      "countryCode": "GI",
+      "count": 1,
+      "file": "GI.json"
+    },
+    {
+      "country": "Greenland",
+      "countryCode": "GL",
+      "count": 2,
+      "file": "GL.json"
+    },
+    {
+      "country": "The Gambia",
+      "countryCode": "GM",
+      "count": 7,
+      "file": "GM.json"
+    },
+    {
+      "country": "Guinea",
+      "countryCode": "GN",
+      "count": 10,
+      "file": "GN.json"
+    },
+    {
+      "country": "Guadeloupe",
+      "countryCode": "GP",
+      "count": 2,
+      "file": "GP.json"
+    },
+    {
+      "country": "Equatorial Guinea",
+      "countryCode": "GQ",
+      "count": 2,
+      "file": "GQ.json"
+    },
+    {
+      "country": "Greece",
+      "countryCode": "GR",
+      "count": 62,
+      "file": "GR.json"
+    },
+    {
+      "country": "Guatemala",
+      "countryCode": "GT",
+      "count": 14,
+      "file": "GT.json"
+    },
+    {
+      "country": "Guam",
+      "countryCode": "GU",
+      "count": 3,
+      "file": "GU.json"
+    },
+    {
+      "country": "Guinea-Bissau",
+      "countryCode": "GW",
+      "count": 2,
+      "file": "GW.json"
+    },
+    {
+      "country": "Guyana",
+      "countryCode": "GY",
+      "count": 4,
+      "file": "GY.json"
+    },
+    {
+      "country": "Hong Kong",
+      "countryCode": "HK",
+      "count": 27,
+      "file": "HK.json"
+    },
+    {
+      "country": "Honduras",
+      "countryCode": "HN",
+      "count": 13,
+      "file": "HN.json"
+    },
+    {
+      "country": "Croatia",
+      "countryCode": "HR",
+      "count": 62,
+      "file": "HR.json"
+    },
+    {
+      "country": "Haiti",
+      "countryCode": "HT",
+      "count": 16,
+      "file": "HT.json"
+    },
+    {
+      "country": "Hungary",
+      "countryCode": "HU",
+      "count": 73,
+      "file": "HU.json"
+    },
+    {
+      "country": "Indonesia",
+      "countryCode": "ID",
+      "count": 918,
+      "file": "ID.json"
+    },
+    {
+      "country": "Ireland",
+      "countryCode": "IE",
+      "count": 44,
+      "file": "IE.json"
+    },
+    {
+      "country": "Israel",
+      "countryCode": "IL",
+      "count": 65,
+      "file": "IL.json"
+    },
+    {
+      "country": "India",
+      "countryCode": "IN",
+      "count": 1854,
+      "file": "IN.json"
+    },
+    {
+      "country": "Iraq",
+      "countryCode": "IQ",
+      "count": 126,
+      "file": "IQ.json"
+    },
+    {
+      "country": "Iran",
+      "countryCode": "IR",
+      "count": 350,
+      "file": "IR.json"
+    },
+    {
+      "country": "Iceland",
+      "countryCode": "IS",
+      "count": 10,
+      "file": "IS.json"
+    },
+    {
+      "country": "Italy",
+      "countryCode": "IT",
+      "count": 256,
+      "file": "IT.json"
+    },
+    {
+      "country": "Jamaica",
+      "countryCode": "JM",
+      "count": 9,
+      "file": "JM.json"
+    },
+    {
+      "country": "Jordan",
+      "countryCode": "JO",
+      "count": 30,
+      "file": "JO.json"
+    },
+    {
+      "country": "Japan",
+      "countryCode": "JP",
+      "count": 1546,
+      "file": "JP.json"
+    },
+    {
+      "country": "Kenya",
+      "countryCode": "KE",
+      "count": 87,
+      "file": "KE.json"
+    },
+    {
+      "country": "Kyrgyzstan",
+      "countryCode": "KG",
+      "count": 38,
+      "file": "KG.json"
+    },
+    {
+      "country": "Cambodia",
+      "countryCode": "KH",
+      "count": 43,
+      "file": "KH.json"
+    },
+    {
+      "country": "Comoros",
+      "countryCode": "KM",
+      "count": 1,
+      "file": "KM.json"
+    },
+    {
+      "country": "St Kitts and Nevis",
+      "countryCode": "KN",
+      "count": 4,
+      "file": "KN.json"
+    },
+    {
+      "country": "North Korea",
+      "countryCode": "KP",
+      "count": 12,
+      "file": "KP.json"
+    },
+    {
+      "country": "South Korea",
+      "countryCode": "KR",
+      "count": 374,
+      "file": "KR.json"
+    },
+    {
+      "country": "Kuwait",
+      "countryCode": "KW",
+      "count": 16,
+      "file": "KW.json"
+    },
+    {
+      "country": "Cayman Islands",
+      "countryCode": "KY",
+      "count": 3,
+      "file": "KY.json"
+    },
+    {
+      "country": "Kazakhstan",
+      "countryCode": "KZ",
+      "count": 95,
+      "file": "KZ.json"
+    },
+    {
+      "country": "Laos",
+      "countryCode": "LA",
+      "count": 3,
+      "file": "LA.json"
+    },
+    {
+      "country": "Lebanon",
+      "countryCode": "LB",
+      "count": 38,
+      "file": "LB.json"
+    },
+    {
+      "country": "Saint Lucia",
+      "countryCode": "LC",
+      "count": 5,
+      "file": "LC.json"
+    },
+    {
+      "country": "Liechtenstein",
+      "countryCode": "LI",
+      "count": 3,
+      "file": "LI.json"
+    },
+    {
+      "country": "Sri Lanka",
+      "countryCode": "LK",
+      "count": 40,
+      "file": "LK.json"
+    },
+    {
+      "country": "Liberia",
+      "countryCode": "LR",
+      "count": 7,
+      "file": "LR.json"
+    },
+    {
+      "country": "Lesotho",
+      "countryCode": "LS",
+      "count": 1,
+      "file": "LS.json"
+    },
+    {
+      "country": "Lithuania",
+      "countryCode": "LT",
+      "count": 41,
+      "file": "LT.json"
+    },
+    {
+      "country": "Luxembourg",
+      "countryCode": "LU",
+      "count": 10,
+      "file": "LU.json"
+    },
+    {
+      "country": "Latvia",
+      "countryCode": "LV",
+      "count": 44,
+      "file": "LV.json"
+    },
+    {
+      "country": "Libya",
+      "countryCode": "LY",
+      "count": 45,
+      "file": "LY.json"
+    },
+    {
+      "country": "Morocco",
+      "countryCode": "MA",
+      "count": 105,
+      "file": "MA.json"
+    },
+    {
+      "country": "Monaco",
+      "countryCode": "MC",
+      "count": 1,
+      "file": "MC.json"
+    },
+    {
+      "country": "Moldova",
+      "countryCode": "MD",
+      "count": 22,
+      "file": "MD.json"
+    },
+    {
+      "country": "Montenegro",
+      "countryCode": "ME",
+      "count": 7,
+      "file": "ME.json"
+    },
+    {
+      "country": "Madagascar",
+      "countryCode": "MG",
+      "count": 15,
+      "file": "MG.json"
+    },
+    {
+      "country": "North Macedonia",
+      "countryCode": "MK",
+      "count": 21,
+      "file": "MK.json"
+    },
+    {
+      "country": "Mali",
+      "countryCode": "ML",
+      "count": 10,
+      "file": "ML.json"
+    },
+    {
+      "country": "Myanmar",
+      "countryCode": "MM",
+      "count": 75,
+      "file": "MM.json"
+    },
+    {
+      "country": "Mongolia",
+      "countryCode": "MN",
+      "count": 28,
+      "file": "MN.json"
+    },
+    {
+      "country": "Macao",
+      "countryCode": "MO",
+      "count": 8,
+      "file": "MO.json"
+    },
+    {
+      "country": "Northern Mariana Islands",
+      "countryCode": "MP",
+      "count": 3,
+      "file": "MP.json"
+    },
+    {
+      "country": "Martinique",
+      "countryCode": "MQ",
+      "count": 1,
+      "file": "MQ.json"
+    },
+    {
+      "country": "Mauritania",
+      "countryCode": "MR",
+      "count": 4,
+      "file": "MR.json"
+    },
+    {
+      "country": "Montserrat",
+      "countryCode": "MS",
+      "count": 1,
+      "file": "MS.json"
+    },
+    {
+      "country": "Malta",
+      "countryCode": "MT",
+      "count": 10,
+      "file": "MT.json"
+    },
+    {
+      "country": "Mauritius",
+      "countryCode": "MU",
+      "count": 6,
+      "file": "MU.json"
+    },
+    {
+      "country": "Maldives",
+      "countryCode": "MV",
+      "count": 5,
+      "file": "MV.json"
+    },
+    {
+      "country": "Malawi",
+      "countryCode": "MW",
+      "count": 14,
+      "file": "MW.json"
+    },
+    {
+      "country": "Mexico",
+      "countryCode": "MX",
+      "count": 670,
+      "file": "MX.json"
+    },
+    {
+      "country": "Malaysia",
+      "countryCode": "MY",
+      "count": 112,
+      "file": "MY.json"
+    },
+    {
+      "country": "Mozambique",
+      "countryCode": "MZ",
+      "count": 25,
+      "file": "MZ.json"
+    },
+    {
+      "country": "Namibia",
+      "countryCode": "NA",
+      "count": 5,
+      "file": "NA.json"
+    },
+    {
+      "country": "New Caledonia",
+      "countryCode": "NC",
+      "count": 2,
+      "file": "NC.json"
+    },
+    {
+      "country": "Niger",
+      "countryCode": "NE",
+      "count": 10,
+      "file": "NE.json"
+    },
+    {
+      "country": "Nigeria",
+      "countryCode": "NG",
+      "count": 309,
+      "file": "NG.json"
+    },
+    {
+      "country": "Nicaragua",
+      "countryCode": "NI",
+      "count": 43,
+      "file": "NI.json"
+    },
+    {
+      "country": "The Netherlands",
+      "countryCode": "NL",
+      "count": 131,
+      "file": "NL.json"
+    },
+    {
+      "country": "Norway",
+      "countryCode": "NO",
+      "count": 70,
+      "file": "NO.json"
+    },
+    {
+      "country": "Nepal",
+      "countryCode": "NP",
+      "count": 65,
+      "file": "NP.json"
+    },
+    {
+      "country": "Niue",
+      "countryCode": "NU",
+      "count": 1,
+      "file": "NU.json"
+    },
+    {
+      "country": "New Zealand",
+      "countryCode": "NZ",
+      "count": 42,
+      "file": "NZ.json"
+    },
+    {
+      "country": "Oman",
+      "countryCode": "OM",
+      "count": 33,
+      "file": "OM.json"
+    },
+    {
+      "country": "Panama",
+      "countryCode": "PA",
+      "count": 34,
+      "file": "PA.json"
+    },
+    {
+      "country": "Peru",
+      "countryCode": "PE",
+      "count": 133,
+      "file": "PE.json"
+    },
+    {
+      "country": "French Polynesia",
+      "countryCode": "PF",
+      "count": 1,
+      "file": "PF.json"
+    },
+    {
+      "country": "Papua New Guinea",
+      "countryCode": "PG",
+      "count": 6,
+      "file": "PG.json"
+    },
+    {
+      "country": "Philippines",
+      "countryCode": "PH",
+      "count": 291,
+      "file": "PH.json"
+    },
+    {
+      "country": "Pakistan",
+      "countryCode": "PK",
+      "count": 258,
+      "file": "PK.json"
+    },
+    {
+      "country": "Poland",
+      "countryCode": "PL",
+      "count": 322,
+      "file": "PL.json"
+    },
+    {
+      "country": "Saint Pierre and Miquelon",
+      "countryCode": "PM",
+      "count": 1,
+      "file": "PM.json"
+    },
+    {
+      "country": "Puerto Rico",
+      "countryCode": "PR",
+      "count": 40,
+      "file": "PR.json"
+    },
+    {
+      "country": "Palestine",
+      "countryCode": "PS",
+      "count": 25,
+      "file": "PS.json"
+    },
+    {
+      "country": "Portugal",
+      "countryCode": "PT",
+      "count": 415,
+      "file": "PT.json"
+    },
+    {
+      "country": "Palau",
+      "countryCode": "PW",
+      "count": 1,
+      "file": "PW.json"
+    },
+    {
+      "country": "Paraguay",
+      "countryCode": "PY",
+      "count": 39,
+      "file": "PY.json"
+    },
+    {
+      "country": "Qatar",
+      "countryCode": "QA",
+      "count": 31,
+      "file": "QA.json"
+    },
+    {
+      "country": "Réunion",
+      "countryCode": "RE",
+      "count": 2,
+      "file": "RE.json"
+    },
+    {
+      "country": "Romania",
+      "countryCode": "RO",
+      "count": 107,
+      "file": "RO.json"
+    },
+    {
+      "country": "Serbia",
+      "countryCode": "RS",
+      "count": 46,
+      "file": "RS.json"
+    },
+    {
+      "country": "Russia",
+      "countryCode": "RU",
+      "count": 828,
+      "file": "RU.json"
+    },
+    {
+      "country": "Rwanda",
+      "countryCode": "RW",
+      "count": 21,
+      "file": "RW.json"
+    },
+    {
+      "country": "Saudi Arabia",
+      "countryCode": "SA",
+      "count": 66,
+      "file": "SA.json"
+    },
+    {
+      "country": "Solomon Islands",
+      "countryCode": "SB",
+      "count": 2,
+      "file": "SB.json"
+    },
+    {
+      "country": "Seychelles",
+      "countryCode": "SC",
+      "count": 1,
+      "file": "SC.json"
+    },
+    {
+      "country": "Sudan",
+      "countryCode": "SD",
+      "count": 56,
+      "file": "SD.json"
+    },
+    {
+      "country": "Sweden",
+      "countryCode": "SE",
+      "count": 67,
+      "file": "SE.json"
+    },
+    {
+      "country": "Singapore",
+      "countryCode": "SG",
+      "count": 46,
+      "file": "SG.json"
+    },
+    {
+      "country": "Slovenia",
+      "countryCode": "SI",
+      "count": 65,
+      "file": "SI.json"
+    },
+    {
+      "country": "Svalbard and Jan Mayen",
+      "countryCode": "SJ",
+      "count": 1,
+      "file": "SJ.json"
+    },
+    {
+      "country": "Slovakia",
+      "countryCode": "SK",
+      "count": 48,
+      "file": "SK.json"
+    },
+    {
+      "country": "Sierra Leone",
+      "countryCode": "SL",
+      "count": 6,
+      "file": "SL.json"
+    },
+    {
+      "country": "San Marino",
+      "countryCode": "SM",
+      "count": 1,
+      "file": "SM.json"
+    },
+    {
+      "country": "Senegal",
+      "countryCode": "SN",
+      "count": 27,
+      "file": "SN.json"
+    },
+    {
+      "country": "Somalia",
+      "countryCode": "SO",
+      "count": 42,
+      "file": "SO.json"
+    },
+    {
+      "country": "Suriname",
+      "countryCode": "SR",
+      "count": 2,
+      "file": "SR.json"
+    },
+    {
+      "country": "South Sudan",
+      "countryCode": "SS",
+      "count": 9,
+      "file": "SS.json"
+    },
+    {
+      "country": "São Tomé and Príncipe",
+      "countryCode": "ST",
+      "count": 1,
+      "file": "ST.json"
+    },
+    {
+      "country": "El Salvador",
+      "countryCode": "SV",
+      "count": 28,
+      "file": "SV.json"
+    },
+    {
+      "country": "Sint Maarten",
+      "countryCode": "SX",
+      "count": 2,
+      "file": "SX.json"
+    },
+    {
+      "country": "Syria",
+      "countryCode": "SY",
+      "count": 35,
+      "file": "SY.json"
+    },
+    {
+      "country": "Eswatini",
+      "countryCode": "SZ",
+      "count": 2,
+      "file": "SZ.json"
+    },
+    {
+      "country": "Turks and Caicos Islands",
+      "countryCode": "TC",
+      "count": 1,
+      "file": "TC.json"
+    },
+    {
+      "country": "Chad",
+      "countryCode": "TD",
+      "count": 8,
+      "file": "TD.json"
+    },
+    {
+      "country": "Togo",
+      "countryCode": "TG",
+      "count": 7,
+      "file": "TG.json"
+    },
+    {
+      "country": "Thailand",
+      "countryCode": "TH",
+      "count": 154,
+      "file": "TH.json"
+    },
+    {
+      "country": "Tajikistan",
+      "countryCode": "TJ",
+      "count": 22,
+      "file": "TJ.json"
+    },
+    {
+      "country": "Timor-Leste",
+      "countryCode": "TL",
+      "count": 5,
+      "file": "TL.json"
+    },
+    {
+      "country": "Turkmenistan",
+      "countryCode": "TM",
+      "count": 12,
+      "file": "TM.json"
+    },
+    {
+      "country": "Tunisia",
+      "countryCode": "TN",
+      "count": 67,
+      "file": "TN.json"
+    },
+    {
+      "country": "Tonga",
+      "countryCode": "TO",
+      "count": 1,
+      "file": "TO.json"
+    },
+    {
+      "country": "Türkiye",
+      "countryCode": "TR",
+      "count": 239,
+      "file": "TR.json"
+    },
+    {
+      "country": "Trinidad and Tobago",
+      "countryCode": "TT",
+      "count": 5,
+      "file": "TT.json"
+    },
+    {
+      "country": "Taiwan",
+      "countryCode": "TW",
+      "count": 151,
+      "file": "TW.json"
+    },
+    {
+      "country": "Tanzania",
+      "countryCode": "TZ",
+      "count": 61,
+      "file": "TZ.json"
+    },
+    {
+      "country": "Ukraine",
+      "countryCode": "UA",
+      "count": 298,
+      "file": "UA.json"
+    },
+    {
+      "country": "Uganda",
+      "countryCode": "UG",
+      "count": 58,
+      "file": "UG.json"
+    },
+    {
+      "country": "United States",
+      "countryCode": "US",
+      "count": 4407,
+      "file": "US.json"
+    },
+    {
+      "country": "Uruguay",
+      "countryCode": "UY",
+      "count": 17,
+      "file": "UY.json"
+    },
+    {
+      "country": "Uzbekistan",
+      "countryCode": "UZ",
+      "count": 118,
+      "file": "UZ.json"
+    },
+    {
+      "country": "St Vincent and Grenadines",
+      "countryCode": "VC",
+      "count": 2,
+      "file": "VC.json"
+    },
+    {
+      "country": "Venezuela",
+      "countryCode": "VE",
+      "count": 60,
+      "file": "VE.json"
+    },
+    {
+      "country": "British Virgin Islands",
+      "countryCode": "VG",
+      "count": 1,
+      "file": "VG.json"
+    },
+    {
+      "country": "U.S. Virgin Islands",
+      "countryCode": "VI",
+      "count": 1,
+      "file": "VI.json"
+    },
+    {
+      "country": "Vietnam",
+      "countryCode": "VN",
+      "count": 188,
+      "file": "VN.json"
+    },
+    {
+      "country": "Vanuatu",
+      "countryCode": "VU",
+      "count": 1,
+      "file": "VU.json"
+    },
+    {
+      "country": "Samoa",
+      "countryCode": "WS",
+      "count": 2,
+      "file": "WS.json"
+    },
+    {
+      "country": "Kosovo",
+      "countryCode": "XK",
+      "count": 10,
+      "file": "XK.json"
+    },
+    {
+      "country": "Yemen",
+      "countryCode": "YE",
+      "count": 54,
+      "file": "YE.json"
+    },
+    {
+      "country": "Mayotte",
+      "countryCode": "YT",
+      "count": 1,
+      "file": "YT.json"
+    },
+    {
+      "country": "South Africa",
+      "countryCode": "ZA",
+      "count": 69,
+      "file": "ZA.json"
+    },
+    {
+      "country": "Zambia",
+      "countryCode": "ZM",
+      "count": 28,
+      "file": "ZM.json"
+    },
+    {
+      "country": "Zimbabwe",
+      "countryCode": "ZW",
+      "count": 26,
+      "file": "ZW.json"
+    }
+  ],
+  "generatedAt": "2026-06-23T00:00:00Z",
+  "institutionCount": 24450,
+  "license": "CC0-1.0",
+  "source": {
+    "checksum": "md5:f42792cae72dd6c223c2b792ccf77169",
+    "conceptDoi": "10.5281/zenodo.6347574",
+    "publicationDate": "2026-06-23",
+    "provider": "Research Organization Registry (ROR)",
+    "versionDoi": "10.5281/zenodo.20818161"
+  }
+}

@@ -6,8 +6,9 @@ Edvora is a modern university admissions workspace for students planning interna
 
 - Personalized dashboard with application progress, deadlines, recommended universities, and next steps.
 - University search with detailed filters for country, program, program level, tuition, funding, tests, GPA scale, language scores, research focus, ranking, and university type.
+- Global ROR institution directory with 24,000+ active education organizations, official domains, source metadata, and automated updates.
 - Wishlist for saving, comparing, and organizing target universities.
-- Application tracker with statuses, deadlines, program details, and decision progress.
+- Full application workspace with editable applicant details, education history, statuses, checklists, linked documents, notes, and university portal access.
 - Document center for managing common admissions materials.
 - Scholarship, budget, destination, consultation, exam prep, and community pages.
 - Responsive interface designed for desktop and mobile use.
@@ -55,6 +56,14 @@ Run TypeScript checks:
 ```bash
 npm run typecheck
 ```
+
+Refresh the global ROR catalog:
+
+```bash
+npm run data:sync
+```
+
+The scheduled GitHub workflow performs this catalog refresh automatically. The ingestion architecture for program, tuition, requirement, deadline, and scholarship facts is documented in `docs/university-data-pipeline.md`.
 
 ## Project Structure
 

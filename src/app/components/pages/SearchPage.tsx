@@ -20,6 +20,7 @@ import {
 import campusImage from "../../../assets/edvora-campus.jpg";
 import { universities } from "../../data/mockData";
 import { useAppData } from "../../providers/AppDataProvider";
+import { GlobalUniversityCatalog } from "./GlobalUniversityCatalog";
 
 type University = (typeof universities)[number];
 type ViewMode = "grid" | "list";
@@ -684,9 +685,8 @@ export function SearchPage() {
             <span className="search-eyebrow">University discovery</span>
             <h1>Find the programs that fit your profile</h1>
             <p>
-              Search {universities.length} universities and{" "}
-              {universities.reduce((total, university) => total + university.programs.length, 0)}{" "}
-              programs with detailed academic, funding, and research filters.
+              Compare detailed admissions profiles with academic, funding, test, and research filters,
+              then explore the worldwide institution directory.
             </p>
           </div>
           <button
@@ -1317,6 +1317,7 @@ export function SearchPage() {
             )}
           </main>
         </div>
+        <GlobalUniversityCatalog />
       </div>
     </div>
   );

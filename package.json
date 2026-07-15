@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
+    "data:sync": "python scripts/sync_ror_catalog.py",
     "dev": "vite",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit"
