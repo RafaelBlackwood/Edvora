@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import {
   ArrowRight,
@@ -422,7 +422,6 @@ export function SearchPage() {
   const [sortMode, setSortMode] = useState<SortMode>("match");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [showFilters, setShowFilters] = useState(false);
-  const filterScrollRef = useRef<HTMLDivElement | null>(null);
 
   const compareUniversities = universities.filter((university) =>
     compareUniversityIds.includes(university.id),
@@ -453,21 +452,6 @@ export function SearchPage() {
     setQuery("");
   };
 
-  useEffect(() => {
-    const scrollElement = filterScrollRef.current;
-
-    if (!scrollElement) return;
-
-    const frame = window.requestAnimationFrame(() => {
-      const maxScrollTop = Math.max(0, scrollElement.scrollHeight - scrollElement.clientHeight);
-
-      if (scrollElement.scrollTop > maxScrollTop) {
-        scrollElement.scrollTop = maxScrollTop;
-      }
-    });
-
-    return () => window.cancelAnimationFrame(frame);
-  }, [filters, showFilters]);
 
   const filteredUniversities = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -846,7 +830,7 @@ export function SearchPage() {
               </button>
             </div>
 
-            <div className="search-filter-scroll" ref={filterScrollRef}>
+            <div className="search-filter-scroll">
               <FilterSection title="Destination">
                 <CheckboxList
                   options={countries}

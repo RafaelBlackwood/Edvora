@@ -1268,9 +1268,14 @@
     z-index: 80;
     top: 0;
     right: 0;
-    bottom: auto;
-    display: grid;
-    grid-template-rows: auto minmax(0, 1fr) auto;
+    bottom: 0;
+    display: block;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-color: #303b52 transparent;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
     width: min(90vw, 370px);
     height: 100dvh;
     min-height: 100dvh;
@@ -1285,6 +1290,9 @@
   }
 
   .search-filter-header {
+    position: sticky;
+    z-index: 2;
+    top: 0;
     grid-template-columns: minmax(0, 1fr) auto auto;
     padding-right: 10px;
   }
@@ -1307,13 +1315,16 @@
   }
 
   .search-filter-scroll {
-    min-height: 0;
+    min-height: auto;
     max-height: none;
-    padding-bottom: 16px;
+    overflow: visible;
+    padding-bottom: 0;
   }
 
   .search-filter-mobile-footer {
-    position: static;
+    position: sticky;
+    z-index: 2;
+    bottom: 0;
     display: grid;
     grid-template-columns: 0.75fr 1.25fr;
     gap: 7px;
