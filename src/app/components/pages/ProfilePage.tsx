@@ -1,175 +1,245 @@
 import { useState } from "react";
-import { User, Award, Edit3, Save } from "lucide-react";
-import { userProfile } from "../../data/mockData";
+import { Award, Check, Edit3, Save, X } from "lucide-react";
+import { useAppData } from "../../providers/AppDataProvider";
 
-const badges = [
-  { name: "Profile Started", icon: "⭐", desc: "Created your Edvora profile", earned: true },
-  { name: "First Search", icon: "🔍", desc: "Searched for universities", earned: true },
-  { name: "First Save", icon: "❤️", desc: "Saved a university", earned: true },
-  { name: "Documents Complete", icon: "📁", desc: "Upload all required docs", earned: false },
-  { name: "First Application", icon: "📋", desc: "Submit your first application", earned: false },
-  { name: "Deadline Master", icon: "⏰", desc: "Apply before all deadlines", earned: false },
-  { name: "Global Applicant", icon: "🌍", desc: "Apply to 5+ countries", earned: false },
-  { name: "Scholarship Hunter", icon: "💰", desc: "Apply for 3 scholarships", earned: false },
+const destinationOptions = [
+  "Germany",
+  "Canada",
+  "Netherlands",
+  "United Kingdom",
+  "United States",
+  "Sweden",
+  "Italy",
+  "Poland",
+  "Austria",
+  "Australia",
 ];
 
+const profileSections = [
+  {
+    title: "Academic profile",
+    fields: [
+      { label: "Current education", key: "currentLevel", type: "text" },
+      { label: "Field of study", key: "fieldOfStudy", type: "text" },
+      { label: "Target degree", key: "targetDegree", type: "text" },
+      { label: "GPA (4.0 scale)", key: "gpa", type: "number" },
+    ],
+  },
+  {
+    title: "Test scores",
+    fields: [
+      { label: "IELTS", key: "ielts", type: "number" },
+      { label: "TOEFL", key: "toefl", type: "number" },
+      { label: "GRE", key: "gre", type: "number" },
+      { label: "GMAT", key: "gmat", type: "number" },
+    ],
+  },
+  {
+    title: "Application preferences",
+    fields: [
+      { label: "Application goal", key: "applicationGoal", type: "text" },
+      { label: "Budget range", key: "budget", type: "text" },
+      { label: "Intake season", key: "intakeSeason", type: "text" },
+      { label: "Work experience", key: "workExperience", type: "text" },
+    ],
+  },
+] as const;
+
 export function ProfilePage() {
+  const {
+    applications,
+    documents,
+    savedScholarshipIds,
+    updateUserProfile,
+    userProfile,
+    wishlistUniversities,
+  } = useAppData();
   const [editing, setEditing] = useState(false);
-  const [profile, setProfile] = useState(userProfile);
+  const [draft, setDraft] = useState(userProfile);
+  const [notice, setNotice] = useState("");
+
+  const finalDocuments = documents.filter((document) => document.status === "Final").length;
+  const completedFields = [
+    draft.name,
+    draft.email,
+    draft.nationality,
+    draft.currentLevel,
+    draft.fieldOfStudy,
+    draft.targetDegree,
+    draft.gpa,
+    draft.ielts,
+    draft.budget,
+    draft.intakeSeason,
+    draft.applicationGoal,
+    draft.destinationCountries.length,
+  ].filter(Boolean).length;
+  const completion = Math.round((completedFields / 12) * 100);
+
+  const achievements = [
+    { name: "Profile started", description: "Created your Edvora profile", earned: true },
+    { name: "First search", description: "Explored university matches", earned: true },
+    { name: "First save", description: "Saved a university", earned: wishlistUniversities.length > 0 },
+    { name: "Documents ready", description: "Finalized six application documents", earned: finalDocuments >= 6 },
+    { name: "First application", description: "Submitted an application", earned: applications.some((application) => application.status !== "Draft") },
+    { name: "Global applicant", description: "Targeted at least three destinations", earned: draft.destinationCountries.length >= 3 },
+    { name: "Scholarship hunter", description: "Saved three scholarships", earned: savedScholarshipIds.length >= 3 },
+    { name: "Profile complete", description: "Reached 90% profile completion", earned: completion >= 90 },
+  ];
+
+  const startEditing = () => {
+    setDraft(userProfile);
+    setNotice("");
+    setEditing(true);
+  };
+
+  const cancelEditing = () => {
+    setDraft(userProfile);
+    setEditing(false);
+  };
+
+  const saveProfile = () => {
+    updateUserProfile({ ...draft, profileCompletion: completion });
+    setEditing(false);
+    setNotice("Profile changes saved. Matching and application tools now use the updated values.");
+  };
+
+  const updateField = (key: string, value: string, type: string) => {
+    const numericValue = value === "" ? null : Number(value);
+    setDraft((current) => ({
+      ...current,
+      [key]: type === "number" ? numericValue : value,
+    }));
+  };
+
+  const toggleDestination = (country: string) => {
+    setDraft((current) => ({
+      ...current,
+      destinationCountries: current.destinationCountries.includes(country)
+        ? current.destinationCountries.filter((item) => item !== country)
+        : [...current.destinationCountries, country],
+    }));
+  };
 
   return (
-    <div style={{ background: "#080d1a", minHeight: "100%" }}>
+    <main style={{ background: "#080d1a", minHeight: "100%" }}>
       <div className="px-4 lg:px-8 py-6 pb-24 lg:pb-8">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-display)" }}>My Profile</h1>
-          <button
-            onClick={() => setEditing(!editing)}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all hover:opacity-80"
-            style={{
-              background: editing ? "rgba(16,185,129,0.15)" : "rgba(124,106,247,0.15)",
-              border: `1px solid ${editing ? "rgba(16,185,129,0.3)" : "rgba(124,106,247,0.25)"}`,
-              color: editing ? "#10b981" : "#a89bf5",
-            }}
-          >
-            {editing ? <><Save size={14} /> Save</> : <><Edit3 size={14} /> Edit Profile</>}
-          </button>
-        </div>
+        <header className="flex items-start justify-between gap-4 mb-6">
+          <div>
+            <h1 className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-display)" }}>My profile</h1>
+            <p className="text-sm mt-1" style={{ color: "#6b7a9e" }}>Your academic profile powers matching, calculations, and applications.</p>
+          </div>
+          <div className="flex gap-2">
+            {editing && (
+              <button type="button" onClick={cancelEditing} className="glass-interactive flex items-center gap-2 px-3 py-2 rounded-md text-sm"><X size={14} /> Cancel</button>
+            )}
+            <button
+              type="button"
+              onClick={editing ? saveProfile : startEditing}
+              className="app-primary-action flex items-center gap-2 px-4 py-2 text-sm font-medium text-white"
+              style={{ background: editing ? "#238a68" : "#665bd7" }}
+            >
+              {editing ? <Save size={14} /> : <Edit3 size={14} />}
+              {editing ? "Save profile" : "Edit profile"}
+            </button>
+          </div>
+        </header>
 
-        <div className="grid lg:grid-cols-3 gap-6">
-          {/* Avatar + basics */}
-          <div className="space-y-4">
-            <div className="p-6 rounded-2xl text-center" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
-              <div className="relative inline-block mb-4">
-                <img src={profile.avatar} alt="Avatar" className="w-24 h-24 rounded-2xl object-cover" />
-                {editing && (
-                  <button className="absolute -bottom-2 -right-2 w-7 h-7 rounded-full flex items-center justify-center" style={{ background: "#7c6af7" }}>
-                    <Edit3 size={12} className="text-white" />
-                  </button>
-                )}
-              </div>
-              <h2 className="text-xl font-bold text-white">{profile.name}</h2>
-              <p className="text-sm" style={{ color: "#6b7a9e" }}>{profile.nationality} · {profile.currentLevel}</p>
-              <div className="flex items-center justify-center gap-2 mt-2">
-                <div className="w-2 h-2 rounded-full" style={{ background: "#10b981" }} />
-                <span className="text-xs" style={{ color: "#10b981" }}>Active applicant</span>
-              </div>
+        {notice && (
+          <div role="status" className="flex items-center justify-between gap-3 p-3 rounded-lg mb-5" style={{ background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.25)", color: "#10b981" }}>
+            <span className="flex items-center gap-2 text-sm"><Check size={16} /> {notice}</span>
+            <button type="button" onClick={() => setNotice("")} aria-label="Dismiss message"><X size={15} /></button>
+          </div>
+        )}
 
-              {/* Profile completion */}
-              <div className="mt-4">
-                <div className="flex justify-between text-xs mb-1">
-                  <span style={{ color: "#6b7a9e" }}>Profile complete</span>
-                  <span style={{ color: "#a89bf5" }}>{profile.profileCompletion}%</span>
-                </div>
-                <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(124,106,247,0.1)" }}>
-                  <div className="h-full rounded-full" style={{ width: `${profile.profileCompletion}%`, background: "linear-gradient(90deg, #7c6af7, #06b6d4)" }} />
-                </div>
+        <div className="grid lg:grid-cols-[280px_minmax(0,1fr)] gap-5">
+          <aside className="space-y-4">
+            <section className="p-5 rounded-lg text-center" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
+              <img src={draft.avatar} alt={draft.name} className="w-20 h-20 rounded-lg object-cover mx-auto mb-3" />
+              <h2 className="text-lg font-bold text-white">{draft.name}</h2>
+              <p className="text-xs mt-1" style={{ color: "#7d89a2" }}>{draft.nationality} / {draft.currentLevel}</p>
+              <span className="inline-flex items-center gap-1.5 mt-3 text-xs" style={{ color: "#10b981" }}><span className="w-1.5 h-1.5 rounded-full" style={{ background: "#10b981" }} /> Active applicant</span>
+              <div className="mt-5 text-left">
+                <div className="flex justify-between text-xs mb-1.5"><span style={{ color: "#6b7a9e" }}>Profile completion</span><strong style={{ color: "#b4adf5" }}>{completion}%</strong></div>
+                <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(124,106,247,0.1)" }}><div className="h-full rounded-full" style={{ width: completion + "%", background: "#6f65d4" }} /></div>
               </div>
+            </section>
 
-              {/* Streak */}
-              <div className="mt-4 p-3 rounded-xl" style={{ background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.2)" }}>
-                <div className="text-2xl mb-1">🔥</div>
-                <div className="text-sm font-medium" style={{ color: "#f59e0b" }}>{profile.streakDays}-day streak</div>
-                <div className="text-xs" style={{ color: "#6b7a9e" }}>Keep it up!</div>
-              </div>
-            </div>
-
-            {/* Badges */}
-            <div className="p-5 rounded-2xl" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
-              <div className="flex items-center gap-2 mb-4">
-                <Award size={15} style={{ color: "#f59e0b" }} />
-                <h3 className="font-semibold text-white">Achievements</h3>
-              </div>
-              <div className="grid grid-cols-4 gap-2">
-                {badges.map((badge) => (
-                  <div
-                    key={badge.name}
-                    className="flex flex-col items-center gap-1 p-2 rounded-xl"
-                    style={{
-                      background: badge.earned ? "rgba(124,106,247,0.1)" : "rgba(8,13,26,0.4)",
-                      opacity: badge.earned ? 1 : 0.4,
-                    }}
-                    title={badge.desc}
-                  >
-                    <span className="text-xl">{badge.icon}</span>
-                    <span className="text-[9px] text-center leading-tight" style={{ color: "#6b7a9e" }}>{badge.name}</span>
+            <section className="p-4 rounded-lg" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
+              <div className="flex items-center gap-2 mb-3"><Award size={15} style={{ color: "#f0b75c" }} /><h2 className="font-semibold text-white text-sm">Achievements</h2></div>
+              <div className="grid grid-cols-2 gap-2">
+                {achievements.map((achievement) => (
+                  <div key={achievement.name} title={achievement.description} className="p-2 rounded-md" style={{ background: achievement.earned ? "rgba(108,94,194,0.12)" : "rgba(8,13,26,0.4)", opacity: achievement.earned ? 1 : 0.45 }}>
+                    <Check size={13} style={{ color: achievement.earned ? "#66d7aa" : "#68758d" }} />
+                    <p className="text-[10px] mt-1" style={{ color: "#9ba5b8" }}>{achievement.name}</p>
                   </div>
                 ))}
               </div>
-            </div>
-          </div>
+            </section>
+          </aside>
 
-          {/* Profile details */}
-          <div className="lg:col-span-2 space-y-4">
-            {[
-              {
-                title: "Academic Profile",
-                fields: [
-                  { label: "Current Education", key: "currentLevel" },
-                  { label: "Field of Study", key: "fieldOfStudy" },
-                  { label: "Target Degree", key: "targetDegree" },
-                  { label: "GPA", key: "gpa" },
-                ],
-              },
-              {
-                title: "Test Scores",
-                fields: [
-                  { label: "IELTS Score", key: "ielts" },
-                  { label: "TOEFL Score", key: "toefl" },
-                  { label: "GRE Score", key: "gre" },
-                  { label: "GMAT Score", key: "gmat" },
-                ],
-              },
-              {
-                title: "Application Preferences",
-                fields: [
-                  { label: "Application Goal", key: "applicationGoal" },
-                  { label: "Budget Range", key: "budget" },
-                  { label: "Intake Season", key: "intakeSeason" },
-                  { label: "Work Experience", key: "workExperience" },
-                ],
-              },
-            ].map(({ title, fields }) => (
-              <div key={title} className="p-5 rounded-2xl" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
-                <h3 className="font-semibold text-white mb-4">{title}</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  {fields.map(({ label, key }) => (
-                    <div key={key}>
-                      <label className="block text-xs font-medium mb-1.5 uppercase tracking-wider" style={{ color: "#6b7a9e" }}>{label}</label>
-                      {editing ? (
-                        <input
-                          value={String(profile[key as keyof typeof profile] ?? "")}
-                          onChange={(e) => setProfile((prev) => ({ ...prev, [key]: e.target.value }))}
-                          className="w-full px-3 py-2 rounded-xl text-sm outline-none"
-                          style={{ background: "rgba(8,13,26,0.6)", border: "1px solid rgba(124,106,247,0.2)", color: "#e8eaf0" }}
-                        />
-                      ) : (
-                        <div className="text-sm" style={{ color: profile[key as keyof typeof profile] ? "#e8eaf0" : "#6b7a9e" }}>
-                          {String(profile[key as keyof typeof profile] ?? "Not set")}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
+          <div className="space-y-4">
+            <section className="p-5 rounded-lg" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
+              <h2 className="font-semibold text-white mb-4">Personal details</h2>
+              <div className="grid sm:grid-cols-2 gap-4">
+                {[
+                  { label: "Full name", key: "name", value: draft.name },
+                  { label: "Email", key: "email", value: draft.email },
+                  { label: "Nationality", key: "nationality", value: draft.nationality },
+                ].map((field) => (
+                  <label key={field.key} className="text-xs" style={{ color: "#6b7a9e" }}>{field.label}
+                    {editing ? (
+                      <input value={field.value} onChange={(event) => updateField(field.key, event.target.value, "text")} className="w-full mt-1.5 px-3 py-2.5 rounded-md text-sm outline-none" style={{ background: "#0b1322", border: "1px solid rgba(124,106,247,0.2)", color: "#e8eaf0" }} />
+                    ) : (
+                      <span className="block mt-1.5 text-sm" style={{ color: "#e1e4ed" }}>{field.value || "Not set"}</span>
+                    )}
+                  </label>
+                ))}
               </div>
+            </section>
+
+            {profileSections.map((section) => (
+              <section key={section.title} className="p-5 rounded-lg" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
+                <h2 className="font-semibold text-white mb-4">{section.title}</h2>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {section.fields.map((field) => {
+                    const value = draft[field.key];
+                    return (
+                      <label key={field.key} className="text-xs" style={{ color: "#6b7a9e" }}>{field.label}
+                        {editing ? (
+                          <input
+                            type={field.type}
+                            step={field.key === "gpa" || field.key === "ielts" ? "0.1" : "1"}
+                            value={value === null ? "" : String(value)}
+                            onChange={(event) => updateField(field.key, event.target.value, field.type)}
+                            className="w-full mt-1.5 px-3 py-2.5 rounded-md text-sm outline-none"
+                            style={{ background: "#0b1322", border: "1px solid rgba(124,106,247,0.2)", color: "#e8eaf0" }}
+                          />
+                        ) : (
+                          <span className="block mt-1.5 text-sm" style={{ color: value === null || value === "" ? "#68758d" : "#e1e4ed" }}>{value === null || value === "" ? "Not set" : String(value)}</span>
+                        )}
+                      </label>
+                    );
+                  })}
+                </div>
+              </section>
             ))}
 
-            {/* Destination countries */}
-            <div className="p-5 rounded-2xl" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
-              <h3 className="font-semibold text-white mb-3">Target Destinations</h3>
+            <section className="p-5 rounded-lg" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
+              <h2 className="font-semibold text-white mb-3">Target destinations</h2>
               <div className="flex flex-wrap gap-2">
-                {profile.destinationCountries.map((c) => (
-                  <span key={c} className="px-3 py-1.5 rounded-full text-sm" style={{ background: "rgba(124,106,247,0.15)", color: "#a89bf5", border: "1px solid rgba(124,106,247,0.25)" }}>
-                    {c}
-                  </span>
-                ))}
-                {editing && (
-                  <button className="px-3 py-1.5 rounded-full text-sm border-dashed transition-all hover:bg-white/5" style={{ border: "1px dashed rgba(124,106,247,0.3)", color: "#6b7a9e" }}>+ Add</button>
-                )}
+                {(editing ? destinationOptions : draft.destinationCountries).map((country) => {
+                  const selected = draft.destinationCountries.includes(country);
+                  return editing ? (
+                    <button type="button" key={country} onClick={() => toggleDestination(country)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs" style={{ background: selected ? "rgba(124,106,247,0.18)" : "#0b1322", border: "1px solid " + (selected ? "#7c6af7" : "rgba(124,106,247,0.15)"), color: selected ? "#c1bbff" : "#7d89a2" }}>{selected && <Check size={12} />}{country}</button>
+                  ) : (
+                    <span key={country} className="px-3 py-1.5 rounded-md text-xs" style={{ background: "rgba(124,106,247,0.14)", color: "#b9b2f6", border: "1px solid rgba(124,106,247,0.22)" }}>{country}</span>
+                  );
+                })}
               </div>
-            </div>
+            </section>
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

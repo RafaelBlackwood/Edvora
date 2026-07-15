@@ -1,46 +1,108 @@
 import { useState } from "react";
 import { Calculator, Target, TrendingUp, TrendingDown, AlertTriangle, CheckCircle2, Sparkles } from "lucide-react";
 import { RadialBarChart, RadialBar, PolarAngleAxis, ResponsiveContainer } from "recharts";
+import { universities } from "../../data/mockData";
+import { useAppData } from "../../providers/AppDataProvider";
 
 const CALC_BG = "https://images.unsplash.com/photo-1419640303358-44f0d27f48e7?w=1920&h=400&fit=crop&auto=format";
 
+function scoreUniversity(
+  university: (typeof universities)[number],
+  profile: { gpa: number; ielts: number; research: boolean; portfolio: boolean; motivation: boolean; recommendations: number },
+) {
+  let score = 42 + Math.min(16, university.acceptanceRate * 0.35) + (university.matchScore - 70) * 0.2;
+  const gpaMargin = profile.gpa - university.gpaMin;
+  const ieltsMargin = profile.ielts - university.ieltsMin;
+  score += gpaMargin >= 0.4 ? 18 : gpaMargin >= 0 ? 10 : Math.max(-24, gpaMargin * 28);
+  score += ieltsMargin >= 0.5 ? 12 : ieltsMargin >= 0 ? 7 : Math.max(-20, ieltsMargin * 22);
+  if (profile.research) score += 5;
+  if (profile.portfolio) score += 3;
+  if (profile.motivation) score += 5;
+  if (profile.recommendations >= 2) score += 4;
+  if (university.greRequired && !profile.research) score -= 4;
+  return Math.round(Math.min(95, Math.max(8, score)));
+}
+
 export function AcceptanceCalculatorPage() {
+  const { userProfile } = useAppData();
   const [form, setForm] = useState({
-    gpa: "3.6", ielts: "7.0", toefl: "", gre: "", gmat: "", sat: "",
-    degree: "Masters", field: "Computer Science", work: "1 year",
+    gpa: String(userProfile.gpa), ielts: String(userProfile.ielts ?? ""), toefl: String(userProfile.toefl ?? ""), gre: String(userProfile.gre ?? ""), gmat: String(userProfile.gmat ?? ""), sat: String(userProfile.sat ?? ""),
+    degree: userProfile.targetDegree, field: userProfile.fieldOfStudy, work: userProfile.workExperience,
     research: false, portfolio: false, motivation: false, recommendations: "1",
-    targetProgram: "Technical University of Munich — MSc CS",
+    targetProgram: universities[1].id,
   });
   const [result, setResult] = useState<null | { chance: number; strong: string[]; weak: string[]; missing: string[]; risk: string; safe: string[]; target: string[]; ambitious: string[]; explanation: string }>(null);
   const [calculating, setCalculating] = useState(false);
 
   const calculate = async () => {
     setCalculating(true);
-    await new Promise((r) => setTimeout(r, 1800));
-    const gpa = parseFloat(form.gpa) || 0;
-    const ielts = parseFloat(form.ielts) || 0;
-    let base = 50;
-    if (gpa >= 3.7) base += 20;
-    else if (gpa >= 3.3) base += 10;
-    else if (gpa < 3.0) base -= 15;
-    if (ielts >= 7.0) base += 15;
-    else if (ielts >= 6.5) base += 8;
-    else if (ielts < 6.0) base -= 20;
-    if (form.motivation) base += 5;
-    if (form.portfolio) base += 5;
-    if (parseInt(form.recommendations) >= 2) base += 5;
-    if (form.research) base += 8;
-    const chance = Math.min(95, Math.max(15, base));
+    await new Promise((resolve) => setTimeout(resolve, 450));
+
+    const gpa = Number.parseFloat(form.gpa) || 0;
+    const ielts = Number.parseFloat(form.ielts) || 0;
+    const recommendations = Number.parseInt(form.recommendations, 10) || 0;
+    const targetUniversity = universities.find((university) => university.id === form.targetProgram) ?? universities[0];
+    const profile = {
+      gpa,
+      ielts,
+      research: form.research,
+      portfolio: form.portfolio,
+      motivation: form.motivation,
+      recommendations,
+    };
+    const chance = scoreUniversity(targetUniversity, profile);
+    const rankedOptions = universities
+      .map((university) => ({
+        chance: scoreUniversity(university, profile),
+        label: university.name + " - " + university.programs[0],
+      }))
+      .sort((first, second) => second.chance - first.chance);
+
+    const strong = [
+      gpa >= targetUniversity.gpaMin
+        ? "GPA meets the listed minimum of " + targetUniversity.gpaMin.toFixed(1)
+        : null,
+      ielts >= targetUniversity.ieltsMin
+        ? "English score meets the IELTS-equivalent minimum of " + targetUniversity.ieltsMin.toFixed(1)
+        : null,
+      form.research ? "Research experience strengthens academic fit" : null,
+      form.motivation ? "Motivation letter is ready" : null,
+      recommendations >= 2 ? "Recommendation coverage is competitive" : null,
+    ].filter((item): item is string => Boolean(item));
+
+    const weak = [
+      gpa < targetUniversity.gpaMin
+        ? "GPA is below the listed minimum by " + (targetUniversity.gpaMin - gpa).toFixed(1)
+        : null,
+      ielts < targetUniversity.ieltsMin
+        ? "English score is below the listed minimum by " + (targetUniversity.ieltsMin - ielts).toFixed(1)
+        : null,
+      recommendations < 2 ? "Most graduate applications expect two references" : null,
+      targetUniversity.greRequired && !form.research
+        ? "This university lists the GRE and the profile has limited research evidence"
+        : null,
+    ].filter((item): item is string => Boolean(item));
+
+    const missing = [
+      !form.motivation ? "Motivation letter not prepared" : null,
+      !form.portfolio && targetUniversity.programs.some((program) => program.toLowerCase().includes("hci"))
+        ? "Portfolio may strengthen this program"
+        : null,
+    ].filter((item): item is string => Boolean(item));
+
     setResult({
       chance,
-      strong: ["IELTS 7.0 meets program requirements", "Field of study aligns with target program", "Work experience adds competitive edge"],
-      weak: ["GPA slightly below average admitted students (avg. 3.7)", "Only 1 recommendation letter (2 expected)"],
-      missing: !form.motivation ? ["Motivation letter not prepared"] : !form.portfolio ? ["Portfolio may be required"] : [],
+      strong: strong.length ? strong : ["Program and study field are broadly aligned"],
+      weak: weak.length ? weak : ["No major threshold gaps detected"],
+      missing,
       risk: chance >= 70 ? "Low" : chance >= 50 ? "Medium" : "High",
-      safe: ["University of Warsaw — MSc CS", "Politecnico di Milano — MSc SE", "Lund University — MSc CS"],
-      target: ["Technical University of Munich — MSc CS", "University of Amsterdam — MSc DS"],
-      ambitious: ["University of Toronto — MSc HCI", "UC Irvine — MSc CS"],
-      explanation: `Your estimated admission chance is ${chance}%. Your IELTS score and field match are strong, but your GPA is slightly below the average for this program. Adding a second recommendation letter and preparing a strong motivation letter could improve your profile by 8–12 percentage points.`,
+      safe: rankedOptions.filter((option) => option.chance >= Math.max(65, chance + 8)).slice(0, 3).map((option) => option.label),
+      target: rankedOptions.filter((option) => option.chance >= 45 && option.chance < Math.max(65, chance + 8)).slice(0, 3).map((option) => option.label),
+      ambitious: rankedOptions.filter((option) => option.chance < 45).slice(0, 3).map((option) => option.label),
+      explanation:
+        "This estimate compares your GPA and English score with " +
+        targetUniversity.name +
+        "'s listed thresholds, then adjusts for selectivity, profile match, and application readiness. It is a planning estimate, not an admission guarantee.",
     });
     setCalculating(false);
   };
@@ -55,7 +117,7 @@ export function AcceptanceCalculatorPage() {
         <div className="absolute inset-0 flex items-center px-6 lg:px-8">
           <div>
             <h1 className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-display)" }}>Acceptance Calculator</h1>
-            <p className="text-sm mt-1" style={{ color: "#a8b4d0" }}>AI-powered admission probability analysis</p>
+            <p className="text-sm mt-1" style={{ color: "#a8b4d0" }}>Profile-based admission readiness estimate</p>
           </div>
         </div>
       </div>
@@ -95,12 +157,18 @@ export function AcceptanceCalculatorPage() {
               <div className="space-y-3">
                 <div>
                   <label className="block text-xs font-medium mb-1.5 uppercase tracking-wider" style={{ color: "#6b7a9e" }}>Target Program</label>
-                  <input
+                  <select
                     value={form.targetProgram}
-                    onChange={(e) => setForm((prev) => ({ ...prev, targetProgram: e.target.value }))}
+                    onChange={(event) => setForm((previous) => ({ ...previous, targetProgram: event.target.value }))}
                     className="w-full px-3 py-2.5 rounded-xl text-sm outline-none"
                     style={{ background: "rgba(8,13,26,0.6)", border: "1px solid rgba(124,106,247,0.15)", color: "#e8eaf0" }}
-                  />
+                  >
+                    {universities.map((university) => (
+                      <option key={university.id} value={university.id}>
+                        {university.name} - {university.programs[0]}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div>
                   <label className="block text-xs font-medium mb-1.5 uppercase tracking-wider" style={{ color: "#6b7a9e" }}>Work Experience</label>

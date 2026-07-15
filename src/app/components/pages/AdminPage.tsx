@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts";
-import { Users, Building2, Award, FileText, TrendingUp, AlertCircle, CheckCircle2, Clock } from "lucide-react";
+import { Users, Building2, Award, FileText, CheckCircle2, Search } from "lucide-react";
+
+import { scholarships, universities } from "../../data/mockData";
 
 const tabs = ["Overview", "Users", "Universities", "Scholarships", "Support", "B2B Portal"];
 
@@ -41,8 +43,31 @@ const supportTickets = [
   { id: "T-004", user: "Omar Farouk", issue: "Payment not processing", priority: "High", status: "open" },
 ];
 
+const initialAdminUsers = [
+  { id: "u1", name: "Alex Rivera", email: "alex.rivera@email.com", role: "Student", status: "Active" },
+  { id: "u2", name: "Maria Garcia", email: "maria.g@example.com", role: "Mentor", status: "Pending" },
+  { id: "u3", name: "Kwame Asante", email: "kwame.a@example.com", role: "Student", status: "Active" },
+  { id: "u4", name: "Aisha Patel", email: "aisha.p@example.com", role: "Partner", status: "Suspended" },
+];
+
 export function AdminPage() {
   const [activeTab, setActiveTab] = useState("Overview");
+  const [reviewItems, setReviewItems] = useState(pendingReviews);
+  const [tickets, setTickets] = useState(supportTickets);
+  const [usersList, setUsersList] = useState(initialAdminUsers);
+  const [managementQuery, setManagementQuery] = useState("");
+
+  const updateReview = (id: string, status: string) => {
+    setReviewItems((items) => items.map((item) => item.id === id ? { ...item, status } : item));
+  };
+
+  const toggleTicket = (id: string) => {
+    setTickets((items) => items.map((item) => item.id === id ? { ...item, status: item.status === "resolved" ? "open" : "resolved" } : item));
+  };
+
+  const toggleUserStatus = (id: string) => {
+    setUsersList((items) => items.map((item) => item.id === id ? { ...item, status: item.status === "Active" ? "Suspended" : "Active" } : item));
+  };
 
   return (
     <div style={{ background: "#080d1a", minHeight: "100%" }}>
@@ -131,7 +156,7 @@ export function AdminPage() {
             <div className="p-5 rounded-2xl" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
               <h3 className="font-semibold text-white mb-4">Pending Reviews</h3>
               <div className="space-y-2">
-                {pendingReviews.map((item) => (
+                {reviewItems.map((item) => (
                   <div key={item.id} className="flex items-center justify-between p-3 rounded-xl" style={{ background: "rgba(8,13,26,0.4)" }}>
                     <div>
                       <span className="text-sm font-medium text-white">{item.user}</span>
@@ -141,11 +166,11 @@ export function AdminPage() {
                       <span className="text-xs" style={{ color: "#6b7a9e" }}>{item.time}</span>
                       {item.status === "pending" ? (
                         <>
-                          <button className="px-2 py-1 rounded-lg text-xs text-white" style={{ background: "#10b981" }}>Approve</button>
-                          <button className="px-2 py-1 rounded-lg text-xs" style={{ background: "rgba(239,68,68,0.2)", color: "#ef4444" }}>Reject</button>
+                          <button type="button" onClick={() => updateReview(item.id, "approved")} className="px-2 py-1 rounded-lg text-xs text-white" style={{ background: "#238a68" }}>Approve</button>
+                          <button type="button" onClick={() => updateReview(item.id, "rejected")} className="px-2 py-1 rounded-lg text-xs" style={{ background: "rgba(239,68,68,0.2)", color: "#ef6d75" }}>Reject</button>
                         </>
                       ) : (
-                        <span className="text-xs px-2 py-1 rounded-full" style={{ background: "rgba(16,185,129,0.1)", color: "#10b981" }}>Approved</span>
+                        <span className="text-xs px-2 py-1 rounded-full" style={{ background: item.status === "approved" ? "rgba(16,185,129,0.1)" : "rgba(239,68,68,0.1)", color: item.status === "approved" ? "#10b981" : "#ef6d75" }}>{item.status === "approved" ? "Approved" : "Rejected"}</span>
                       )}
                     </div>
                   </div>
@@ -166,7 +191,7 @@ export function AdminPage() {
                     </tr>
                   </thead>
                   <tbody className="space-y-1">
-                    {supportTickets.map((ticket) => (
+                    {tickets.map((ticket) => (
                       <tr key={ticket.id} style={{ borderBottom: "1px solid rgba(124,106,247,0.06)" }}>
                         <td className="py-2.5 text-xs font-mono" style={{ color: "#7c6af7" }}>{ticket.id}</td>
                         <td className="py-2.5 text-sm" style={{ color: "#a8b4d0" }}>{ticket.user}</td>
@@ -188,7 +213,7 @@ export function AdminPage() {
                           </span>
                         </td>
                         <td className="py-2.5">
-                          <button className="text-xs px-2 py-1 rounded-lg hover:opacity-80" style={{ background: "rgba(124,106,247,0.15)", color: "#a89bf5" }}>
+                          <button type="button" onClick={() => toggleTicket(ticket.id)} className="text-xs px-2 py-1 rounded-lg hover:opacity-80" style={{ background: "rgba(124,106,247,0.15)", color: "#a89bf5" }}>
                             {ticket.status === "resolved" ? "View" : "Respond"}
                           </button>
                         </td>
@@ -201,22 +226,32 @@ export function AdminPage() {
           </div>
         )}
 
+        {activeTab === "Users" && (
+          <section className="p-5 rounded-lg" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
+            <div className="flex items-center justify-between gap-3 mb-4"><div><h2 className="font-semibold text-white">User management</h2><p className="text-xs mt-1" style={{ color: "#6b7a9e" }}>Review roles and account access.</p></div><label className="relative"><Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2" /><input value={managementQuery} onChange={(event) => setManagementQuery(event.target.value)} placeholder="Search users" className="pl-8 pr-3 py-2 rounded-md text-xs" style={{ background: "#0a1221", border: "1px solid rgba(124,106,247,0.15)", color: "#e8eaf0" }} /></label></div>
+            <div className="overflow-x-auto"><table className="w-full min-w-[560px]"><thead><tr>{["Name", "Email", "Role", "Status", "Action"].map((heading) => <th key={heading} className="text-left pb-2 text-xs" style={{ color: "#6b7a9e" }}>{heading}</th>)}</tr></thead><tbody>{usersList.filter((user) => (user.name + user.email).toLowerCase().includes(managementQuery.toLowerCase())).map((user) => <tr key={user.id} style={{ borderTop: "1px solid rgba(124,106,247,0.08)" }}><td className="py-3 text-sm text-white">{user.name}</td><td className="py-3 text-xs" style={{ color: "#8f9ab0" }}>{user.email}</td><td className="py-3 text-xs" style={{ color: "#aaa2f2" }}>{user.role}</td><td className="py-3 text-xs" style={{ color: user.status === "Active" ? "#10b981" : user.status === "Pending" ? "#f0b75c" : "#ef6d75" }}>{user.status}</td><td className="py-3"><button type="button" onClick={() => toggleUserStatus(user.id)} className="glass-interactive px-3 py-1.5 rounded-md text-xs">{user.status === "Active" ? "Suspend" : "Activate"}</button></td></tr>)}</tbody></table></div>
+          </section>
+        )}
+
         {activeTab === "Universities" && (
-          <div className="p-5 rounded-2xl" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
-            <h3 className="font-semibold text-white mb-4">University Management</h3>
-            <div className="grid md:grid-cols-2 gap-4">
-              <button className="p-4 rounded-xl text-left hover:opacity-80 transition-all" style={{ background: "rgba(8,13,26,0.5)", border: "1px solid rgba(124,106,247,0.15)" }}>
-                <div className="text-lg mb-2">➕</div>
-                <div className="font-medium text-white">Add New University</div>
-                <div className="text-xs mt-1" style={{ color: "#6b7a9e" }}>Add a university with programs and requirements</div>
-              </button>
-              <button className="p-4 rounded-xl text-left hover:opacity-80 transition-all" style={{ background: "rgba(8,13,26,0.5)", border: "1px solid rgba(124,106,247,0.15)" }}>
-                <div className="text-lg mb-2">✏️</div>
-                <div className="font-medium text-white">Update Programs</div>
-                <div className="text-xs mt-1" style={{ color: "#6b7a9e" }}>Edit program details, deadlines, and requirements</div>
-              </button>
-            </div>
-          </div>
+          <section className="p-5 rounded-lg" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
+            <div className="flex items-center justify-between gap-3 mb-4"><div><h2 className="font-semibold text-white">University catalog</h2><p className="text-xs mt-1" style={{ color: "#6b7a9e" }}>{universities.length} records in the local catalog.</p></div><label className="relative"><Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2" /><input value={managementQuery} onChange={(event) => setManagementQuery(event.target.value)} placeholder="Search catalog" className="pl-8 pr-3 py-2 rounded-md text-xs" style={{ background: "#0a1221", border: "1px solid rgba(124,106,247,0.15)", color: "#e8eaf0" }} /></label></div>
+            <div className="grid md:grid-cols-2 gap-2">{universities.filter((university) => (university.name + university.country).toLowerCase().includes(managementQuery.toLowerCase())).map((university) => <article key={university.id} className="flex items-center gap-3 p-3 rounded-md" style={{ background: "#0a1221" }}><span className="text-xl">{university.logo}</span><div className="flex-1 min-w-0"><h3 className="text-sm text-white truncate">{university.name}</h3><p className="text-[10px]" style={{ color: "#6b7a9e" }}>{university.country} / {university.programs.length} programs</p></div><span className="text-[10px]" style={{ color: "#10b981" }}>Published</span></article>)}</div>
+          </section>
+        )}
+
+        {activeTab === "Scholarships" && (
+          <section className="p-5 rounded-lg" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
+            <h2 className="font-semibold text-white mb-1">Scholarship catalog</h2><p className="text-xs mb-4" style={{ color: "#6b7a9e" }}>Review funding records, deadlines, and source readiness.</p>
+            <div className="space-y-2">{scholarships.map((scholarship) => <article key={scholarship.id} className="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-3 p-3 rounded-md" style={{ background: "#0a1221" }}><div><h3 className="text-sm text-white">{scholarship.name}</h3><p className="text-[10px]" style={{ color: "#6b7a9e" }}>{scholarship.country} / {scholarship.type}</p></div><span className="text-xs" style={{ color: "#4dd39e" }}>{scholarship.amount}</span><span className="text-[10px]" style={{ color: "#f0b75c" }}>{scholarship.deadline}</span></article>)}</div>
+          </section>
+        )}
+
+        {activeTab === "Support" && (
+          <section className="p-5 rounded-lg" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
+            <h2 className="font-semibold text-white mb-4">Support queue</h2>
+            <div className="space-y-2">{tickets.map((ticket) => <article key={ticket.id} className="flex items-center gap-3 p-3 rounded-md" style={{ background: "#0a1221" }}><span className="text-xs font-mono" style={{ color: "#8f84e8" }}>{ticket.id}</span><div className="flex-1"><h3 className="text-sm text-white">{ticket.issue}</h3><p className="text-[10px]" style={{ color: "#6b7a9e" }}>{ticket.user} / {ticket.priority} priority</p></div><span className="text-[10px]" style={{ color: ticket.status === "resolved" ? "#10b981" : "#55cde6" }}>{ticket.status}</span><button type="button" onClick={() => toggleTicket(ticket.id)} className="glass-interactive px-3 py-1.5 rounded-md text-xs">{ticket.status === "resolved" ? "Reopen" : "Resolve"}</button></article>)}</div>
+          </section>
         )}
 
         {activeTab === "B2B Portal" && (
