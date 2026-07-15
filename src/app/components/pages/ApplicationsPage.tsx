@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
-import { Plus, ChevronRight, CheckCircle2, Circle, Clock, X } from "lucide-react";
-import { applications, universities } from "../../data/mockData";
+import { useNavigate, useSearchParams } from "react-router";
+import { Plus, ChevronRight, CheckCircle2 } from "lucide-react";
+import { universities } from "../../data/mockData";
+import { useAppData } from "../../providers/AppDataProvider";
 
 const statusSteps = ["Draft", "Submitted", "Reviewed", "Accepted", "Rejected"];
 const statusColors: Record<string, { bg: string; color: string }> = {
@@ -16,11 +17,60 @@ const appFormSteps = ["University", "Program", "Intake", "Personal Info", "Educa
 
 export function ApplicationsPage() {
   const navigate = useNavigate();
-  const [apps, setApps] = useState(applications);
-  const [showNewApp, setShowNewApp] = useState(false);
+  const [searchParams] = useSearchParams();
+  const { applications: apps, createApplication } = useAppData();
+  const preselectedUniversity = searchParams.get("university") ?? "";
+  const preselectedProgram = searchParams.get("program") ?? "";
   const [formStep, setFormStep] = useState(0);
-  const [selectedUni, setSelectedUni] = useState("");
-  const [activeTab, setActiveTab] = useState<"tracker" | "new">("tracker");
+  const [selectedUni, setSelectedUni] = useState(preselectedUniversity);
+  const [selectedProgram, setSelectedProgram] = useState(preselectedProgram);
+  const [selectedIntake, setSelectedIntake] = useState("");
+  const [formError, setFormError] = useState("");
+  const [activeTab, setActiveTab] = useState<"tracker" | "new">(
+    searchParams.get("new") === "1" || preselectedUniversity ? "new" : "tracker",
+  );
+  const selectedUniversity = universities.find((university) => university.id === selectedUni);
+
+  const startNewApplication = () => {
+    setSelectedUni("");
+    setSelectedProgram("");
+    setSelectedIntake("");
+    setFormError("");
+    setFormStep(0);
+    setActiveTab("new");
+    navigate("/applications", { replace: true });
+  };
+
+  const continueApplication = () => {
+    const missingSelection =
+      (formStep === 0 && !selectedUni && "university") ||
+      (formStep === 1 && !selectedProgram && "program") ||
+      (formStep === 2 && !selectedIntake && "intake");
+
+    if (missingSelection) {
+      setFormError("Choose a " + missingSelection + " to continue.");
+      return;
+    }
+
+    setFormError("");
+    setFormStep((current) => Math.min(7, current + 1));
+  };
+
+  const submitApplication = () => {
+    const result = createApplication({
+      intake: selectedIntake,
+      program: selectedProgram,
+      universityId: selectedUni,
+    });
+
+    if (!result.ok) {
+      setFormError(result.message ?? "The application could not be submitted.");
+      return;
+    }
+
+    setFormError("");
+    setFormStep(7);
+  };
 
   return (
     <div style={{ background: "#080d1a", minHeight: "100%" }}>
@@ -31,7 +81,7 @@ export function ApplicationsPage() {
             <p className="text-sm mt-1" style={{ color: "#6b7a9e" }}>Track and manage all your university applications</p>
           </div>
           <button
-            onClick={() => { setActiveTab("new"); setFormStep(0); }}
+            onClick={startNewApplication}
             className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-white hover:opacity-90 transition-all"
             style={{ background: "linear-gradient(135deg, #7c6af7, #06b6d4)" }}
           >
@@ -145,7 +195,8 @@ export function ApplicationsPage() {
                 </div>
               ))}
             </div>
-            <p className="text-xs text-center mb-6" style={{ color: "#6b7a9e" }}>Step {formStep + 1} of {appFormSteps.length}: <span style={{ color: "#a89bf5" }}>{appFormSteps[formStep]}</span></p>
+            <p className="text-xs text-center mb-2" style={{ color: "#6b7a9e" }}>Step {formStep + 1} of {appFormSteps.length}: <span style={{ color: "#a89bf5" }}>{appFormSteps[formStep]}</span></p>
+            {formError && <p role="alert" className="text-xs text-center mb-4" style={{ color: "#ef6d75" }}>{formError}</p>}
 
             <div className="p-6 rounded-2xl" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.15)" }}>
               {formStep === 0 && (
@@ -155,7 +206,11 @@ export function ApplicationsPage() {
                     {universities.map((u) => (
                       <button
                         key={u.id}
-                        onClick={() => setSelectedUni(u.id)}
+                        onClick={() => {
+                          setSelectedUni(u.id);
+                          setSelectedProgram("");
+                          setFormError("");
+                        }}
                         className="w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all"
                         style={{
                           background: selectedUni === u.id ? "rgba(124,106,247,0.15)" : "rgba(8,13,26,0.5)",
@@ -178,14 +233,22 @@ export function ApplicationsPage() {
                 <div>
                   <h3 className="font-semibold text-white mb-4">Select Program</h3>
                   <div className="space-y-2">
-                    {["MSc Computer Science", "MSc Data Science", "MSc AI", "MSc Software Engineering", "PhD Information Science"].map((prog) => (
+                    {(selectedUniversity?.programs ?? []).map((prog) => (
                       <button
                         key={prog}
+                        type="button"
+                        onClick={() => {
+                          setSelectedProgram(prog);
+                          setFormError("");
+                        }}
                         className="w-full flex items-center justify-between p-3 rounded-xl text-left transition-all hover:bg-white/5"
-                        style={{ background: "rgba(8,13,26,0.5)", border: "1px solid rgba(124,106,247,0.1)" }}
+                        style={{
+                          background: selectedProgram === prog ? "rgba(124,106,247,0.15)" : "rgba(8,13,26,0.5)",
+                          border: "1px solid " + (selectedProgram === prog ? "#7c6af7" : "rgba(124,106,247,0.1)"),
+                        }}
                       >
                         <span className="text-sm text-white">{prog}</span>
-                        <ChevronRight size={14} style={{ color: "#6b7a9e" }} />
+                        {selectedProgram === prog ? <CheckCircle2 size={15} style={{ color: "#10b981" }} /> : <ChevronRight size={14} style={{ color: "#6b7a9e" }} />}
                       </button>
                     ))}
                   </div>
@@ -196,8 +259,23 @@ export function ApplicationsPage() {
                 <div>
                   <h3 className="font-semibold text-white mb-4">{appFormSteps[formStep]}</h3>
                   <div className="space-y-3">
-                    {formStep === 2 && ["Fall 2025", "Spring 2026", "Fall 2026"].map((s) => (
-                      <button key={s} className="w-full p-3 rounded-xl text-sm text-white text-left hover:bg-white/5 transition-all" style={{ background: "rgba(8,13,26,0.5)", border: "1px solid rgba(124,106,247,0.1)" }}>{s}</button>
+                    {formStep === 2 && ["Fall 2026", "Spring 2027", "Fall 2027"].map((intake) => (
+                      <button
+                        key={intake}
+                        type="button"
+                        onClick={() => {
+                          setSelectedIntake(intake);
+                          setFormError("");
+                        }}
+                        className="w-full flex items-center justify-between p-3 rounded-xl text-sm text-white text-left hover:bg-white/5 transition-all"
+                        style={{
+                          background: selectedIntake === intake ? "rgba(124,106,247,0.15)" : "rgba(8,13,26,0.5)",
+                          border: "1px solid " + (selectedIntake === intake ? "#7c6af7" : "rgba(124,106,247,0.1)"),
+                        }}
+                      >
+                        {intake}
+                        {selectedIntake === intake && <CheckCircle2 size={15} style={{ color: "#10b981" }} />}
+                      </button>
                     ))}
                     {[3, 4].includes(formStep) && (
                       <div className="grid grid-cols-2 gap-3">
@@ -221,7 +299,12 @@ export function ApplicationsPage() {
                     )}
                     {formStep === 6 && (
                       <div className="space-y-2 text-sm">
-                        {[["University", universities.find(u => u.id === selectedUni)?.name || "Technical University of Munich"], ["Program", "MSc Computer Science"], ["Intake", "Fall 2025"], ["Documents", "6/6 attached"]].map(([k, v]) => (
+                        {[
+                          ["University", selectedUniversity?.name || "Not selected"],
+                          ["Program", selectedProgram || "Not selected"],
+                          ["Intake", selectedIntake || "Not selected"],
+                          ["Documents", "6 required items"],
+                        ].map(([k, v]) => (
                           <div key={k as string} className="flex justify-between p-3 rounded-xl" style={{ background: "rgba(8,13,26,0.5)" }}>
                             <span style={{ color: "#6b7a9e" }}>{k as string}</span>
                             <span style={{ color: "#e8eaf0" }}>{v as string}</span>
@@ -256,7 +339,7 @@ export function ApplicationsPage() {
               )}
               {formStep < 7 ? (
                 <button
-                  onClick={() => setFormStep(Math.min(7, formStep + 1))}
+                  onClick={() => formStep === 6 ? submitApplication() : continueApplication()}
                   className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-all"
                   style={{ background: "linear-gradient(135deg, #7c6af7, #06b6d4)" }}
                 >
@@ -264,7 +347,11 @@ export function ApplicationsPage() {
                 </button>
               ) : (
                 <button
-                  onClick={() => { setActiveTab("tracker"); setFormStep(0); }}
+                  onClick={() => {
+                    setActiveTab("tracker");
+                    setFormStep(0);
+                    navigate("/applications", { replace: true });
+                  }}
                   className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-all"
                   style={{ background: "linear-gradient(135deg, #10b981, #06b6d4)" }}
                 >

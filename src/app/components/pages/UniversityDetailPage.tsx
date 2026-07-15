@@ -30,6 +30,28 @@ export function UniversityDetailPage() {
 
   const uni = universities.find((u) => u.id === id) || universities[0];
   const uniPrograms = programs.filter((p) => p.universityId === uni.id);
+  const displayPrograms = uniPrograms.length > 0
+    ? uniPrograms
+    : uni.programs.map((name, index) => ({
+        id: "catalog-" + uni.id + "-" + index,
+        name,
+        universityId: uni.id,
+        university: uni.name,
+        duration: name.startsWith("PhD") ? "4-5 years" : name.startsWith("Bachelor") ? "3-4 years" : "1-2 years",
+        tuition: uni.tuition,
+        currency: uni.currency,
+        deadline: uni.deadline,
+        intake: "Fall",
+        language: "English",
+        department: name.startsWith("PhD") ? "Doctoral School" : "Graduate Studies",
+        requirements: {
+          gpa: uni.gpaMin,
+          ielts: uni.ieltsMin,
+          gre: uni.greRequired,
+          portfolio: false,
+        },
+        description: "A full-time " + name + " pathway with access to " + uni.strengths.slice(0, 2).join(" and ") + ".",
+      }));
   const saved = isUniversitySaved(uni.id);
   const comparing = compareUniversityIds.includes(uni.id);
 
@@ -88,7 +110,7 @@ export function UniversityDetailPage() {
               <GitCompare size={16} />
             </button>
             <button
-              onClick={() => navigate("/applications")}
+              onClick={() => navigate("/applications?new=1&university=" + uni.id)}
               className="px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90"
               style={{ background: "linear-gradient(135deg, #7c6af7, #06b6d4)" }}
             >
@@ -205,7 +227,7 @@ export function UniversityDetailPage() {
 
         {activeTab === "Programs" && (
           <div className="space-y-4">
-            {uniPrograms.length > 0 ? uniPrograms.map((prog) => (
+            {displayPrograms.map((prog) => (
               <div key={prog.id} className="p-5 rounded-2xl" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
                 <div className="flex items-start justify-between gap-4 mb-3">
                   <div>
@@ -213,7 +235,7 @@ export function UniversityDetailPage() {
                     <p className="text-sm mt-0.5" style={{ color: "#6b7a9e" }}>{prog.department} · {prog.duration}</p>
                   </div>
                   <button
-                    onClick={() => navigate("/applications")}
+                    onClick={() => navigate("/applications?new=1&university=" + uni.id + "&program=" + encodeURIComponent(prog.name))}
                     className="shrink-0 px-4 py-2 rounded-xl text-sm font-medium text-white hover:opacity-90"
                     style={{ background: "linear-gradient(135deg, #7c6af7, #06b6d4)" }}
                   >
@@ -235,12 +257,7 @@ export function UniversityDetailPage() {
                   ))}
                 </div>
               </div>
-            )) : (
-              <div className="text-center py-12" style={{ color: "#6b7a9e" }}>
-                <p>Detailed program info coming soon.</p>
-                <p className="text-sm mt-1">{uni.programs.join(" · ")}</p>
-              </div>
-            )}
+            ))}
           </div>
         )}
 
@@ -366,7 +383,7 @@ export function UniversityDetailPage() {
             </div>
             <div className="mt-6 text-center">
               <button
-                onClick={() => navigate("/applications")}
+                onClick={() => navigate("/applications?new=1&university=" + uni.id)}
                 className="px-8 py-3 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-all"
                 style={{ background: "linear-gradient(135deg, #7c6af7, #06b6d4)" }}
               >

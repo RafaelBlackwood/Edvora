@@ -1,4 +1,4 @@
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import {
   ArrowRight,
@@ -367,17 +367,17 @@ function FilterSection({
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
-    <details
-      className="search-filter-section"
-      open={isOpen}
-      onToggle={(event) => setIsOpen(event.currentTarget.open)}
-    >
-      <summary>
+    <section className={"search-filter-section " + (isOpen ? "is-open" : "")}>
+      <button
+        type="button"
+        aria-expanded={isOpen}
+        onClick={() => setIsOpen((open) => !open)}
+      >
         <span>{title}</span>
         <ChevronDown size={14} aria-hidden="true" />
-      </summary>
-      <div>{children}</div>
-    </details>
+      </button>
+      {isOpen && <div className="search-filter-section-body">{children}</div>}
+    </section>
   );
 }
 
@@ -422,6 +422,7 @@ export function SearchPage() {
   const [sortMode, setSortMode] = useState<SortMode>("match");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [showFilters, setShowFilters] = useState(false);
+  const filterScrollRef = useRef<HTMLDivElement | null>(null);
 
   const compareUniversities = universities.filter((university) =>
     compareUniversityIds.includes(university.id),
@@ -451,6 +452,22 @@ export function SearchPage() {
     setFilters(defaultFilters);
     setQuery("");
   };
+
+  useEffect(() => {
+    const scrollElement = filterScrollRef.current;
+
+    if (!scrollElement) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      const maxScrollTop = Math.max(0, scrollElement.scrollHeight - scrollElement.clientHeight);
+
+      if (scrollElement.scrollTop > maxScrollTop) {
+        scrollElement.scrollTop = maxScrollTop;
+      }
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [filters, showFilters]);
 
   const filteredUniversities = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -829,7 +846,7 @@ export function SearchPage() {
               </button>
             </div>
 
-            <div className="search-filter-scroll">
+            <div className="search-filter-scroll" ref={filterScrollRef}>
               <FilterSection title="Destination">
                 <CheckboxList
                   options={countries}
