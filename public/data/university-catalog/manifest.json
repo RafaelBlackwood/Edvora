@@ -16,7 +16,7 @@
     {
       "country": "Afghanistan",
       "countryCode": "AF",
-      "count": 51,
+      "count": 56,
       "file": "AF.json"
     },
     {
@@ -26,27 +26,33 @@
       "file": "AG.json"
     },
     {
+      "country": "Anguilla",
+      "countryCode": "AI",
+      "count": 1,
+      "file": "AI.json"
+    },
+    {
       "country": "Albania",
       "countryCode": "AL",
-      "count": 33,
+      "count": 34,
       "file": "AL.json"
     },
     {
       "country": "Armenia",
       "countryCode": "AM",
-      "count": 20,
+      "count": 21,
       "file": "AM.json"
     },
     {
       "country": "Angola",
       "countryCode": "AO",
-      "count": 29,
+      "count": 30,
       "file": "AO.json"
     },
     {
       "country": "Argentina",
       "countryCode": "AR",
-      "count": 163,
+      "count": 165,
       "file": "AR.json"
     },
     {
@@ -64,7 +70,7 @@
     {
       "country": "Australia",
       "countryCode": "AU",
-      "count": 136,
+      "count": 139,
       "file": "AU.json"
     },
     {
@@ -82,7 +88,7 @@
     {
       "country": "Azerbaijan",
       "countryCode": "AZ",
-      "count": 48,
+      "count": 51,
       "file": "AZ.json"
     },
     {
@@ -100,13 +106,13 @@
     {
       "country": "Bangladesh",
       "countryCode": "BD",
-      "count": 199,
+      "count": 205,
       "file": "BD.json"
     },
     {
       "country": "Belgium",
       "countryCode": "BE",
-      "count": 86,
+      "count": 87,
       "file": "BE.json"
     },
     {
@@ -166,7 +172,7 @@
     {
       "country": "Brazil",
       "countryCode": "BR",
-      "count": 558,
+      "count": 565,
       "file": "BR.json"
     },
     {
@@ -184,7 +190,7 @@
     {
       "country": "Botswana",
       "countryCode": "BW",
-      "count": 12,
+      "count": 13,
       "file": "BW.json"
     },
     {
@@ -202,7 +208,7 @@
     {
       "country": "Canada",
       "countryCode": "CA",
-      "count": 396,
+      "count": 399,
       "file": "CA.json"
     },
     {
@@ -226,7 +232,7 @@
     {
       "country": "Switzerland",
       "countryCode": "CH",
-      "count": 161,
+      "count": 163,
       "file": "CH.json"
     },
     {
@@ -238,7 +244,7 @@
     {
       "country": "Chile",
       "countryCode": "CL",
-      "count": 98,
+      "count": 99,
       "file": "CL.json"
     },
     {
@@ -250,7 +256,7 @@
     {
       "country": "China",
       "countryCode": "CN",
-      "count": 1217,
+      "count": 1226,
       "file": "CN.json"
     },
     {
@@ -268,7 +274,7 @@
     {
       "country": "Cuba",
       "countryCode": "CU",
-      "count": 38,
+      "count": 39,
       "file": "CU.json"
     },
     {
@@ -286,7 +292,7 @@
     {
       "country": "Cyprus",
       "countryCode": "CY",
-      "count": 45,
+      "count": 46,
       "file": "CY.json"
     },
     {
@@ -298,7 +304,7 @@
     {
       "country": "Germany",
       "countryCode": "DE",
-      "count": 614,
+      "count": 618,
       "file": "DE.json"
     },
     {
@@ -328,13 +334,13 @@
     {
       "country": "Algeria",
       "countryCode": "DZ",
-      "count": 123,
+      "count": 124,
       "file": "DZ.json"
     },
     {
       "country": "Ecuador",
       "countryCode": "EC",
-      "count": 98,
+      "count": 100,
       "file": "EC.json"
     },
     {
@@ -364,7 +370,7 @@
     {
       "country": "Spain",
       "countryCode": "ES",
-      "count": 213,
+      "count": 216,
       "file": "ES.json"
     },
     {
@@ -400,7 +406,7 @@
     {
       "country": "France",
       "countryCode": "FR",
-      "count": 499,
+      "count": 500,
       "file": "FR.json"
     },
     {
@@ -436,7 +442,7 @@
     {
       "country": "Ghana",
       "countryCode": "GH",
-      "count": 123,
+      "count": 124,
       "file": "GH.json"
     },
     {
@@ -466,7 +472,7 @@
     {
       "country": "Guadeloupe",
       "countryCode": "GP",
-      "count": 2,
+      "count": 3,
       "file": "GP.json"
     },
     {
@@ -538,7 +544,7 @@
     {
       "country": "Indonesia",
       "countryCode": "ID",
-      "count": 918,
+      "count": 945,
       "file": "ID.json"
     },
     {
@@ -550,25 +556,25 @@
     {
       "country": "Israel",
       "countryCode": "IL",
-      "count": 65,
+      "count": 66,
       "file": "IL.json"
     },
     {
       "country": "India",
       "countryCode": "IN",
-      "count": 1854,
+      "count": 1943,
       "file": "IN.json"
     },
     {
       "country": "Iraq",
       "countryCode": "IQ",
-      "count": 126,
+      "count": 128,
       "file": "IQ.json"
     },
     {
       "country": "Iran",
       "countryCode": "IR",
-      "count": 350,
+      "count": 356,
       "file": "IR.json"
     },
     {
@@ -580,7 +586,7 @@
     {
       "country": "Italy",
       "countryCode": "IT",
-      "count": 256,
+      "count": 257,
       "file": "IT.json"
     },
     {
@@ -592,7 +598,7 @@
     {
       "country": "Jordan",
       "countryCode": "JO",
-      "count": 30,
+      "count": 31,
       "file": "JO.json"
     },
     {
@@ -604,7 +610,7 @@
     {
       "country": "Kenya",
       "countryCode": "KE",
-      "count": 87,
+      "count": 88,
       "file": "KE.json"
     },
     {
@@ -658,7 +664,7 @@
     {
       "country": "Kazakhstan",
       "countryCode": "KZ",
-      "count": 95,
+      "count": 96,
       "file": "KZ.json"
     },
     {
@@ -724,13 +730,13 @@
     {
       "country": "Libya",
       "countryCode": "LY",
-      "count": 45,
+      "count": 47,
       "file": "LY.json"
     },
     {
       "country": "Morocco",
       "countryCode": "MA",
-      "count": 105,
+      "count": 106,
       "file": "MA.json"
     },
     {
@@ -802,7 +808,7 @@
     {
       "country": "Mauritania",
       "countryCode": "MR",
-      "count": 4,
+      "count": 5,
       "file": "MR.json"
     },
     {
@@ -826,7 +832,7 @@
     {
       "country": "Maldives",
       "countryCode": "MV",
-      "count": 5,
+      "count": 6,
       "file": "MV.json"
     },
     {
@@ -838,7 +844,7 @@
     {
       "country": "Mexico",
       "countryCode": "MX",
-      "count": 670,
+      "count": 680,
       "file": "MX.json"
     },
     {
@@ -874,7 +880,7 @@
     {
       "country": "Nigeria",
       "countryCode": "NG",
-      "count": 309,
+      "count": 315,
       "file": "NG.json"
     },
     {
@@ -886,19 +892,19 @@
     {
       "country": "The Netherlands",
       "countryCode": "NL",
-      "count": 131,
+      "count": 132,
       "file": "NL.json"
     },
     {
       "country": "Norway",
       "countryCode": "NO",
-      "count": 70,
+      "count": 71,
       "file": "NO.json"
     },
     {
       "country": "Nepal",
       "countryCode": "NP",
-      "count": 65,
+      "count": 69,
       "file": "NP.json"
     },
     {
@@ -928,7 +934,7 @@
     {
       "country": "Peru",
       "countryCode": "PE",
-      "count": 133,
+      "count": 134,
       "file": "PE.json"
     },
     {
@@ -946,13 +952,13 @@
     {
       "country": "Philippines",
       "countryCode": "PH",
-      "count": 291,
+      "count": 292,
       "file": "PH.json"
     },
     {
       "country": "Pakistan",
       "countryCode": "PK",
-      "count": 258,
+      "count": 262,
       "file": "PK.json"
     },
     {
@@ -994,13 +1000,13 @@
     {
       "country": "Paraguay",
       "countryCode": "PY",
-      "count": 39,
+      "count": 40,
       "file": "PY.json"
     },
     {
       "country": "Qatar",
       "countryCode": "QA",
-      "count": 31,
+      "count": 32,
       "file": "QA.json"
     },
     {
@@ -1024,7 +1030,7 @@
     {
       "country": "Russia",
       "countryCode": "RU",
-      "count": 828,
+      "count": 829,
       "file": "RU.json"
     },
     {
@@ -1054,7 +1060,7 @@
     {
       "country": "Sudan",
       "countryCode": "SD",
-      "count": 56,
+      "count": 57,
       "file": "SD.json"
     },
     {
@@ -1144,7 +1150,7 @@
     {
       "country": "Syria",
       "countryCode": "SY",
-      "count": 35,
+      "count": 36,
       "file": "SY.json"
     },
     {
@@ -1174,7 +1180,7 @@
     {
       "country": "Thailand",
       "countryCode": "TH",
-      "count": 154,
+      "count": 157,
       "file": "TH.json"
     },
     {
@@ -1198,7 +1204,7 @@
     {
       "country": "Tunisia",
       "countryCode": "TN",
-      "count": 67,
+      "count": 70,
       "file": "TN.json"
     },
     {
@@ -1222,7 +1228,7 @@
     {
       "country": "Taiwan",
       "countryCode": "TW",
-      "count": 151,
+      "count": 152,
       "file": "TW.json"
     },
     {
@@ -1234,7 +1240,7 @@
     {
       "country": "Ukraine",
       "countryCode": "UA",
-      "count": 298,
+      "count": 301,
       "file": "UA.json"
     },
     {
@@ -1246,19 +1252,19 @@
     {
       "country": "United States",
       "countryCode": "US",
-      "count": 4407,
+      "count": 4427,
       "file": "US.json"
     },
     {
       "country": "Uruguay",
       "countryCode": "UY",
-      "count": 17,
+      "count": 18,
       "file": "UY.json"
     },
     {
       "country": "Uzbekistan",
       "countryCode": "UZ",
-      "count": 118,
+      "count": 124,
       "file": "UZ.json"
     },
     {
@@ -1288,7 +1294,7 @@
     {
       "country": "Vietnam",
       "countryCode": "VN",
-      "count": 188,
+      "count": 193,
       "file": "VN.json"
     },
     {
@@ -1300,19 +1306,19 @@
     {
       "country": "Samoa",
       "countryCode": "WS",
-      "count": 2,
+      "count": 3,
       "file": "WS.json"
     },
     {
       "country": "Kosovo",
       "countryCode": "XK",
-      "count": 10,
+      "count": 11,
       "file": "XK.json"
     },
     {
       "country": "Yemen",
       "countryCode": "YE",
-      "count": 54,
+      "count": 55,
       "file": "YE.json"
     },
     {
@@ -1324,7 +1330,7 @@
     {
       "country": "South Africa",
       "countryCode": "ZA",
-      "count": 69,
+      "count": 70,
       "file": "ZA.json"
     },
     {
@@ -1340,14 +1346,14 @@
       "file": "ZW.json"
     }
   ],
-  "generatedAt": "2026-06-23T00:00:00Z",
-  "institutionCount": 24450,
+  "generatedAt": "2026-07-20T00:00:00Z",
+  "institutionCount": 24725,
   "license": "CC0-1.0",
   "source": {
-    "checksum": "md5:f42792cae72dd6c223c2b792ccf77169",
+    "checksum": "md5:ad7e842ce1b296fc066a0babe86ec48e",
     "conceptDoi": "10.5281/zenodo.6347574",
-    "publicationDate": "2026-06-23",
+    "publicationDate": "2026-07-20",
     "provider": "Research Organization Registry (ROR)",
-    "versionDoi": "10.5281/zenodo.20818161"
+    "versionDoi": "10.5281/zenodo.21458494"
   }
 }
