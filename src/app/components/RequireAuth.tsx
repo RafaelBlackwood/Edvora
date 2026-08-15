@@ -1,9 +1,17 @@
-﻿import { Navigate, useLocation } from "react-router";
+import { Navigate, useLocation } from "react-router";
 import { useAuth, type AuthUser } from "../providers/AuthProvider";
 
 export function RequireAuth({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
   const location = useLocation();
+
+  if (isLoading) {
+    return (
+      <main className="route-loading" aria-busy="true" aria-label="Loading your account">
+        <span className="auth-spinner" aria-hidden="true" />
+      </main>
+    );
+  }
 
   if (!isAuthenticated) {
     return <Navigate to="/" replace state={{ from: location.pathname }} />;

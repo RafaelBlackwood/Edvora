@@ -1,7 +1,14 @@
-﻿import { createContext, useContext, useMemo, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import type { Provider as SupabaseProvider, Session } from "@supabase/supabase-js";
 import { userProfile } from "../data/mockData";
 import {
-  createSessionNonce,
   normalizeEmail,
   sanitizeUserText,
   validateEmail,
@@ -9,13 +16,26 @@ import {
   validateOneTimeCode,
   validatePassword,
 } from "../lib/security";
-import { readSessionJson, removeSessionJson, writeSessionJson } from "../lib/storage";
+import {
+  getOAuthProviderAvailability,
+  isSupabaseConfigured,
+  missingSupabaseMessage,
+  supabase,
+} from "../lib/supabase";
 
 type AuthRole = "student" | "admin";
-type AuthProviderName = "Google" | "Apple" | "Facebook";
+export type AuthProviderName = "Google" | "Apple" | "Facebook" | "X";
+
+const OAUTH_PROVIDERS: Record<AuthProviderName, SupabaseProvider> = {
+  Apple: "apple",
+  Facebook: "facebook",
+  Google: "google",
+  X: "x",
+};
 
 export type AuthUser = {
   id: string;
+  isGuest: boolean;
   avatar: string;
   email: string;
   name: string;
@@ -35,97 +55,222 @@ type RegistrationInput = Credentials & {
 type AuthResult = {
   ok: boolean;
   message?: string;
+  requiresVerification?: boolean;
 };
 
 type PendingRegistration = {
   email: string;
   name: string;
-  passwordStrengthAccepted: boolean;
-};
-
-type StoredSession = {
-  expiresAt: number;
-  issuedAt: number;
-  nonce: string;
-  user: AuthUser;
 };
 
 type AuthContextValue = {
+  canUseGuestAccess: boolean;
+  continueAsGuest: () => void;
   isAuthenticated: boolean;
+  isLoading: boolean;
+  isPasswordRecovery: boolean;
   pendingRegistration: PendingRegistration | null;
   registerAccount: (input: RegistrationInput) => Promise<AuthResult>;
+  requestPasswordReset: (email: string) => Promise<AuthResult>;
+  resendVerification: () => Promise<AuthResult>;
   signIn: (input: Credentials) => Promise<AuthResult>;
-  signInWithProvider: (provider: AuthProviderName) => void;
-  signOut: () => void;
+  signInWithProvider: (provider: AuthProviderName, redirectPath?: string) => Promise<AuthResult>;
+  signOut: () => Promise<void>;
+  updatePassword: (password: string) => Promise<AuthResult>;
   user: AuthUser | null;
   verifyEmail: (code: string) => Promise<AuthResult>;
 };
 
-const AUTH_STORAGE_KEY = "edvora.auth.session.v1";
-const SESSION_TTL_MS = 8 * 60 * 60 * 1000;
-const DEMO_VERIFICATION_CODE = "246810";
-
-const demoUsers: Array<AuthUser & { password: string }> = [
-  {
-    id: "student_demo",
-    avatar: userProfile.avatar,
-    email: "alex.rivera@email.com",
-    name: userProfile.name,
-    password: "EdvoraDemo1!",
-    profileCompletion: userProfile.profileCompletion,
-    role: "student",
-  },
-  {
-    id: "admin_demo",
-    avatar: userProfile.avatar,
-    email: "admin@edvora.test",
-    name: "Maya Admin",
-    password: "AdminDemo1!",
-    profileCompletion: 100,
-    role: "admin",
-  },
-];
+type ProfileRow = {
+  application_goal: string | null;
+  avatar_url: string | null;
+  budget: string | null;
+  current_level: string | null;
+  destination_countries: string[] | null;
+  display_name: string;
+  field_of_study: string | null;
+  intake_season: string | null;
+  nationality: string | null;
+  onboarding_completed: boolean;
+  role: string;
+  target_degree: string | null;
+};
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-function getInitialSession() {
-  const session = readSessionJson<StoredSession | null>(AUTH_STORAGE_KEY, null);
+const DEV_GUEST_SESSION_KEY = "edvora.dev.guest";
+const DEV_GUEST_USER: AuthUser = {
+  avatar: userProfile.avatar,
+  email: "guest@edvora.local",
+  id: "dev-guest",
+  isGuest: true,
+  name: "Guest Student",
+  profileCompletion: 0,
+  role: "student",
+};
 
-  if (!session || session.expiresAt <= Date.now()) {
-    removeSessionJson(AUTH_STORAGE_KEY);
+function getDevGuestUser() {
+  if (!import.meta.env.DEV || window.sessionStorage.getItem(DEV_GUEST_SESSION_KEY) !== "true") {
     return null;
   }
 
-  return session;
+  return DEV_GUEST_USER;
 }
 
-function persistUser(user: AuthUser) {
-  const now = Date.now();
-  const session: StoredSession = {
-    expiresAt: now + SESSION_TTL_MS,
-    issuedAt: now,
-    nonce: createSessionNonce(),
-    user,
-  };
+function friendlyAuthMessage(message: string) {
+  const normalized = message.toLowerCase();
 
-  writeSessionJson(AUTH_STORAGE_KEY, session);
-  return session;
+  if (
+    normalized.includes("failed to fetch") ||
+    normalized.includes("fetch failed") ||
+    normalized.includes("network request failed")
+  ) {
+    return "The authentication service is offline. Start the local backend and try again.";
+  }
+
+  if (normalized.includes("invalid login credentials")) {
+    return "The email or password is incorrect.";
+  }
+
+  if (normalized.includes("email not confirmed")) {
+    return "Confirm your email before signing in.";
+  }
+
+  if (normalized.includes("user already registered")) {
+    return "An account already exists for this email.";
+  }
+
+  if (normalized.includes("rate limit")) {
+    return "Too many attempts. Please wait a moment and try again.";
+  }
+
+  return message;
 }
 
-function toRegisteredUser(pendingRegistration: PendingRegistration): AuthUser {
+function profileCompletion(profile: ProfileRow | null) {
+  if (profile?.onboarding_completed) {
+    return 100;
+  }
+
+  const fields = [
+    profile?.display_name,
+    profile?.nationality,
+    profile?.current_level,
+    profile?.target_degree,
+    profile?.field_of_study,
+    profile?.budget,
+    profile?.intake_season,
+    profile?.application_goal,
+    profile?.destination_countries?.length,
+  ];
+
+  return Math.round((fields.filter(Boolean).length / fields.length) * 100);
+}
+
+async function loadAuthUser(session: Session | null): Promise<AuthUser | null> {
+  if (!session?.user || !supabase) {
+    return null;
+  }
+
+  const { data } = await supabase
+    .from("profiles")
+    .select(
+      "application_goal, avatar_url, budget, current_level, destination_countries, display_name, field_of_study, intake_season, nationality, onboarding_completed, role, target_degree",
+    )
+    .eq("id", session.user.id)
+    .maybeSingle();
+  const profile = (data as ProfileRow | null) ?? null;
+  const metadata = session.user.user_metadata as Record<string, unknown>;
+  const metadataName =
+    typeof metadata.name === "string"
+      ? metadata.name
+      : typeof metadata.full_name === "string"
+        ? metadata.full_name
+        : "";
+  const metadataAvatar =
+    typeof metadata.avatar_url === "string"
+      ? metadata.avatar_url
+      : typeof metadata.picture === "string"
+        ? metadata.picture
+        : "";
+
   return {
-    id: `student_${crypto.randomUUID()}`,
-    avatar: userProfile.avatar,
-    email: pendingRegistration.email,
-    name: pendingRegistration.name,
-    profileCompletion: 18,
-    role: "student",
+    id: session.user.id,
+    isGuest: false,
+    avatar: profile?.avatar_url || metadataAvatar || userProfile.avatar,
+    email: session.user.email ?? "",
+    name: profile?.display_name || metadataName || session.user.email?.split("@")[0] || "Student",
+    profileCompletion: profileCompletion(profile),
+    role: profile?.role === "admin" ? "admin" : "student",
   };
+}
+
+function getBackend() {
+  return isSupabaseConfigured && supabase ? supabase : null;
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [session, setSession] = useState<StoredSession | null>(() => getInitialSession());
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isPasswordRecovery, setIsPasswordRecovery] = useState(false);
   const [pendingRegistration, setPendingRegistration] = useState<PendingRegistration | null>(null);
+
+  const hydrateSession = useCallback(async (session: Session | null) => {
+    if (session) {
+      window.sessionStorage.removeItem(DEV_GUEST_SESSION_KEY);
+    }
+
+    const nextUser = session ? await loadAuthUser(session) : getDevGuestUser();
+    setUser(nextUser);
+    setIsLoading(false);
+  }, []);
+
+  useEffect(() => {
+    const backend = getBackend();
+
+    if (!backend) {
+      setUser(getDevGuestUser());
+      setIsLoading(false);
+      return;
+    }
+
+    let active = true;
+
+    void backend.auth.getSession().then(({ data }) => {
+      if (active) {
+        void hydrateSession(data.session);
+      }
+    });
+
+    const { data } = backend.auth.onAuthStateChange((event, session) => {
+      if (event === "PASSWORD_RECOVERY") {
+        setIsPasswordRecovery(true);
+      }
+
+      window.setTimeout(() => {
+        if (active) {
+          void hydrateSession(session);
+        }
+      }, 0);
+    });
+
+    return () => {
+      active = false;
+      data.subscription.unsubscribe();
+    };
+  }, [hydrateSession]);
+
+  const continueAsGuest = () => {
+    if (!import.meta.env.DEV) {
+      return;
+    }
+
+    window.sessionStorage.setItem(DEV_GUEST_SESSION_KEY, "true");
+    setPendingRegistration(null);
+    setIsPasswordRecovery(false);
+    setUser(DEV_GUEST_USER);
+    setIsLoading(false);
+  };
 
   const signIn = async ({ email, password }: Credentials): Promise<AuthResult> => {
     const normalizedEmail = normalizeEmail(email);
@@ -139,21 +284,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return { ok: false, message: "Password is required." };
     }
 
-    await new Promise((resolve) => setTimeout(resolve, 450));
+    const backend = getBackend();
 
-    const demoUser = demoUsers.find(
-      (candidate) => candidate.email === normalizedEmail && candidate.password === password,
-    );
-
-    if (!demoUser) {
-      return {
-        ok: false,
-        message: "Invalid credentials. Try the demo student account or register a new account.",
-      };
+    if (!backend) {
+      return { ok: false, message: missingSupabaseMessage };
     }
 
-    const { password: _password, ...safeUser } = demoUser;
-    setSession(persistUser(safeUser));
+    const { data, error } = await backend.auth.signInWithPassword({
+      email: normalizedEmail,
+      password,
+    });
+
+    if (error) {
+      return { ok: false, message: friendlyAuthMessage(error.message) };
+    }
+
+    await hydrateSession(data.session);
     return { ok: true };
   };
 
@@ -167,15 +313,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return failed;
     }
 
-    await new Promise((resolve) => setTimeout(resolve, 450));
+    const backend = getBackend();
 
-    setPendingRegistration({
+    if (!backend) {
+      return { ok: false, message: missingSupabaseMessage };
+    }
+
+    const { data, error } = await backend.auth.signUp({
       email: normalizedEmail,
-      name: cleanName,
-      passwordStrengthAccepted: true,
+      password,
+      options: {
+        data: { name: cleanName },
+        emailRedirectTo: `${window.location.origin}/onboarding`,
+      },
     });
 
-    return { ok: true };
+    if (error) {
+      return { ok: false, message: friendlyAuthMessage(error.message) };
+    }
+
+    setPendingRegistration({ email: normalizedEmail, name: cleanName });
+
+    if (data.session) {
+      await hydrateSession(data.session);
+      setPendingRegistration(null);
+      return { ok: true, requiresVerification: false };
+    }
+
+    return { ok: true, requiresVerification: true };
   };
 
   const verifyEmail = async (code: string): Promise<AuthResult> => {
@@ -189,49 +354,169 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return codeValidation;
     }
 
-    await new Promise((resolve) => setTimeout(resolve, 350));
+    const backend = getBackend();
 
-    if (code !== DEMO_VERIFICATION_CODE) {
-      return { ok: false, message: "Verification code is incorrect. Prototype code: 246810." };
+    if (!backend) {
+      return { ok: false, message: missingSupabaseMessage };
     }
 
-    const user = toRegisteredUser(pendingRegistration);
+    const { data, error } = await backend.auth.verifyOtp({
+      email: pendingRegistration.email,
+      token: code,
+      type: "email",
+    });
+
+    if (error) {
+      return { ok: false, message: friendlyAuthMessage(error.message) };
+    }
+
     setPendingRegistration(null);
-    setSession(persistUser(user));
+    await hydrateSession(data.session);
+    return { ok: true };
+  };
+
+  const resendVerification = async (): Promise<AuthResult> => {
+    if (!pendingRegistration) {
+      return { ok: false, message: "Start registration before requesting another code." };
+    }
+
+    const backend = getBackend();
+
+    if (!backend) {
+      return { ok: false, message: missingSupabaseMessage };
+    }
+
+    const { error } = await backend.auth.resend({
+      email: pendingRegistration.email,
+      type: "signup",
+      options: { emailRedirectTo: `${window.location.origin}/onboarding` },
+    });
+
+    return error
+      ? { ok: false, message: friendlyAuthMessage(error.message) }
+      : { ok: true, message: "A fresh verification code was sent." };
+  };
+
+  const signInWithProvider = async (
+    provider: AuthProviderName,
+    redirectPath = "/dashboard",
+  ): Promise<AuthResult> => {
+    const backend = getBackend();
+
+    if (!backend) {
+      return { ok: false, message: missingSupabaseMessage };
+    }
+
+    const providerId = OAUTH_PROVIDERS[provider];
+    const availability = await getOAuthProviderAvailability(providerId);
+
+    if (!availability.reachable) {
+      return { ok: false, message: "The authentication service is offline. Start the local backend and try again." };
+    }
+
+    if (!availability.enabled) {
+      return { ok: false, message: `${provider} sign-in is not configured yet.` };
+    }
+
+    const safePath = redirectPath.startsWith("/") && !redirectPath.startsWith("//")
+      ? redirectPath
+      : "/dashboard";
+    const callbackUrl = new URL("/auth/callback", window.location.origin);
+    callbackUrl.searchParams.set("next", safePath);
+
+    const { error } = await backend.auth.signInWithOAuth({
+      provider: providerId,
+      options: { redirectTo: callbackUrl.toString() },
+    });
+
+    if (error) {
+      const normalized = error.message.toLowerCase();
+      if (normalized.includes("provider is not enabled") || normalized.includes("unsupported provider")) {
+        return { ok: false, message: `${provider} sign-in is not enabled for this environment yet.` };
+      }
+      return { ok: false, message: friendlyAuthMessage(error.message) };
+    }
 
     return { ok: true };
   };
 
-  const signInWithProvider = (provider: AuthProviderName) => {
-    setSession(
-      persistUser({
-        id: `${provider.toLowerCase()}_demo`,
-        avatar: userProfile.avatar,
-        email: `${provider.toLowerCase()}-student@edvora.test`,
-        name: `${provider} Student`,
-        profileCompletion: 42,
-        role: "student",
-      }),
-    );
+  const requestPasswordReset = async (email: string): Promise<AuthResult> => {
+    const normalizedEmail = normalizeEmail(email);
+    const validation = validateEmail(normalizedEmail);
+
+    if (!validation.ok) {
+      return validation;
+    }
+
+    const backend = getBackend();
+
+    if (!backend) {
+      return { ok: false, message: missingSupabaseMessage };
+    }
+
+    const { error } = await backend.auth.resetPasswordForEmail(normalizedEmail, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+
+    return error
+      ? { ok: false, message: friendlyAuthMessage(error.message) }
+      : { ok: true };
   };
 
-  const signOut = () => {
-    removeSessionJson(AUTH_STORAGE_KEY);
-    setSession(null);
+  const updatePassword = async (password: string): Promise<AuthResult> => {
+    const validation = validatePassword(password);
+
+    if (!validation.ok) {
+      return validation;
+    }
+
+    const backend = getBackend();
+
+    if (!backend) {
+      return { ok: false, message: missingSupabaseMessage };
+    }
+
+    const { error } = await backend.auth.updateUser({ password });
+
+    if (error) {
+      return { ok: false, message: friendlyAuthMessage(error.message) };
+    }
+
+    setIsPasswordRecovery(false);
+    return { ok: true };
+  };
+
+  const signOut = async () => {
+    const backend = getBackend();
+    window.sessionStorage.removeItem(DEV_GUEST_SESSION_KEY);
+    setUser(null);
+    setPendingRegistration(null);
+    setIsPasswordRecovery(false);
+
+    if (backend) {
+      await backend.auth.signOut();
+    }
   };
 
   const value = useMemo<AuthContextValue>(
     () => ({
-      isAuthenticated: Boolean(session?.user),
+      canUseGuestAccess: import.meta.env.DEV,
+      continueAsGuest,
+      isAuthenticated: Boolean(user),
+      isLoading,
+      isPasswordRecovery,
       pendingRegistration,
       registerAccount,
+      requestPasswordReset,
+      resendVerification,
       signIn,
       signInWithProvider,
       signOut,
-      user: session?.user ?? null,
+      updatePassword,
+      user,
       verifyEmail,
     }),
-    [pendingRegistration, session],
+    [isLoading, isPasswordRecovery, pendingRegistration, user],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,7 +1,16 @@
 import { useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import { ArrowLeft, CheckCircle2, FileText, Plus, Search } from "lucide-react";
+import {
+  ApplicationProgramStep,
+  createProfiledPrograms,
+  findRequirementGroup,
+  getProgramIntakes,
+} from "../ApplicationProgramStep";
+import { resolveApplicationInstitutionId } from "../../data/curatedInstitutions";
 import { universities } from "../../data/mockData";
+import { useUniversityCatalog } from "../../hooks/useUniversityCatalog";
+import { useUniversityPrograms } from "../../hooks/useUniversityPrograms";
 import { useAppData } from "../../providers/AppDataProvider";
 import { applicationStatuses } from "../../types/application";
 import { ApplicationWorkspace, formatApplicationDate } from "./ApplicationWorkspace";
@@ -29,13 +38,14 @@ export function ApplicationsPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { applications, createApplication } = useAppData();
+  const { institutions } = useUniversityCatalog();
   const requestedApplication = applications.find((application) => application.id === searchParams.get("application"));
   const preselectedUniversity = searchParams.get("university") ?? "";
   const preselectedProgram = searchParams.get("program") ?? "";
   const [view, setView] = useState<"tracker" | "new">(
     searchParams.get("new") === "1" || Boolean(preselectedUniversity) ? "new" : "tracker",
   );
-  const [newStep, setNewStep] = useState(0);
+  const [newStep, setNewStep] = useState(preselectedProgram ? 2 : preselectedUniversity ? 1 : 0);
   const [selectedUniversityId, setSelectedUniversityId] = useState(preselectedUniversity);
   const [selectedProgram, setSelectedProgram] = useState(preselectedProgram);
   const [selectedIntake, setSelectedIntake] = useState("");
@@ -44,6 +54,30 @@ export function ApplicationsPage() {
   const [query, setQuery] = useState("");
 
   const selectedUniversity = universities.find((university) => university.id === selectedUniversityId);
+  const selectedInstitutionId = resolveApplicationInstitutionId(selectedUniversityId);
+  const selectedCatalogUniversity = institutions.find(
+    (institution) => institution.id === selectedInstitutionId,
+  );
+  const selectedUniversityName = selectedUniversity?.name ?? selectedCatalogUniversity?.name ?? "";
+  const selectedUniversityWebsite = selectedUniversity?.website ?? selectedCatalogUniversity?.website ?? "";
+  const programCatalog = useUniversityPrograms(selectedInstitutionId);
+  const profiledPrograms = useMemo(
+    () => createProfiledPrograms(selectedUniversity?.programs ?? [], selectedUniversityName),
+    [selectedUniversity, selectedUniversityName],
+  );
+  const availablePrograms = programCatalog.loading
+    ? []
+    : programCatalog.programs.length > 0
+      ? programCatalog.programs
+      : profiledPrograms;
+  const selectedProgramRecord = availablePrograms.find(
+    (program) => program.name === selectedProgram,
+  );
+  const requirementGroup = findRequirementGroup(
+    selectedProgramRecord,
+    programCatalog.snapshot,
+  );
+  const intakeChoices = getProgramIntakes(selectedProgramRecord);
   const filteredApplications = useMemo(() => applications.filter((application) => {
     const matchesStatus = statusFilter === "All" || application.status === statusFilter;
     const needle = query.trim().toLowerCase();
@@ -72,7 +106,7 @@ export function ApplicationsPage() {
   const continueNew = () => {
     const missing =
       (newStep === 0 && !selectedUniversityId && "university") ||
-      (newStep === 1 && !selectedProgram && "program") ||
+      (newStep === 1 && (!selectedProgram || !selectedProgramRecord) && "program") ||
       (newStep === 2 && !selectedIntake && "intake");
 
     if (missing) {
@@ -84,7 +118,20 @@ export function ApplicationsPage() {
   };
 
   const createDraft = () => {
-    const result = createApplication({ intake: selectedIntake, program: selectedProgram, universityId: selectedUniversityId });
+    const result = createApplication({
+      deadlineLabel: selectedProgramRecord?.applicationDeadline,
+      documents: requirementGroup?.documents,
+      intake: selectedIntake,
+      portalUrl:
+        selectedProgramRecord?.applicationUrl ||
+        selectedProgramRecord?.officialUrl ||
+        selectedUniversityWebsite,
+      program: selectedProgram,
+      programSourceUrl: selectedProgramRecord?.officialUrl,
+      programVerifiedAt: programCatalog.snapshot?.sourceUpdatedAt,
+      universityId: selectedUniversityId,
+      universityName: selectedUniversityName,
+    });
     if (!result.ok || !result.id) {
       setFormError(result.message ?? "Application could not be created.");
       return;
@@ -116,10 +163,20 @@ export function ApplicationsPage() {
             </div>
             {formError && <p role="alert" className="mb-3 text-sm" style={{ color: "#f58a90" }}>{formError}</p>}
             <section className="p-5 rounded-lg" style={panelStyle}>
-              {newStep === 0 && <UniversityStep selectedId={selectedUniversityId} onSelect={(id) => { setSelectedUniversityId(id); setSelectedProgram(""); setFormError(""); }} />}
-              {newStep === 1 && <ChoiceStep title="Choose a program" choices={selectedUniversity?.programs ?? []} selected={selectedProgram} onSelect={(value) => { setSelectedProgram(value); setFormError(""); }} />}
-              {newStep === 2 && <ChoiceStep title="Choose an intake" choices={["Fall 2026", "Spring 2027", "Fall 2027"]} selected={selectedIntake} onSelect={(value) => { setSelectedIntake(value); setFormError(""); }} columns />}
-              {newStep === 3 && <ReviewStep university={selectedUniversity?.name ?? "Not selected"} program={selectedProgram} intake={selectedIntake} deadline={selectedUniversity?.deadline ?? ""} />}
+              {newStep === 0 && <UniversityStep selectedId={selectedUniversityId} onSelect={(id) => { setSelectedUniversityId(id); setSelectedProgram(""); setSelectedIntake(""); setFormError(""); }} />}
+              {newStep === 1 && (
+                <ApplicationProgramStep
+                  backendReachable={programCatalog.backendReachable}
+                  error={programCatalog.error}
+                  loading={programCatalog.loading}
+                  onSelect={(program) => { setSelectedProgram(program.name); setSelectedIntake(""); setFormError(""); }}
+                  programs={availablePrograms}
+                  selected={selectedProgram}
+                  snapshot={programCatalog.snapshot}
+                />
+              )}
+              {newStep === 2 && <ChoiceStep title="Choose an intake" choices={intakeChoices} selected={selectedIntake} onSelect={(value) => { setSelectedIntake(value); setFormError(""); }} columns />}
+              {newStep === 3 && <ReviewStep university={selectedUniversityName || "Not selected"} program={selectedProgram} intake={selectedIntake} deadlineLabel={selectedProgramRecord?.applicationDeadline ?? ""} verifiedAt={programCatalog.snapshot?.sourceUpdatedAt ?? ""} />}
             </section>
             <div className="flex gap-3 mt-4">
               {newStep > 0 && <button type="button" onClick={() => setNewStep((step) => Math.max(0, step - 1))} className="px-5 py-2.5 rounded-lg text-sm" style={{ border: "1px solid rgba(124,106,247,0.22)", color: "#a8b4d0" }}>Back</button>}
@@ -137,18 +194,17 @@ function UniversityStep({ onSelect, selectedId }: { onSelect: (id: string) => vo
 }
 
 function ChoiceStep({ choices, columns = false, onSelect, selected, title }: { choices: string[]; columns?: boolean; onSelect: (value: string) => void; selected: string; title: string }) {
-  return <><h2 className="font-semibold text-white mb-4">{title}</h2><div className={columns ? "grid sm:grid-cols-3 gap-2" : "space-y-2"}>{choices.map((choice) => <button key={choice} type="button" onClick={() => onSelect(choice)} className="w-full flex items-center justify-between p-3 rounded-lg text-left hover:bg-white/5" style={{ background: selected === choice ? "rgba(124,106,247,0.15)" : "rgba(8,13,26,0.5)", border: "1px solid " + (selected === choice ? "#716ee0" : "rgba(124,106,247,0.1)") }}><span className="text-sm text-white">{choice}</span>{selected === choice && <CheckCircle2 size={16} style={{ color: "#4adea8" }} />}</button>)}</div></>;
+  return <><h2 className="font-semibold text-white mb-4">{title}</h2>{choices.length === 0 ? <p className="py-8 text-center text-sm" style={{ color: "#8f9bb8" }}>This program is not currently listing an available intake.</p> : <div className={columns ? "grid sm:grid-cols-3 gap-2" : "space-y-2"}>{choices.map((choice) => <button key={choice} type="button" onClick={() => onSelect(choice)} className="w-full flex items-center justify-between p-3 rounded-lg text-left hover:bg-white/5" style={{ background: selected === choice ? "rgba(124,106,247,0.15)" : "rgba(8,13,26,0.5)", border: "1px solid " + (selected === choice ? "#716ee0" : "rgba(124,106,247,0.1)") }}><span className="text-sm text-white">{choice}</span>{selected === choice && <CheckCircle2 size={16} style={{ color: "#4adea8" }} />}</button>)}</div>}</>;
 }
 
-function ReviewStep({ deadline, intake, program, university }: { deadline: string; intake: string; program: string; university: string }) {
-  return <><h2 className="font-semibold text-white mb-4">Review draft</h2><div className="space-y-2">{[["University", university], ["Program", program || "Not selected"], ["Intake", intake || "Not selected"], ["Deadline", formatApplicationDate(deadline)]].map(([label, value]) => <div key={label} className="flex justify-between gap-4 p-3 rounded-lg" style={{ background: "rgba(8,13,26,0.55)" }}><span className="text-sm" style={{ color: "#6b7a9e" }}>{label}</span><strong className="text-sm text-white text-right">{value}</strong></div>)}</div></>;
+function ReviewStep({ deadlineLabel, intake, program, university, verifiedAt }: { deadlineLabel: string; intake: string; program: string; university: string; verifiedAt: string }) {
+  return <><h2 className="font-semibold text-white mb-4">Review draft</h2><div className="space-y-2">{[["University", university], ["Program", program || "Not selected"], ["Intake", intake || "Not selected"], ["Official deadline listing", deadlineLabel || "Confirm on the official program page"], ["Catalog verification", verifiedAt || "Official import pending"]].map(([label, value]) => <div key={label} className="flex justify-between gap-4 p-3 rounded-lg" style={{ background: "rgba(8,13,26,0.55)" }}><span className="text-sm" style={{ color: "#6b7a9e" }}>{label}</span><strong className="text-sm text-white text-right">{value}</strong></div>)}</div></>;
 }
-
 function Tracker({ applications, query, setQuery, setStatusFilter, statusFilter }: { applications: ReturnType<typeof useAppData>["applications"]; query: string; setQuery: (value: string) => void; setStatusFilter: (value: string) => void; statusFilter: string }) {
   const navigate = useNavigate();
   return <><div className="flex flex-col sm:flex-row gap-3 mb-4"><label className="relative flex-1"><Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "#6b7a9e" }} /><input value={query} onChange={(event) => setQuery(event.target.value)} className="w-full pl-9 pr-3 py-2.5 rounded-lg text-sm outline-none" style={inputStyle} placeholder="Search applications" /></label><div className="flex gap-1 overflow-x-auto">{["All", ...applicationStatuses].map((status) => <button key={status} type="button" onClick={() => setStatusFilter(status)} className="shrink-0 px-3 py-2 rounded-lg text-xs" style={{ background: statusFilter === status ? "rgba(124,106,247,0.18)" : "rgba(13,20,50,0.5)", border: "1px solid rgba(124,106,247,0.14)", color: statusFilter === status ? "#d2ccff" : "#8290ae" }}>{status}</button>)}</div></div><div className="space-y-3">{applications.map((application) => {
     const university = universities.find((candidate) => candidate.id === application.universityId);
     const statusStyle = statusColors[application.status] ?? statusColors.Draft;
-    return <article key={application.id} className="p-4 lg:p-5 rounded-lg hover:bg-white/[0.025]" style={panelStyle}><div className="flex flex-col lg:flex-row lg:items-center gap-4"><div className="flex items-start gap-3 flex-1 min-w-0"><div className="w-11 h-11 rounded-lg flex items-center justify-center text-lg shrink-0" style={{ background: "rgba(124,106,247,0.1)" }}>{university?.logo || "U"}</div><div className="min-w-0"><div className="flex flex-wrap items-center gap-2 mb-1"><h2 className="font-semibold text-white truncate">{application.university}</h2><span className="px-2.5 py-1 rounded-full text-xs font-medium" style={statusStyle}>{application.status}</span></div><p className="text-sm truncate" style={{ color: "#8f9bb8" }}>{application.program} - {application.intake}</p><div className="flex flex-wrap gap-x-4 gap-y-1 text-xs mt-2" style={{ color: "#6b7a9e" }}><span>Deadline <strong style={{ color: "#e7ad4f" }}>{formatApplicationDate(application.deadline)}</strong></span><span>{application.documents.length} documents</span><span>{application.tasks.filter((task) => task.completed).length}/{application.tasks.length} tasks</span></div></div></div><div className="flex items-center gap-3 lg:w-64"><div className="flex-1"><div className="flex justify-between text-xs mb-1.5" style={{ color: "#6b7a9e" }}><span>Completion</span><span style={{ color: "#a89bf5" }}>{application.progress}%</span></div><div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(124,106,247,0.1)" }}><div className="h-full rounded-full" style={{ width: application.progress + "%", background: "linear-gradient(90deg, #7c6af7, #06b6d4)" }} /></div></div><button type="button" onClick={() => navigate("/applications?application=" + encodeURIComponent(application.id))} className="px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-500/20" style={{ background: "rgba(124,106,247,0.12)", border: "1px solid rgba(124,106,247,0.3)", color: "#d2ccff" }}>Open</button></div></div></article>;
+    return <article key={application.id} className="p-4 lg:p-5 rounded-lg hover:bg-white/[0.025]" style={panelStyle}><div className="flex flex-col lg:flex-row lg:items-center gap-4"><div className="flex items-start gap-3 flex-1 min-w-0"><div className="w-11 h-11 rounded-lg flex items-center justify-center text-lg shrink-0" style={{ background: "rgba(124,106,247,0.1)" }}>{university?.logo || "U"}</div><div className="min-w-0"><div className="flex flex-wrap items-center gap-2 mb-1"><h2 className="font-semibold text-white truncate">{application.university}</h2><span className="px-2.5 py-1 rounded-full text-xs font-medium" style={statusStyle}>{application.status}</span></div><p className="text-sm truncate" style={{ color: "#8f9bb8" }}>{application.program} - {application.intake}</p><div className="flex flex-wrap gap-x-4 gap-y-1 text-xs mt-2" style={{ color: "#6b7a9e" }}><span>Deadline <strong style={{ color: "#e7ad4f" }}>{application.deadline ? formatApplicationDate(application.deadline) : application.deadlineLabel || "Not set"}</strong></span><span>{application.documents.length} documents</span><span>{application.tasks.filter((task) => task.completed).length}/{application.tasks.length} tasks</span></div></div></div><div className="flex items-center gap-3 lg:w-64"><div className="flex-1"><div className="flex justify-between text-xs mb-1.5" style={{ color: "#6b7a9e" }}><span>Completion</span><span style={{ color: "#a89bf5" }}>{application.progress}%</span></div><div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(124,106,247,0.1)" }}><div className="h-full rounded-full" style={{ width: application.progress + "%", background: "linear-gradient(90deg, #7c6af7, #06b6d4)" }} /></div></div><button type="button" onClick={() => navigate("/applications?application=" + encodeURIComponent(application.id))} className="px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-500/20" style={{ background: "rgba(124,106,247,0.12)", border: "1px solid rgba(124,106,247,0.3)", color: "#d2ccff" }}>Open</button></div></div></article>;
   })}{!applications.length && <div className="p-10 rounded-lg text-center" style={panelStyle}><FileText size={24} className="mx-auto mb-3" style={{ color: "#6b7a9e" }} /><h2 className="font-medium text-white">No matching applications</h2><p className="text-sm mt-1" style={{ color: "#6b7a9e" }}>Change the search or status filter.</p></div>}</div></>;
 }

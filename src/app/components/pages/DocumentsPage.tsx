@@ -40,6 +40,7 @@ export function DocumentsPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadTargetId, setUploadTargetId] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState("");
+  const [uploading, setUploading] = useState(false);
   const [notice, setNotice] = useState("");
   const [previewId, setPreviewId] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -75,15 +76,17 @@ export function DocumentsPage() {
     setUploadError("");
   };
 
-  const submitUpload = () => {
+  const submitUpload = async () => {
     if (!selectedFile) {
       setUploadError("Choose a document before uploading.");
       return;
     }
 
+    setUploading(true);
     const result = uploadTargetId
-      ? replaceDocument(uploadTargetId, { category: uploadCategory, file: selectedFile })
-      : addDocument({ category: uploadCategory, file: selectedFile });
+      ? await replaceDocument(uploadTargetId, { category: uploadCategory, file: selectedFile })
+      : await addDocument({ category: uploadCategory, file: selectedFile });
+    setUploading(false);
 
     if (!result.ok) {
       setUploadError(result.message ?? "The document could not be uploaded.");
@@ -225,7 +228,7 @@ export function DocumentsPage() {
               </select>
             </label>
             {uploadError && <p role="alert" className="text-xs mb-3" style={{ color: "#ef6d75" }}>{uploadError}</p>}
-            <button type="button" disabled={!selectedFile} onClick={submitUpload} className="app-primary-action w-full py-3 text-sm font-semibold text-white disabled:opacity-40" style={{ background: "#665bd7" }}>{uploadTargetId ? "Replace file" : "Upload document"}</button>
+            <button type="button" disabled={!selectedFile || uploading} onClick={() => void submitUpload()} className="app-primary-action w-full py-3 text-sm font-semibold text-white disabled:opacity-40" style={{ background: "#665bd7" }}>{uploading ? "Uploading..." : uploadTargetId ? "Replace file" : "Upload document"}</button>
           </section>
         </div>
       )}
@@ -242,7 +245,7 @@ export function DocumentsPage() {
             </dl>
             <div className="flex gap-2">
               <button type="button" className="glass-interactive flex-1 py-2.5 rounded-md text-sm" onClick={() => { setPreviewId(null); openUpload(previewDocument.id); }}>Replace file</button>
-              <button type="button" className="px-4 py-2.5 rounded-md text-sm flex items-center gap-2" style={{ background: "rgba(239,68,68,0.12)", color: "#ef6d75", border: "1px solid rgba(239,68,68,0.25)" }} onClick={() => { removeDocument(previewDocument.id); setPreviewId(null); }}><Trash2 size={14} /> Remove</button>
+              <button type="button" className="px-4 py-2.5 rounded-md text-sm flex items-center gap-2" style={{ background: "rgba(239,68,68,0.12)", color: "#ef6d75", border: "1px solid rgba(239,68,68,0.25)" }} onClick={() => { void removeDocument(previewDocument.id); setPreviewId(null); }}><Trash2 size={14} /> Remove</button>
             </div>
           </section>
         </div>

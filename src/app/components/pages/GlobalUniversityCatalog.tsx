@@ -1,5 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
-import { Building2, ChevronLeft, ChevronRight, ExternalLink, Globe2, Search } from "lucide-react";
+import {
+  Building2,
+  CalendarDays,
+  ChevronLeft,
+  ChevronRight,
+  ExternalLink,
+  Globe2,
+  Link2,
+  RotateCcw,
+  Search,
+  SlidersHorizontal,
+} from "lucide-react";
 import { SafeExternalLink } from "../SafeExternalLink";
 
 type CatalogCountry = {
@@ -12,6 +23,7 @@ type CatalogCountry = {
 type CatalogManifest = {
   countries: CatalogCountry[];
   generatedAt: string;
+  indexFile: string;
   institutionCount: number;
   source: {
     publicationDate: string;
@@ -33,15 +45,26 @@ type CatalogInstitution = {
 };
 
 const pageSize = 24;
+const currentYear = new Date().getFullYear();
 
-export function GlobalUniversityCatalog() {
+type GlobalUniversityCatalogProps = {
+  initialQuery?: string;
+};
+
+export function GlobalUniversityCatalog({ initialQuery = "" }: GlobalUniversityCatalogProps) {
   const [manifest, setManifest] = useState<CatalogManifest | null>(null);
   const [institutions, setInstitutions] = useState<CatalogInstitution[]>([]);
   const [countryCode, setCountryCode] = useState("");
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(initialQuery);
+  const [region, setRegion] = useState("");
+  const [foundedFrom, setFoundedFrom] = useState("");
+  const [foundedTo, setFoundedTo] = useState("");
+  const [websiteOnly, setWebsiteOnly] = useState(false);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  useEffect(() => setQuery(initialQuery), [initialQuery]);
 
   useEffect(() => {
     let active = true;
@@ -50,55 +73,68 @@ export function GlobalUniversityCatalog() {
         if (!response.ok) throw new Error("Catalog manifest could not be loaded.");
         return response.json() as Promise<CatalogManifest>;
       })
-      .then((data) => {
+      .then(async (data) => {
         if (!active) return;
         setManifest(data);
-        const localeCountry = new Intl.Locale(navigator.language).region;
-        const initialCountry = data.countries.some((country) => country.countryCode === localeCountry)
-          ? localeCountry ?? "US"
-          : data.countries.some((country) => country.countryCode === "US") ? "US" : data.countries[0]?.countryCode ?? "";
-        setCountryCode(initialCountry);
+        const response = await fetch("/data/university-catalog/" + data.indexFile);
+
+        if (!response.ok) {
+          throw new Error("Worldwide institution index could not be loaded.");
+        }
+
+        const index = (await response.json()) as CatalogInstitution[];
+
+        if (active) {
+          setInstitutions(index);
+        }
       })
       .catch((reason: Error) => active && setError(reason.message))
       .finally(() => active && setLoading(false));
     return () => { active = false; };
   }, []);
 
-  useEffect(() => {
-    if (!manifest || !countryCode) return;
-    const country = manifest.countries.find((item) => item.countryCode === countryCode);
-    if (!country) return;
-    let active = true;
-    setLoading(true);
-    setError("");
-    fetch("/data/university-catalog/" + country.file)
-      .then((response) => {
-        if (!response.ok) throw new Error("Country catalog could not be loaded.");
-        return response.json() as Promise<CatalogInstitution[]>;
-      })
-      .then((data) => active && setInstitutions(data))
-      .catch((reason: Error) => active && setError(reason.message))
-      .finally(() => active && setLoading(false));
-    return () => { active = false; };
-  }, [countryCode, manifest]);
-
   const results = useMemo(() => {
     const needle = query.trim().toLocaleLowerCase();
-    if (!needle) return institutions;
-    return institutions.filter((institution) =>
-      [institution.name, institution.city, institution.region, ...institution.aliases]
-        .some((value) => value.toLocaleLowerCase().includes(needle)),
-    );
-  }, [institutions, query]);
+    const regionNeedle = region.trim().toLocaleLowerCase();
+    const minimumYear = foundedFrom ? Number(foundedFrom) : null;
+    const maximumYear = foundedTo ? Number(foundedTo) : null;
 
-  useEffect(() => setPage(1), [countryCode, query]);
+    return institutions.filter((institution) => {
+      if (countryCode && institution.countryCode !== countryCode) return false;
+      if (regionNeedle && !institution.region.toLocaleLowerCase().includes(regionNeedle)) return false;
+      if (minimumYear && (!institution.established || institution.established < minimumYear)) return false;
+      if (maximumYear && (!institution.established || institution.established > maximumYear)) return false;
+      if (websiteOnly && !institution.website) return false;
+      if (!needle) return true;
+
+      return [institution.name, institution.city, institution.region, ...institution.aliases]
+        .some((value) => value.toLocaleLowerCase().includes(needle));
+    });
+  }, [countryCode, foundedFrom, foundedTo, institutions, query, region, websiteOnly]);
+
+  useEffect(() => setPage(1), [countryCode, foundedFrom, foundedTo, query, region, websiteOnly]);
 
   const pageCount = Math.max(1, Math.ceil(results.length / pageSize));
   const visible = results.slice((page - 1) * pageSize, page * pageSize);
   const selectedCountry = manifest?.countries.find((country) => country.countryCode === countryCode);
+  const activeFilterCount = [
+    countryCode,
+    region.trim(),
+    foundedFrom,
+    foundedTo,
+    websiteOnly,
+  ].filter(Boolean).length;
+
+  const resetFilters = () => {
+    setCountryCode("");
+    setRegion("");
+    setFoundedFrom("");
+    setFoundedTo("");
+    setWebsiteOnly(false);
+  };
 
   return (
-    <section className="mt-8 pb-8" aria-labelledby="global-catalog-heading">
+    <section className="global-university-catalog pb-8" aria-labelledby="global-catalog-heading">
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-4">
         <div>
           <span className="text-xs font-semibold uppercase" style={{ color: "#7f8bac" }}>Global directory</span>
@@ -111,18 +147,112 @@ export function GlobalUniversityCatalog() {
         <div className="flex items-center gap-2 text-xs" style={{ color: "#7180a3" }}><Globe2 size={15} /> {manifest?.countries.length ?? 0} countries and territories</div>
       </div>
 
-      <div className="grid sm:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] gap-3 mb-4">
-        <label>
-          <span className="sr-only">Country</span>
-          <select value={countryCode} onChange={(event) => setCountryCode(event.target.value)} className="w-full px-3 py-3 rounded-lg text-sm outline-none" style={{ background: "#0d1630", border: "1px solid rgba(124,106,247,0.2)", color: "#e8eaf0" }}>
-            {(manifest?.countries ?? []).map((country) => <option key={country.countryCode} value={country.countryCode}>{country.country} ({country.count.toLocaleString()})</option>)}
-          </select>
-        </label>
-        <label className="relative">
-          <span className="sr-only">Search the selected country</span>
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "#7180a3" }} />
-          <input value={query} onChange={(event) => setQuery(event.target.value)} className="w-full pl-10 pr-3 py-3 rounded-lg text-sm outline-none" style={{ background: "#0d1630", border: "1px solid rgba(124,106,247,0.2)", color: "#e8eaf0" }} placeholder={selectedCountry ? "Search institutions in " + selectedCountry.country : "Search institutions"} />
-        </label>
+      <label className="global-catalog-search">
+        <span className="sr-only">Search the worldwide institution directory</span>
+        <Search size={16} aria-hidden="true" />
+        <input
+          type="search"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder={selectedCountry
+            ? "Search institutions in " + selectedCountry.country
+            : "Search all " + (manifest?.institutionCount.toLocaleString() ?? "") + " institutions"}
+        />
+      </label>
+
+      <section className="global-catalog-filters" aria-labelledby="global-filter-heading">
+        <div className="global-catalog-filter-heading">
+          <div>
+            <SlidersHorizontal size={16} aria-hidden="true" />
+            <strong id="global-filter-heading">Directory filters</strong>
+            {activeFilterCount > 0 && <span>{activeFilterCount} active</span>}
+          </div>
+          <button
+            type="button"
+            onClick={resetFilters}
+            disabled={activeFilterCount === 0}
+            title="Reset directory filters"
+          >
+            <RotateCcw size={14} aria-hidden="true" />
+            Reset
+          </button>
+        </div>
+
+        <div className="global-catalog-filter-grid">
+          <label>
+            <span>Country or territory</span>
+            <select value={countryCode} onChange={(event) => setCountryCode(event.target.value)}>
+              <option value="">All countries ({manifest?.institutionCount.toLocaleString() ?? 0})</option>
+              {(manifest?.countries ?? []).map((country) => (
+                <option key={country.countryCode} value={country.countryCode}>
+                  {country.country} ({country.count.toLocaleString()})
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label>
+            <span>Region or state</span>
+            <span className="global-catalog-input-with-icon">
+              <Globe2 size={15} aria-hidden="true" />
+              <input
+                type="search"
+                value={region}
+                onChange={(event) => setRegion(event.target.value)}
+                placeholder="Any region"
+              />
+            </span>
+          </label>
+
+          <label>
+            <span>Founded from</span>
+            <span className="global-catalog-input-with-icon">
+              <CalendarDays size={15} aria-hidden="true" />
+              <input
+                type="number"
+                min="1000"
+                max={currentYear}
+                inputMode="numeric"
+                value={foundedFrom}
+                onChange={(event) => setFoundedFrom(event.target.value)}
+                placeholder="Any year"
+              />
+            </span>
+          </label>
+
+          <label>
+            <span>Founded before</span>
+            <span className="global-catalog-input-with-icon">
+              <CalendarDays size={15} aria-hidden="true" />
+              <input
+                type="number"
+                min="1000"
+                max={currentYear}
+                inputMode="numeric"
+                value={foundedTo}
+                onChange={(event) => setFoundedTo(event.target.value)}
+                placeholder="Any year"
+              />
+            </span>
+          </label>
+
+          <label className="global-catalog-website-filter">
+            <input
+              type="checkbox"
+              checked={websiteOnly}
+              onChange={(event) => setWebsiteOnly(event.target.checked)}
+            />
+            <span aria-hidden="true" />
+            <Link2 size={15} aria-hidden="true" />
+            Official website available
+          </label>
+        </div>
+      </section>
+
+      <div className="global-catalog-result-summary" aria-live="polite">
+        <strong>{results.length.toLocaleString()}</strong>
+        <span>{results.length === 1 ? "institution" : "institutions"} match</span>
+        {selectedCountry && <span>in {selectedCountry.country}</span>}
       </div>
 
       {error && <div role="alert" className="p-4 rounded-lg text-sm" style={{ background: "rgba(239,68,68,0.1)", color: "#f58a90" }}>{error}</div>}

@@ -1,0 +1,139 @@
+{
+  "generatedFrom": "Official university program snapshots",
+  "institutionCount": 4,
+  "programCount": 1242,
+  "records": [
+    {
+      "degreeLevels": [
+        "Certificate",
+        "Doctorate / PhD",
+        "Master's / MS",
+        "Professional degree"
+      ],
+      "deliveryModes": [
+        "Hybrid",
+        "On campus",
+        "Online"
+      ],
+      "institutionId": "https://ror.org/05hr6q169",
+      "institutionName": "A.T. Still University",
+      "languages": [
+        "English"
+      ],
+      "programCount": 58,
+      "sourceUpdatedAt": "2026-07-29",
+      "subjects": [
+        "Education",
+        "Health and medicine",
+        "Humanities and languages",
+        "Social and behavioral sciences"
+      ]
+    },
+    {
+      "degreeLevels": [
+        "Bachelor's / BS",
+        "Certificate",
+        "Doctorate / PhD",
+        "MBA / EMBA",
+        "Master's / MS"
+      ],
+      "deliveryModes": [],
+      "institutionId": "https://ror.org/02kkvpp62",
+      "institutionName": "Technical University of Munich",
+      "languages": [],
+      "programCount": 183,
+      "sourceUpdatedAt": "2026-07-28",
+      "subjects": [
+        "Agriculture and forestry",
+        "Architecture and design",
+        "Arts and creative studies",
+        "Business and management",
+        "Computer science and IT",
+        "Data science and artificial intelligence",
+        "Education",
+        "Engineering",
+        "Environmental and earth sciences",
+        "Health and medicine",
+        "Humanities and languages",
+        "Mathematics and statistics",
+        "Natural sciences",
+        "Social and behavioral sciences"
+      ]
+    },
+    {
+      "degreeLevels": [
+        "Bachelor's / BS",
+        "Diploma",
+        "Doctorate / PhD",
+        "MBA / EMBA",
+        "Master's / MS",
+        "Postgraduate certificate",
+        "Professional degree"
+      ],
+      "deliveryModes": [
+        "On campus"
+      ],
+      "institutionId": "https://ror.org/00hj54h04",
+      "institutionName": "University of Texas at Austin",
+      "languages": [
+        "English"
+      ],
+      "programCount": 380,
+      "sourceUpdatedAt": "2026-07-29",
+      "subjects": [
+        "Architecture and design",
+        "Arts and creative studies",
+        "Business and management",
+        "Computer science and IT",
+        "Data science and artificial intelligence",
+        "Education",
+        "Engineering",
+        "Environmental and earth sciences",
+        "Health and medicine",
+        "Humanities and languages",
+        "Mathematics and statistics",
+        "Natural sciences",
+        "Social and behavioral sciences"
+      ]
+    },
+    {
+      "degreeLevels": [
+        "Bachelor's / BS",
+        "Diploma",
+        "Doctorate / PhD",
+        "MBA / EMBA",
+        "Master's / MS",
+        "Professional degree"
+      ],
+      "deliveryModes": [
+        "On campus"
+      ],
+      "institutionId": "https://ror.org/03dbr7087",
+      "institutionName": "University of Toronto",
+      "languages": [
+        "English"
+      ],
+      "programCount": 621,
+      "sourceUpdatedAt": "2026-08-12",
+      "subjects": [
+        "Agriculture and forestry",
+        "Architecture and design",
+        "Arts and creative studies",
+        "Business and management",
+        "Computer science and IT",
+        "Data science and artificial intelligence",
+        "Education",
+        "Engineering",
+        "Environmental and earth sciences",
+        "Health and medicine",
+        "Humanities and languages",
+        "Law",
+        "Mathematics and statistics",
+        "Natural sciences",
+        "Social and behavioral sciences"
+      ]
+    }
+  ],
+  "sourceUpdatedAt": "2026-08-12",
+  "version": 1
+}

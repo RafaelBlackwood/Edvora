@@ -2,7 +2,7 @@ name: Sync university catalog
 
 on:
   schedule:
-    - cron: "17 3 * * 1"
+    - cron: "17 3 * * *"
   workflow_dispatch:
 
 permissions:
@@ -30,14 +30,22 @@ jobs:
           ZENODO_API_KEY: ${{ secrets.ZENODO_API_KEY }}
         run: python scripts/sync_ror_catalog.py
 
+      - name: Refresh official program catalogs
+        run: |
+          python scripts/sync_atsu_program_catalog.py --strict
+          python scripts/sync_tum_program_catalog.py
+          python scripts/sync_ut_austin_program_catalog.py
+          python scripts/sync_utoronto_program_catalog.py --strict
+          python scripts/build_program_search_index.py
+
       - name: Commit catalog changes
         run: |
           git config user.name "edvora-catalog-bot"
           git config user.email "edvora-catalog-bot@users.noreply.github.com"
-          git add public/data/university-catalog
+          git add public/data/university-catalog public/data/program-catalog
           if git diff --cached --quiet; then
-            echo "Catalog already matches the latest ROR release."
+            echo "University and program catalogs already match the latest sources."
           else
-            git commit -m "Update global university catalog"
+            git commit -m "Update university and program catalogs"
             git push
           fi

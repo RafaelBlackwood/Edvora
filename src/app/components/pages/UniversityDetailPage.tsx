@@ -1,10 +1,37 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router";
-import { Heart, GitCompare, ArrowLeft, MapPin, Users, Globe, Star, Award, CheckCircle2, ExternalLink } from "lucide-react";
-import { universities, programs } from "../../data/mockData";
+import {
+  ArrowLeft,
+  Award,
+  Building2,
+  CalendarDays,
+  CheckCircle2,
+  Database,
+  ExternalLink,
+  GitCompare,
+  Globe,
+  Heart,
+  MapPin,
+  Star,
+} from "lucide-react";
+import campusImage from "../../../assets/edvora-campus.jpg";
+import { curatedInstitutionIds } from "../../data/curatedInstitutions";
+import { universities } from "../../data/mockData";
+import { getUniversitySourceData } from "../../data/universitySourceData";
+import {
+  useCatalogInstitutionDetail,
+  useUniversityCatalog,
+  type CatalogInstitution,
+  type CatalogManifest,
+} from "../../hooks/useUniversityCatalog";
 import { useAppData } from "../../providers/AppDataProvider";
+import { SafeExternalLink } from "../SafeExternalLink";
+import { UniversityLogo } from "../UniversityLogo";
+import { UniversityProgramDirectory } from "../UniversityProgramDirectory";
+import { UniversityRequirementsDirectory } from "../UniversityRequirementsDirectory";
 
 const tabs = ["Overview", "Programs", "Requirements", "Costs", "Scholarships", "Application Guide"];
+
 
 const appGuideSteps = [
   { step: 1, title: "Choose Program", desc: "Browse and select your target program with our smart search." },
@@ -17,9 +44,439 @@ const appGuideSteps = [
   { step: 8, title: "Accept Offer", desc: "Confirm your place and begin visa preparation." },
 ];
 
+function CatalogUniversityDetail({
+  institution,
+  manifest,
+}: {
+  institution: CatalogInstitution;
+  manifest: CatalogManifest | null;
+}) {
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("Overview");
+  const {
+    error: detailError,
+    institution: fullInstitution,
+    loading: detailLoading,
+  } = useCatalogInstitutionDetail(institution);
+  const location = [institution.city, institution.region, institution.country]
+    .filter(Boolean)
+    .join(", ");
+  const domains = fullInstitution?.domains ?? [];
+  const coordinates = fullInstitution?.coordinates;
+  const recordUpdated = fullInstitution?.source.recordUpdated;
+  const applicationId = "ror-" + institution.id.split("/").pop();
+
+  const pendingPanels: Record<string, { title: string; description: string }> = {
+    Costs: {
+      title: "Current costs are not published in Edvora yet",
+      description:
+        "Tuition, mandatory fees, application charges, and living costs can change by program, citizenship, campus, and academic year. Use the official university site until a reviewed snapshot is available.",
+    },
+    Scholarships: {
+      title: "Funding records are being verified",
+      description:
+        "Scholarships, grants, fellowships, assistantships, and waivers are offer-specific. Edvora will not show generic funding claims as if they applied to every applicant.",
+    },
+  };
+
+  return (
+    <div style={{ background: "#080d1a", minHeight: "100%" }}>
+      <header className="relative h-64 overflow-hidden">
+        <img
+          src={campusImage}
+          alt=""
+          className="w-full h-full object-cover"
+          style={{ filter: "brightness(0.38) saturate(0.7)" }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(8,13,26,0.16) 0%, rgba(8,13,26,0.88) 78%, #080d1a 100%)",
+          }}
+        />
+
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          className="absolute top-4 left-4 lg:left-8 inline-flex items-center gap-1 px-3 py-2 rounded-lg text-sm hover:bg-white/10"
+          style={{ background: "rgba(0,0,0,0.4)", color: "#b4bfd2" }}
+        >
+          <ArrowLeft size={14} aria-hidden="true" />
+          Back
+        </button>
+
+        <div className="absolute left-4 right-4 bottom-6 lg:left-8 lg:right-8 flex items-end justify-between gap-4">
+          <div className="flex items-end gap-4 min-w-0">
+            <UniversityLogo
+              className="is-profile"
+              name={institution.name}
+              website={institution.website}
+            />
+            <div className="min-w-0">
+              <span
+                className="text-[10px] font-semibold uppercase"
+                style={{ color: "#9ca8ff" }}
+              >
+                Verified education institution
+              </span>
+              <h1
+                className="text-xl sm:text-2xl font-bold text-white leading-tight mt-1"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
+                {institution.name}
+              </h1>
+              <p
+                className="flex items-center gap-1.5 text-xs sm:text-sm mt-1"
+                style={{ color: "#a8b4d0" }}
+              >
+                <MapPin size={12} aria-hidden="true" />
+                {location}
+              </p>
+            </div>
+          </div>
+          {institution.website && (
+            <SafeExternalLink
+              url={institution.website}
+              className="hidden sm:inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs glass-interactive"
+              style={{ color: "#d3d7ff" }}
+            >
+              Official website
+            </SafeExternalLink>
+          )}
+        </div>
+      </header>
+
+      <div
+        style={{
+          borderBottom: "1px solid rgba(124,106,247,0.12)",
+          background: "rgba(8,13,26,0.92)",
+          backdropFilter: "blur(12px)",
+        }}
+        className="sticky top-0 z-10 px-4 lg:px-8"
+      >
+        <div className="flex overflow-x-auto gap-1 -mb-px scrollbar-none">
+          {tabs.map((tab) => (
+            <button
+              type="button"
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className="px-4 py-3 text-sm font-medium whitespace-nowrap transition-all border-b-2"
+              style={{
+                borderBottomColor: activeTab === tab ? "#7c6af7" : "transparent",
+                color: activeTab === tab ? "#a89bf5" : "#6b7a9e",
+              }}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <main className="px-4 lg:px-8 py-6 pb-24 lg:pb-8">
+        <div
+          className="mb-5 flex flex-wrap items-center justify-between gap-2 rounded-lg px-4 py-3"
+          style={{
+            background: "rgba(42, 111, 88, 0.12)",
+            border: "1px solid rgba(76, 175, 135, 0.24)",
+          }}
+        >
+          <span className="text-xs font-medium" style={{ color: "#a9d8c5" }}>
+            Institution identity verified through the current ROR release
+          </span>
+          <span className="text-xs" style={{ color: "#7d9f92" }}>
+            {detailLoading
+              ? "Loading full record..."
+              : recordUpdated
+                ? "Record updated " + recordUpdated
+                : "Release " + (manifest?.source.publicationDate ?? "current")}
+          </span>
+        </div>
+
+        {activeTab === "Overview" && (
+          <div className="grid lg:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.72fr)] gap-5">
+            <div className="space-y-4">
+              <section
+                className="p-5 rounded-lg"
+                style={{
+                  background: "rgba(13,20,50,0.6)",
+                  border: "1px solid rgba(124,106,247,0.12)",
+                }}
+              >
+                <h2 className="font-semibold text-white">Institution profile</h2>
+                <p className="text-sm leading-relaxed mt-3" style={{ color: "#a8b4d0" }}>
+                  {institution.name} is an active education institution in the
+                  Research Organization Registry. The names, location, founding year,
+                  domains, coordinates, and registry provenance shown here come from
+                  the current Edvora catalog release.
+                </p>
+
+                {institution.aliases.length > 0 && (
+                  <div className="mt-5">
+                    <h3 className="text-xs font-semibold text-white">Names and aliases</h3>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {institution.aliases.slice(0, 12).map((alias) => (
+                        <span
+                          key={alias}
+                          className="px-2.5 py-1.5 rounded-md text-xs"
+                          style={{
+                            background: "rgba(124,106,247,0.1)",
+                            border: "1px solid rgba(124,106,247,0.18)",
+                            color: "#aaa3ef",
+                          }}
+                        >
+                          {alias}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {domains.length > 0 && (
+                  <div className="mt-5">
+                    <h3 className="text-xs font-semibold text-white">Verified domains</h3>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {domains.map((domain) => (
+                        <span
+                          key={domain}
+                          className="px-2.5 py-1.5 rounded-md text-xs"
+                          style={{
+                            background: "rgba(38,118,137,0.12)",
+                            border: "1px solid rgba(71,154,172,0.2)",
+                            color: "#8fc4cf",
+                          }}
+                        >
+                          {domain}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </section>
+
+              <section
+                className="p-5 rounded-lg"
+                style={{
+                  background: "rgba(13,20,50,0.6)",
+                  border: "1px solid rgba(124,106,247,0.12)",
+                }}
+              >
+                <h2 className="font-semibold text-white">Admissions data status</h2>
+                <div className="grid sm:grid-cols-2 gap-3 mt-4">
+                  {[
+                    ["Programs and degrees", "Published records appear in Programs"],
+                    ["Entry requirements", "Awaiting program-level verification"],
+                    ["Tuition and funding", "Awaiting current official sources"],
+                    ["Deadlines and intakes", "Awaiting program-level verification"],
+                  ].map(([label, value]) => (
+                    <div
+                      key={label}
+                      className="p-3 rounded-md"
+                      style={{ background: "rgba(8,13,26,0.5)" }}
+                    >
+                      <span className="block text-xs" style={{ color: "#7c899f" }}>
+                        {label}
+                      </span>
+                      <strong
+                        className="block text-xs font-medium mt-1"
+                        style={{ color: "#b4bfd0" }}
+                      >
+                        {value}
+                      </strong>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            </div>
+
+            <aside className="space-y-4">
+              <section
+                className="p-5 rounded-lg"
+                style={{
+                  background: "rgba(13,20,50,0.6)",
+                  border: "1px solid rgba(124,106,247,0.12)",
+                }}
+              >
+                <h2 className="font-semibold text-white">Verified facts</h2>
+                <dl className="space-y-3 mt-4">
+                  {[
+                    [Globe, "Country", institution.country],
+                    [MapPin, "City", institution.city || "Not listed"],
+                    [MapPin, "Region", institution.region || "Not listed"],
+                    [
+                      CalendarDays,
+                      "Established",
+                      institution.established?.toString() || "Not listed",
+                    ],
+                    [
+                      Database,
+                      "Registry",
+                      institution.id.replace("https://ror.org/", "ROR "),
+                    ],
+                    [
+                      MapPin,
+                      "Coordinates",
+                      coordinates?.lat != null && coordinates.lng != null
+                        ? coordinates.lat.toFixed(4) + ", " + coordinates.lng.toFixed(4)
+                        : "Not listed",
+                    ],
+                  ].map(([Icon, label, value]) => {
+                    const FactIcon = Icon as typeof Globe;
+                    return (
+                      <div key={label as string} className="flex items-center justify-between gap-4">
+                        <dt className="flex items-center gap-2 text-xs" style={{ color: "#77859c" }}>
+                          <FactIcon size={13} aria-hidden="true" />
+                          {label as string}
+                        </dt>
+                        <dd
+                          className="text-xs font-medium text-right"
+                          style={{ color: "#d5dbe4" }}
+                        >
+                          {value as string}
+                        </dd>
+                      </div>
+                    );
+                  })}
+                </dl>
+              </section>
+
+              {detailError && (
+                <p className="text-xs leading-relaxed" style={{ color: "#d2a764" }}>
+                  {detailError}
+                </p>
+              )}
+
+              {institution.website && (
+                <SafeExternalLink
+                  url={institution.website}
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-lg text-sm font-medium hover:bg-white/5"
+                  style={{
+                    background: "rgba(124,106,247,0.1)",
+                    border: "1px solid rgba(124,106,247,0.22)",
+                    color: "#aaa3ef",
+                  }}
+                >
+                  Official website
+                </SafeExternalLink>
+              )}
+
+              <SafeExternalLink
+                url={institution.id}
+                className="flex items-center justify-center gap-2 text-xs hover:text-white"
+                style={{ color: "#68768d" }}
+              >
+                Open registry record
+              </SafeExternalLink>
+            </aside>
+          </div>
+        )}
+
+        {activeTab === "Programs" && (
+          <UniversityProgramDirectory
+            applicationUniversityId={applicationId}
+            institutionId={institution.id}
+            institutionName={institution.name}
+            officialWebsite={institution.website}
+          />
+        )}
+
+        {activeTab === "Requirements" && (
+          <UniversityRequirementsDirectory
+            institutionId={institution.id}
+            institutionName={institution.name}
+            officialWebsite={institution.website}
+          />
+        )}
+
+        {pendingPanels[activeTab] && (
+          <section
+            className="p-5 rounded-lg"
+            style={{
+              background: "rgba(13,20,50,0.6)",
+              border: "1px solid rgba(124,106,247,0.12)",
+            }}
+          >
+            <h2 className="font-semibold text-white">{pendingPanels[activeTab].title}</h2>
+            <p
+              className="max-w-3xl text-sm leading-relaxed mt-3"
+              style={{ color: "#a8b4d0" }}
+            >
+              {pendingPanels[activeTab].description}
+            </p>
+            {institution.website && (
+              <SafeExternalLink
+                url={institution.website}
+                className="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-md text-sm"
+                style={{
+                  background: "rgba(124,106,247,0.1)",
+                  border: "1px solid rgba(124,106,247,0.22)",
+                  color: "#aaa3ef",
+                }}
+              >
+                Verify on official website
+              </SafeExternalLink>
+            )}
+          </section>
+        )}
+
+        {activeTab === "Application Guide" && (
+          <div className="max-w-2xl mx-auto">
+            <div className="space-y-3">
+              {appGuideSteps.map((step) => (
+                <div
+                  key={step.step}
+                  className="flex items-start gap-4 p-4 rounded-lg"
+                  style={{
+                    background: "rgba(13,20,50,0.6)",
+                    border: "1px solid rgba(124,106,247,0.12)",
+                  }}
+                >
+                  <div
+                    className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-sm font-bold"
+                    style={{ background: "#665bd7", color: "white" }}
+                  >
+                    {step.step}
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-white text-sm">{step.title}</h3>
+                    <p className="text-sm mt-0.5" style={{ color: "#6b7a9e" }}>
+                      {step.desc}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-6 text-center">
+              <button
+                type="button"
+                onClick={() =>
+                  navigate(
+                    "/applications?new=1&university=" +
+                      encodeURIComponent(applicationId),
+                  )
+                }
+                className="px-8 py-3 rounded-lg text-sm font-semibold text-white"
+                style={{ background: "#665bd7" }}
+              >
+                Start application
+              </button>
+            </div>
+          </div>
+        )}
+      </main>
+    </div>
+  );
+}
+
 export function UniversityDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const {
+    error: catalogError,
+    institutions,
+    loading: catalogLoading,
+    manifest,
+  } = useUniversityCatalog();
   const {
     compareUniversityIds,
     isUniversitySaved,
@@ -28,30 +485,76 @@ export function UniversityDetailPage() {
   } = useAppData();
   const [activeTab, setActiveTab] = useState("Overview");
 
-  const uni = universities.find((u) => u.id === id) || universities[0];
-  const uniPrograms = programs.filter((p) => p.universityId === uni.id);
-  const displayPrograms = uniPrograms.length > 0
-    ? uniPrograms
-    : uni.programs.map((name, index) => ({
-        id: "catalog-" + uni.id + "-" + index,
-        name,
-        universityId: uni.id,
-        university: uni.name,
-        duration: name.startsWith("PhD") ? "4-5 years" : name.startsWith("Bachelor") ? "3-4 years" : "1-2 years",
-        tuition: uni.tuition,
-        currency: uni.currency,
-        deadline: uni.deadline,
-        intake: "Fall",
-        language: "English",
-        department: name.startsWith("PhD") ? "Doctoral School" : "Graduate Studies",
-        requirements: {
-          gpa: uni.gpaMin,
-          ielts: uni.ieltsMin,
-          gre: uni.greRequired,
-          portfolio: false,
-        },
-        description: "A full-time " + name + " pathway with access to " + uni.strengths.slice(0, 2).join(" and ") + ".",
-      }));
+  const uni = universities.find((university) => university.id === id);
+  const catalogCode = id?.startsWith("ror-") ? id.slice(4) : "";
+  const curatedInstitutionId = uni ? curatedInstitutionIds[uni.id] : undefined;
+  const catalogInstitution = catalogCode
+    ? institutions.find((institution) => institution.id.endsWith("/" + catalogCode))
+    : uni
+      ? institutions.find((institution) => {
+          if (institution.id === curatedInstitutionId) return true;
+          const names = [institution.name, ...institution.aliases].map((name) =>
+            name.toLocaleLowerCase().replace(/[^a-z0-9]+/g, ""),
+          );
+          const targetName = uni.name
+            .toLocaleLowerCase()
+            .replace(/[^a-z0-9]+/g, "");
+          return names.includes(targetName);
+        })
+      : undefined;
+  const { institution: catalogDetail } =
+    useCatalogInstitutionDetail(catalogInstitution);
+
+  if (!uni) {
+    if (catalogLoading) {
+      return (
+        <div
+          className="min-h-full grid place-items-center p-6"
+          style={{ background: "#080d1a", color: "#9aa6ba" }}
+          aria-live="polite"
+        >
+          <div className="text-center">
+            <Building2 size={26} className="mx-auto mb-3" style={{ color: "#8f84e8" }} />
+            <p className="text-sm">Loading university profile...</p>
+          </div>
+        </div>
+      );
+    }
+
+    if (catalogInstitution) {
+      return (
+        <CatalogUniversityDetail
+          institution={catalogInstitution}
+          manifest={manifest}
+        />
+      );
+    }
+
+    return (
+      <div
+        className="min-h-full grid place-items-center p-6"
+        style={{ background: "#080d1a" }}
+      >
+        <div className="text-center max-w-sm">
+          <Building2 size={28} className="mx-auto mb-3" style={{ color: "#7c6af7" }} />
+          <h1 className="text-lg font-semibold text-white">University not found</h1>
+          <p className="text-sm mt-2" style={{ color: "#7d899e" }}>
+            {catalogError || "This institution is not present in the current catalog release."}
+          </p>
+          <button
+            type="button"
+            onClick={() => navigate("/search")}
+            className="mt-5 px-4 py-2 rounded-lg text-sm font-medium"
+            style={{ background: "#665bd7", color: "#ffffff" }}
+          >
+            Back to university search
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const sourceData = getUniversitySourceData(uni.id);
   const saved = isUniversitySaved(uni.id);
   const comparing = compareUniversityIds.includes(uni.id);
 
@@ -74,9 +577,11 @@ export function UniversityDetailPage() {
 
         <div className="absolute bottom-6 left-4 lg:left-8 right-4 flex items-end justify-between">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shrink-0" style={{ background: "rgba(13,20,50,0.9)", border: "1px solid rgba(124,106,247,0.2)" }}>
-              {uni.logo}
-            </div>
+            <UniversityLogo
+              className="is-profile"
+              name={uni.name}
+              website={uni.website}
+            />
             <div>
               <h1 className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-display)" }}>{uni.name}</h1>
               <div className="flex items-center gap-3 mt-1">
@@ -141,6 +646,23 @@ export function UniversityDetailPage() {
       </div>
 
       <div className="px-4 lg:px-8 py-6 pb-24 lg:pb-8">
+        {sourceData && (
+          <div
+            className="mb-5 flex flex-col gap-1 rounded-lg px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+            style={{
+              background: "rgba(42, 111, 88, 0.12)",
+              border: "1px solid rgba(76, 175, 135, 0.24)",
+            }}
+          >
+            <span className="text-xs font-medium" style={{ color: "#a9d8c5" }}>
+              Official-source snapshot for {sourceData.scope}
+            </span>
+            <span className="text-xs" style={{ color: "#7d9f92" }}>
+              Verified {sourceData.verifiedAt} - {sourceData.academicYear}
+            </span>
+          </div>
+        )}
+
         {activeTab === "Overview" && (
           <div className="grid lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-4">
@@ -157,7 +679,10 @@ export function UniversityDetailPage() {
                 </div>
               </div>
               <div className="p-5 rounded-2xl" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
-                <h3 className="font-semibold text-white mb-3">Available Programs</h3>
+                <h3 className="font-semibold text-white mb-1">Profiled program areas</h3>
+                <p className="text-xs mb-3" style={{ color: "#6b7a9e" }}>
+                  Confirm current availability and specialization names on the official program page.
+                </p>
                 <div className="space-y-2">
                   {uni.programs.map((p) => (
                     <div key={p} className="flex items-center gap-2 text-sm" style={{ color: "#a8b4d0" }}>
@@ -173,10 +698,28 @@ export function UniversityDetailPage() {
                 <h3 className="font-semibold text-white mb-4">At a Glance</h3>
                 <div className="space-y-3">
                   {[
-                    { icon: Users, label: "Students", value: `${(uni.studentPopulation / 1000).toFixed(0)}K+` },
-                    { icon: Globe, label: "International", value: `${uni.internationalPercent}%` },
-                    { icon: Star, label: "World Ranking", value: `#${uni.worldRanking}` },
-                    { icon: Award, label: "Type", value: uni.type },
+                    {
+                      icon: CalendarDays,
+                      label: "Established",
+                      value: catalogDetail?.established?.toString() ?? "See registry",
+                    },
+                    {
+                      icon: Globe,
+                      label: "Country",
+                      value: catalogDetail?.country ?? uni.country,
+                    },
+                    {
+                      icon: MapPin,
+                      label: "Region",
+                      value: catalogDetail?.region || uni.city,
+                    },
+                    {
+                      icon: Database,
+                      label: "Registry",
+                      value:
+                        catalogDetail?.id.replace("https://ror.org/", "ROR ") ??
+                        "Loading",
+                    },
                   ].map(({ icon: Icon, label, value }) => (
                     <div key={label} className="flex items-center justify-between">
                       <div className="flex items-center gap-2 text-sm" style={{ color: "#6b7a9e" }}>
@@ -187,29 +730,24 @@ export function UniversityDetailPage() {
                   ))}
                 </div>
               </div>
-              <div className="p-5 rounded-2xl" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
-                <h3 className="font-semibold text-white mb-3">Quick Facts</h3>
+              <div className="p-5 rounded-lg" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
+                <h3 className="font-semibold text-white mb-3">Data quality</h3>
                 <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span style={{ color: "#6b7a9e" }}>Acceptance Rate</span>
-                    <span style={{ color: "#10b981" }}>{uni.acceptanceRate}%</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span style={{ color: "#6b7a9e" }}>IELTS Minimum</span>
-                    <span style={{ color: "#a8b4d0" }}>{uni.ieltsMin}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span style={{ color: "#6b7a9e" }}>Min GPA</span>
-                    <span style={{ color: "#a8b4d0" }}>{uni.gpaMin}/4.0</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span style={{ color: "#6b7a9e" }}>GRE Required</span>
-                    <span style={{ color: uni.greRequired ? "#f59e0b" : "#10b981" }}>{uni.greRequired ? "Yes" : "No"}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span style={{ color: "#6b7a9e" }}>Scholarship</span>
-                    <span style={{ color: uni.scholarshipAvailable ? "#10b981" : "#6b7a9e" }}>{uni.scholarshipAvailable ? "Available" : "Limited"}</span>
-                  </div>
+                  {[
+                    ["Cost cycle", sourceData?.academicYear ?? "Awaiting verification"],
+                    ["Last verified", sourceData?.verifiedAt ?? "Not verified"],
+                    [
+                      "Registry record",
+                      catalogDetail?.source.recordUpdated ?? "Loading current record",
+                    ],
+                    ["Admissions", "Program-specific"],
+                    ["Deadlines", "Program-specific"],
+                  ].map(([label, value]) => (
+                    <div key={label} className="flex justify-between gap-4">
+                      <span style={{ color: "#6b7a9e" }}>{label}</span>
+                      <span className="text-right" style={{ color: "#a8b4d0" }}>{value}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
               <a
@@ -226,133 +764,139 @@ export function UniversityDetailPage() {
         )}
 
         {activeTab === "Programs" && (
-          <div className="space-y-4">
-            {displayPrograms.map((prog) => (
-              <div key={prog.id} className="p-5 rounded-2xl" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
-                <div className="flex items-start justify-between gap-4 mb-3">
-                  <div>
-                    <h3 className="font-semibold text-white">{prog.name}</h3>
-                    <p className="text-sm mt-0.5" style={{ color: "#6b7a9e" }}>{prog.department} · {prog.duration}</p>
-                  </div>
-                  <button
-                    onClick={() => navigate("/applications?new=1&university=" + uni.id + "&program=" + encodeURIComponent(prog.name))}
-                    className="shrink-0 px-4 py-2 rounded-xl text-sm font-medium text-white hover:opacity-90"
-                    style={{ background: "linear-gradient(135deg, #7c6af7, #06b6d4)" }}
-                  >
-                    Apply
-                  </button>
-                </div>
-                <p className="text-sm mb-3" style={{ color: "#a8b4d0" }}>{prog.description}</p>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  {[
-                    ["Tuition", prog.tuition === 0 ? "Free" : `${prog.currency} ${prog.tuition.toLocaleString()}/yr`],
-                    ["Deadline", prog.deadline],
-                    ["Language", prog.language],
-                    ["Intake", prog.intake],
-                  ].map(([k, v]) => (
-                    <div key={k as string} className="px-3 py-2 rounded-xl" style={{ background: "rgba(8,13,26,0.5)" }}>
-                      <div className="text-xs" style={{ color: "#6b7a9e" }}>{k as string}</div>
-                      <div className="text-sm font-medium mt-0.5" style={{ color: "#e8eaf0" }}>{v as string}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
+          <UniversityProgramDirectory
+            applicationUniversityId={uni.id}
+            fallbackProgramNames={uni.programs}
+            institutionId={catalogInstitution?.id ?? curatedInstitutionId}
+            institutionName={uni.name}
+            officialWebsite={uni.website}
+          />
         )}
 
         {activeTab === "Requirements" && (
-          <div className="grid md:grid-cols-2 gap-4">
-            {[
-              { title: "Academic Requirements", items: [
-                [`GPA Minimum`, `${uni.gpaMin}/4.0`],
-                [`IELTS Minimum`, `${uni.ieltsMin}`],
-                [`TOEFL`, `90+ (alternative to IELTS)`],
-                [`GRE`, uni.greRequired ? "Required" : "Not required"],
-                [`GMAT`, uni.gmatRequired ? "Required" : "Not required"],
-              ]},
-              { title: "Required Documents", items: [
-                ["Official Transcripts", "Certified, translated"],
-                ["CV / Resume", "Academic + professional"],
-                ["Motivation Letter", "Program-specific"],
-                ["Letters of Recommendation", "2 academic references"],
-                ["Passport Copy", "Valid for program duration"],
-                ["Bachelor's Diploma", "Certified copy"],
-              ]},
-            ].map(({ title, items }) => (
-              <div key={title} className="p-5 rounded-2xl" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
-                <h3 className="font-semibold text-white mb-4">{title}</h3>
-                <div className="space-y-2.5">
-                  {items.map(([k, v]) => (
-                    <div key={k as string} className="flex items-center justify-between gap-4">
-                      <span className="text-sm" style={{ color: "#a8b4d0" }}>{k as string}</span>
-                      <span className="text-sm font-medium text-right" style={{ color: "#e8eaf0" }}>{v as string}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
+          <UniversityRequirementsDirectory
+            institutionId={catalogInstitution?.id ?? curatedInstitutionId}
+            institutionName={uni.name}
+            officialWebsite={uni.website}
+          />
         )}
 
         {activeTab === "Costs" && (
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="p-5 rounded-2xl" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
-              <h3 className="font-semibold text-white mb-4">Tuition Fees</h3>
-              <div className="space-y-3 text-sm">
-                <div className="flex justify-between">
-                  <span style={{ color: "#6b7a9e" }}>Annual Tuition</span>
-                  <span className="font-medium" style={{ color: uni.tuition === 0 ? "#10b981" : "#e8eaf0" }}>
-                    {uni.tuition === 0 ? "Free / €0" : `${uni.currency} ${uni.tuition.toLocaleString()}`}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span style={{ color: "#6b7a9e" }}>Semester Fee</span>
-                  <span style={{ color: "#a8b4d0" }}>{uni.tuition === 0 ? "~€150–350" : `${uni.currency} ${(uni.tuition / 2).toLocaleString()}`}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span style={{ color: "#6b7a9e" }}>Application Fee</span>
-                  <span style={{ color: "#a8b4d0" }}>~$75–150</span>
-                </div>
-              </div>
-            </div>
-            <div className="p-5 rounded-2xl" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
-              <h3 className="font-semibold text-white mb-4">Estimated Living Costs in {uni.city}</h3>
-              <div className="space-y-3 text-sm">
-                {[["Housing", "€450–900/mo"], ["Food", "€200–350/mo"], ["Transport", "€70–100/mo"], ["Health Insurance", "€80–120/mo"], ["Personal", "€100–200/mo"]].map(([k, v]) => (
-                  <div key={k as string} className="flex justify-between">
-                    <span style={{ color: "#6b7a9e" }}>{k as string}</span>
-                    <span style={{ color: "#a8b4d0" }}>{v as string}</span>
-                  </div>
+          sourceData ? (
+            <div className="space-y-4">
+              <div className="grid md:grid-cols-3 gap-4">
+                {[
+                  {
+                    label: "Tuition",
+                    value: sourceData.tuition.amountLabel,
+                    detail: sourceData.tuition.context,
+                  },
+                  {
+                    label: "Application fee",
+                    value: sourceData.applicationFee.amountLabel,
+                    detail: sourceData.applicationFee.context,
+                  },
+                  {
+                    label: "Living costs",
+                    value: sourceData.livingCosts.amountLabel,
+                    detail: sourceData.livingCosts.context,
+                  },
+                ].map((item) => (
+                  <section
+                    key={item.label}
+                    className="p-5 rounded-lg"
+                    style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}
+                  >
+                    <span className="text-xs font-semibold uppercase" style={{ color: "#77859c" }}>
+                      {item.label}
+                    </span>
+                    <strong className="block mt-2 text-base text-white">{item.value}</strong>
+                    <p className="mt-2 text-xs leading-relaxed" style={{ color: "#98a5b8" }}>
+                      {item.detail}
+                    </p>
+                  </section>
                 ))}
               </div>
+
+              <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.72fr)] gap-4">
+                <section className="p-5 rounded-lg" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
+                  <h3 className="font-semibold text-white mb-3">What changes the final price</h3>
+                  <div className="space-y-2">
+                    {sourceData.notes.map((note) => (
+                      <p key={note} className="flex items-start gap-2 text-sm leading-relaxed" style={{ color: "#a8b4d0" }}>
+                        <CheckCircle2 size={14} className="mt-0.5 shrink-0" style={{ color: "#55b792" }} />
+                        {note}
+                      </p>
+                    ))}
+                  </div>
+                </section>
+
+                <section className="p-5 rounded-lg" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
+                  <h3 className="font-semibold text-white mb-3">Official sources</h3>
+                  <div className="space-y-2">
+                    {sourceData.sources.map((source) => (
+                      <SafeExternalLink
+                        key={source.url}
+                        url={source.url}
+                        className="flex items-center justify-between gap-3 rounded-md px-3 py-2 text-sm hover:bg-white/5"
+                        style={{ border: "1px solid rgba(124,106,247,0.16)", color: "#aaa3ef" }}
+                      >
+                        {source.label}
+                        <ExternalLink size={13} aria-hidden="true" />
+                      </SafeExternalLink>
+                    ))}
+                  </div>
+                </section>
+              </div>
             </div>
-          </div>
+          ) : (
+            <section className="p-5 rounded-lg" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
+              <h3 className="font-semibold text-white">Cost data pending verification</h3>
+              <p className="text-sm mt-2" style={{ color: "#8f9bb0" }}>
+                Edvora will not estimate tuition or living costs without a current official source.
+              </p>
+            </section>
+          )
         )}
 
         {activeTab === "Scholarships" && (
           <div className="grid md:grid-cols-2 gap-4">
-            {[
-              { name: "University Merit Scholarship", amount: "€600/mo", type: "University-funded", coverage: "Living stipend" },
-              { name: "DAAD Scholarship", amount: "€1,200/mo", type: "Government-funded", coverage: "Full — tuition + living" },
-              { name: "Department Assistantship", amount: "€800/mo", type: "Research position", coverage: "Stipend + fee waiver" },
-            ].map((s) => (
-              <div key={s.name} className="p-5 rounded-2xl" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
-                <div className="flex items-start justify-between mb-2">
-                  <h3 className="font-medium text-white">{s.name}</h3>
-                  <span className="text-sm font-bold" style={{ color: "#10b981" }}>{s.amount}</span>
-                </div>
-                <p className="text-xs mb-2" style={{ color: "#6b7a9e" }}>{s.type}</p>
-                <p className="text-sm" style={{ color: "#a8b4d0" }}>{s.coverage}</p>
-                <button
-                  onClick={() => navigate("/scholarships")}
-                  className="mt-3 text-xs font-medium hover:underline flex items-center gap-1"
-                  style={{ color: "#a89bf5" }}
-                >
-                  See details <ArrowLeft size={10} className="rotate-180" />
-                </button>
+            <section className="p-5 rounded-lg" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
+              <div className="flex items-center gap-2">
+                <Award size={17} style={{ color: "#e5b956" }} aria-hidden="true" />
+                <h3 className="font-semibold text-white">Funding is offer-specific</h3>
               </div>
-            ))}
+              <p className="text-sm leading-relaxed mt-3" style={{ color: "#a8b4d0" }}>
+                Scholarships, assistantships, fellowships, and waivers depend on the program,
+                citizenship, funding year, and admission offer. Edvora no longer shows generic
+                scholarship names or amounts as if they applied to every university.
+              </p>
+              <button
+                type="button"
+                onClick={() => navigate("/scholarships")}
+                className="mt-4 px-4 py-2 rounded-md text-sm font-medium"
+                style={{ background: "#665bd7", color: "#ffffff" }}
+              >
+                Search funding opportunities
+              </button>
+            </section>
+
+            <section className="p-5 rounded-lg" style={{ background: "rgba(13,20,50,0.6)", border: "1px solid rgba(124,106,247,0.12)" }}>
+              <h3 className="font-semibold text-white mb-3">Verify with the university</h3>
+              <div className="space-y-2">
+                {(sourceData?.sources ?? []).map((source) => (
+                  <SafeExternalLink
+                    key={source.url}
+                    url={source.url}
+                    className="flex items-center justify-between gap-3 rounded-md px-3 py-2 text-sm hover:bg-white/5"
+                    style={{ border: "1px solid rgba(124,106,247,0.16)", color: "#aaa3ef" }}
+                  >
+                    {source.label}
+                    <ExternalLink size={13} aria-hidden="true" />
+                  </SafeExternalLink>
+                ))}
+              </div>
+            </section>
           </div>
         )}
 

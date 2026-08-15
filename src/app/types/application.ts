@@ -32,6 +32,7 @@ export type ApplicationRecord = {
   applicant: ApplicantDetails;
   applicationReference: string | null;
   deadline: string;
+  deadlineLabel: string;
   documents: string[];
   education: EducationDetails;
   id: string;
@@ -40,6 +41,8 @@ export type ApplicationRecord = {
   notes: string;
   portalUrl: string;
   program: string;
+  programSourceUrl: string;
+  programVerifiedAt: string;
   progress: number;
   status: ApplicationStatus;
   submittedDate: string | null;

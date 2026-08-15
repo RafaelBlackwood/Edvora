@@ -1,29 +1,66 @@
-﻿import { BrowserRouter, Navigate, Route, Routes } from "react-router";
-import type { ReactNode } from "react";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router";
+import { lazy, Suspense, type ReactNode } from "react";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { Layout } from "./components/Layout";
 import { RequireAuth, RequireRole } from "./components/RequireAuth";
-import { AcceptanceCalculatorPage } from "./components/pages/AcceptanceCalculatorPage";
-import { AdminPage } from "./components/pages/AdminPage";
-import { ApplicationsPage } from "./components/pages/ApplicationsPage";
-import { AssistantBotPage } from "./components/pages/AssistantBotPage";
-import { BudgetSimulatorPage } from "./components/pages/BudgetSimulatorPage";
-import { CommunityPage } from "./components/pages/CommunityPage";
-import { ConsultationsPage } from "./components/pages/ConsultationsPage";
-import { DashboardPage } from "./components/pages/DashboardPage";
-import { DestinationGuidePage } from "./components/pages/DestinationGuidePage";
-import { DocumentsPage } from "./components/pages/DocumentsPage";
-import { ExamPrepPage } from "./components/pages/ExamPrepPage";
 import { LoginPage } from "./components/pages/LoginPage";
-import { OnboardingPage } from "./components/pages/OnboardingPage";
-import { ProfilePage } from "./components/pages/ProfilePage";
+import { OAuthCallbackPage } from "./components/pages/OAuthCallbackPage";
 import { RegisterPage } from "./components/pages/RegisterPage";
-import { ScholarshipsPage } from "./components/pages/ScholarshipsPage";
-import { SearchPage } from "./components/pages/SearchPage";
-import { UniversityDetailPage } from "./components/pages/UniversityDetailPage";
-import { WishlistPage } from "./components/pages/WishlistPage";
+import { ResetPasswordPage } from "./components/pages/ResetPasswordPage";
 import { AppDataProvider } from "./providers/AppDataProvider";
 import { AuthProvider } from "./providers/AuthProvider";
+
+const AcceptanceCalculatorPage = lazy(async () => ({
+  default: (await import("./components/pages/AcceptanceCalculatorPage")).AcceptanceCalculatorPage,
+}));
+const AdminPage = lazy(async () => ({
+  default: (await import("./components/pages/AdminPage")).AdminPage,
+}));
+const ApplicationsPage = lazy(async () => ({
+  default: (await import("./components/pages/ApplicationsPage")).ApplicationsPage,
+}));
+const AssistantBotPage = lazy(async () => ({
+  default: (await import("./components/pages/AssistantBotPage")).AssistantBotPage,
+}));
+const BudgetSimulatorPage = lazy(async () => ({
+  default: (await import("./components/pages/BudgetSimulatorPage")).BudgetSimulatorPage,
+}));
+const CommunityPage = lazy(async () => ({
+  default: (await import("./components/pages/CommunityPage")).CommunityPage,
+}));
+const ConsultationsPage = lazy(async () => ({
+  default: (await import("./components/pages/ConsultationsPage")).ConsultationsPage,
+}));
+const DashboardPage = lazy(async () => ({
+  default: (await import("./components/pages/DashboardPage")).DashboardPage,
+}));
+const DestinationGuidePage = lazy(async () => ({
+  default: (await import("./components/pages/DestinationGuidePage")).DestinationGuidePage,
+}));
+const DocumentsPage = lazy(async () => ({
+  default: (await import("./components/pages/DocumentsPage")).DocumentsPage,
+}));
+const ExamPrepPage = lazy(async () => ({
+  default: (await import("./components/pages/ExamPrepPage")).ExamPrepPage,
+}));
+const OnboardingPage = lazy(async () => ({
+  default: (await import("./components/pages/OnboardingPage")).OnboardingPage,
+}));
+const ProfilePage = lazy(async () => ({
+  default: (await import("./components/pages/ProfilePage")).ProfilePage,
+}));
+const ScholarshipsPage = lazy(async () => ({
+  default: (await import("./components/pages/ScholarshipsPage")).ScholarshipsPage,
+}));
+const SearchPage = lazy(async () => ({
+  default: (await import("./components/pages/SearchPage")).SearchPage,
+}));
+const UniversityDetailPage = lazy(async () => ({
+  default: (await import("./components/pages/UniversityDetailPage")).UniversityDetailPage,
+}));
+const WishlistPage = lazy(async () => ({
+  default: (await import("./components/pages/WishlistPage")).WishlistPage,
+}));
 
 function AppWithLayout({ children }: { children: ReactNode }) {
   return (
@@ -70,10 +107,26 @@ export default function App() {
         <AuthProvider>
           <AppDataProvider>
             <div className="dark" style={{ height: "100dvh", overflow: "hidden" }}>
-              <Routes>
+              <Suspense
+                fallback={
+                  <main className="route-loading" aria-busy="true" aria-label="Loading page">
+                    <span className="auth-spinner" aria-hidden="true" />
+                  </main>
+                }
+              >
+                <Routes>
                 <Route path="/" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
-                <Route path="/onboarding" element={<OnboardingPage />} />
+                <Route path="/auth/callback" element={<OAuthCallbackPage />} />
+                <Route path="/reset-password" element={<ResetPasswordPage />} />
+                <Route
+                  path="/onboarding"
+                  element={
+                    <RequireAuth>
+                      <OnboardingPage />
+                    </RequireAuth>
+                  }
+                />
 
                 {routes.map((route) => (
                   <Route
@@ -85,7 +138,8 @@ export default function App() {
 
                 <Route path="/admin" element={<AdminWithLayout />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
+                </Routes>
+              </Suspense>
             </div>
           </AppDataProvider>
         </AuthProvider>

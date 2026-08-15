@@ -141,11 +141,37 @@ def write_catalog(records: list[dict], metadata: dict, checksum: str):
             "file": filename,
         })
 
+    search_index = [
+        {
+            "aliases": record["aliases"],
+            "city": record["city"],
+            "country": record["country"],
+            "countryCode": record["countryCode"],
+            "established": record["established"],
+            "id": record["id"],
+            "name": record["name"],
+            "region": record["region"],
+            "website": record["website"],
+        }
+        for record in sorted(
+            records,
+            key=lambda item: (
+                item["country"].casefold(),
+                item["name"].casefold(),
+            ),
+        )
+    ]
+    (staging / "index.json").write_text(
+        json.dumps(search_index, ensure_ascii=False, separators=(",", ":")),
+        encoding="utf-8",
+    )
+
     manifest = {
         "catalogScope": "Active ROR organizations classified as education",
         "countries": chunks,
         "generatedAt": ((metadata.get("metadata") or {}).get("publication_date") or "") + "T00:00:00Z",
         "institutionCount": len(records),
+        "indexFile": "index.json",
         "license": "CC0-1.0",
         "source": {
             "checksum": f"md5:{checksum}",

@@ -9,6 +9,7 @@ Edvora separates stable institution identity from frequently changing admissions
 The generated catalog is written to `public/data/university-catalog/`:
 
 - `manifest.json` contains release metadata, total coverage, and country chunk details.
+- `index.json` contains the compact worldwide identity and location fields used by browser search.
 - `<country-code>.json` contains normalized institutions for one country or territory.
 - Each institution retains its ROR ID, names, location, domains, website, establishment year, and source modification date.
 
@@ -43,6 +44,27 @@ fact
 ```
 
 Every visible changing value should retain `source_url`, `fetched_at`, `academic_year`, and `confidence`. Conflicting observations are preserved; publication rules choose the newest authoritative value instead of deleting history.
+
+## Search Filter Contract
+
+Search filters are published only when the corresponding field has a defined source and freshness policy.
+
+| Unified search fields | Fields | Authoritative source | Refresh status |
+| --- | --- | --- | --- |
+| Institution fields | Identity, country, region, founding year, official website | ROR data dump | Automatic weekly release check |
+| Admissions fields | Program level, subject, tuition, funding, GPA, language tests, entrance exams, university type, research focus | Official university pages, official feeds, or recognized public-sector APIs | Requires a published source observation |
+
+The search page presents both field groups in one filter panel and one result list. Institution filters apply across the complete catalog. When a user selects an admissions criterion, the result set includes only institutions with matching published admissions facts; institutions with unknown requirements are not treated as matches.
+
+Institution metadata must not be used to infer admissions requirements. The admissions filter index must include only facts whose `review_status` is `published`; records without a published fact remain discoverable until an admissions criterion is selected.
+
+A changing fact is eligible for publication only when it includes:
+
+- an official source URL associated with the institution's known domain;
+- the fetch time and content hash;
+- a normalized value and the original evidence;
+- an academic year or effective date when the source provides one;
+- a confidence score and review status.
 
 ## Website Refresh Pipeline
 

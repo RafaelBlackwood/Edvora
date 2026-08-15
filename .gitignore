@@ -12,3 +12,12 @@ pnpm-debug.log*
 
 .DS_Store
 Thumbs.db
+# Local backend and infrastructure files
+LOCAL_BACKEND_SETUP.md
+docker-compose.local.yml
+docker-compose.*.local.yml
+.docker/
+supabase/config.toml
+supabase/.gitignore
+supabase/.temp/
+supabase/.branches/

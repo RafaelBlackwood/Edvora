@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Sparkles, ArrowRight, ArrowLeft, Check } from "lucide-react";
+import { useAppData } from "../../providers/AppDataProvider";
 
 const BOOKSHELF_BG = "https://images.unsplash.com/photo-1653055274479-225eff1cc16b?w=1920&h=1080&fit=crop&auto=format";
 
@@ -64,6 +65,7 @@ const steps = [
 
 export function OnboardingPage() {
   const navigate = useNavigate();
+  const { updateUserProfile } = useAppData();
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
   const [scores, setScores] = useState({ gpa: "", ielts: "", toefl: "", gre: "", gmat: "" });
@@ -99,8 +101,32 @@ export function OnboardingPage() {
   };
 
   const next = () => {
-    if (currentStep < steps.length - 1) setCurrentStep((s) => s + 1);
-    else navigate("/dashboard");
+    if (currentStep < steps.length - 1) {
+      setCurrentStep((stepIndex) => stepIndex + 1);
+      return;
+    }
+
+    const parseScore = (value: string) => {
+      const parsed = Number(value);
+      return Number.isFinite(parsed) && value.trim() ? parsed : null;
+    };
+
+    updateUserProfile({
+      applicationGoal: (answers.goal as string) ?? "",
+      budget: (answers.budget as string) ?? "",
+      currentLevel: (answers.level as string) ?? "",
+      destinationCountries: (answers.countries as string[]) ?? [],
+      fieldOfStudy: (answers.field as string) ?? "",
+      gmat: parseScore(scores.gmat),
+      gpa: parseScore(scores.gpa) ?? 0,
+      gre: parseScore(scores.gre),
+      ielts: parseScore(scores.ielts) ?? 0,
+      intakeSeason: (answers.intake as string) ?? "",
+      profileCompletion: 100,
+      targetDegree: (answers.targetDegree as string) ?? "",
+      toefl: parseScore(scores.toefl),
+    });
+    navigate("/dashboard");
   };
 
   return (

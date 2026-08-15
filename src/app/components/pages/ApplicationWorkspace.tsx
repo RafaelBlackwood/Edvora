@@ -178,7 +178,7 @@ export function ApplicationWorkspace({
           </div>
         </div>
         <div className="flex items-center gap-5 text-xs" style={{ color: "#6b7a9e" }}>
-          <span>Deadline <strong className="block mt-1 text-sm" style={{ color: "#f8b84e" }}>{formatApplicationDate(draft.deadline)}</strong></span>
+          <span>Deadline <strong className="block mt-1 text-sm" style={{ color: "#f8b84e" }}>{draft.deadline ? formatApplicationDate(draft.deadline) : draft.deadlineLabel || "Not set"}</strong></span>
           <span>Completion <strong className="block mt-1 text-sm" style={{ color: "#a89bf5" }}>{draft.progress}%</strong></span>
           <span>Updated <strong className="block mt-1 text-sm" style={{ color: "#c7cde0" }}>{formatApplicationDate(draft.lastUpdated)}</strong></span>
         </div>
@@ -219,11 +219,29 @@ export function ApplicationWorkspace({
               <label className="block text-xs mb-1.5" style={{ color: "#8f9bb8" }}>Status</label>
               <select value={draft.status} onChange={(event) => setDraft((current) => ({ ...current, status: event.target.value as ApplicationRecord["status"] }))} className="w-full px-3 py-2.5 rounded-lg text-sm outline-none mb-3" style={inputStyle}>{applicationStatuses.map((status) => <option key={status}>{status}</option>)}</select>
               <Field label="Deadline" type="date" value={draft.deadline} onChange={(value) => setDraft((current) => ({ ...current, deadline: value }))} />
+              {draft.deadlineLabel && (
+                <p className="mt-2 text-xs leading-relaxed" style={{ color: "#8f9bb8" }}>
+                  Official listing: {draft.deadlineLabel}
+                </p>
+              )}
               <div className="mt-3"><Field label="Application reference" value={draft.applicationReference ?? ""} onChange={(value) => setDraft((current) => ({ ...current, applicationReference: value || null }))} /></div>
             </section>
             <section className="p-5 rounded-lg" style={panelStyle}>
-              <h2 className="font-semibold text-white mb-3">University portal</h2>
+              <h2 className="font-semibold text-white mb-3">Official program source</h2>
               <Field label="HTTPS portal address" type="url" value={draft.portalUrl} onChange={(value) => setDraft((current) => ({ ...current, portalUrl: value }))} />
+              {draft.programSourceUrl && (
+                <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+                  <span className="text-xs" style={{ color: "#7785a4" }}>
+                    {draft.programVerifiedAt ? `Catalog checked ${draft.programVerifiedAt}` : "Official listing"}
+                  </span>
+                  <SafeExternalLink
+                    url={draft.programSourceUrl}
+                    className="inline-flex items-center gap-1.5 text-xs hover:text-white"
+                  >
+                    Verify details <ExternalLink size={12} />
+                  </SafeExternalLink>
+                </div>
+              )}
             </section>
           </aside>
         </div>

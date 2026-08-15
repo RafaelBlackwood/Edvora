@@ -1,11 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 import { Check, RotateCcw, Save } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieChart as RePieChart, Pie } from "recharts";
+import {
+  loadBudgetScenario,
+  saveBudgetScenario,
+  type BudgetScenario,
+  type BudgetValues,
+} from "../../lib/featureData";
+import { useAuth } from "../../providers/AuthProvider";
 
 const CHART_COLORS = ["#7c6af7", "#06b6d4", "#10b981", "#f59e0b", "#f43f5e", "#a855f7", "#3b82f6"];
+const GUEST_BUDGET_KEY = "edvora.budget.scenario.v1";
 
-const defaultBudget = {
+const defaultBudget: BudgetValues = {
   tuition: 16000,
   housing: 800,
   food: 300,
@@ -29,38 +37,70 @@ const countryPresets: Record<string, typeof defaultBudget> = {
   "United States": { ...defaultBudget, tuition: 45000, housing: 1650, food: 520, transport: 130, health: 280 },
 };
 
-type BudgetScenario = {
-  budget: typeof defaultBudget;
-  currency: string;
-  duration: number;
-  preset: string;
-  scholarship: number;
-};
-
-function loadBudgetScenario() {
-  try {
-    const stored = sessionStorage.getItem("edvora.budget.scenario");
-    return stored ? (JSON.parse(stored) as BudgetScenario) : null;
-  } catch {
-    return null;
-  }
-}
 export function BudgetSimulatorPage() {
+  const { user } = useAuth();
   const [searchParams] = useSearchParams();
-  const savedScenario = loadBudgetScenario();
   const requestedPreset = searchParams.get("country");
   const initialPreset = requestedPreset && countryPresets[requestedPreset]
     ? requestedPreset
-    : savedScenario?.preset && countryPresets[savedScenario.preset]
-      ? savedScenario.preset
-      : "Netherlands";
-  const useSavedScenario = !requestedPreset ? savedScenario : null;
-  const [budget, setBudget] = useState<typeof defaultBudget>(() => useSavedScenario?.budget ?? countryPresets[initialPreset]);
-  const [currency, setCurrency] = useState(useSavedScenario?.currency ?? "EUR");
-  const [duration, setDuration] = useState(useSavedScenario?.duration ?? 2);
-  const [scholarship, setScholarship] = useState(useSavedScenario?.scholarship ?? 0);
+    : "Netherlands";
+  const [budget, setBudget] = useState<BudgetValues>(() => countryPresets[initialPreset]);
+  const [currency, setCurrency] = useState("EUR");
+  const [duration, setDuration] = useState(2);
+  const [scholarship, setScholarship] = useState(0);
   const [preset, setPreset] = useState(initialPreset);
   const [notice, setNotice] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+
+    if (user.isGuest) {
+      setIsLoading(false);
+      if (requestedPreset) return;
+
+      try {
+        const stored = JSON.parse(
+          sessionStorage.getItem(GUEST_BUDGET_KEY) ?? "null",
+        ) as BudgetScenario | null;
+
+        if (stored) {
+          if (countryPresets[stored.preset]) setPreset(stored.preset);
+          setBudget(stored.budget);
+          if (currencies[stored.currency]) setCurrency(stored.currency);
+          setDuration(stored.duration);
+          setScholarship(stored.scholarship);
+        }
+      } catch {
+        setNotice("The saved guest budget could not be loaded.");
+      }
+      return;
+    }
+
+    let active = true;
+    setIsLoading(true);
+
+    void loadBudgetScenario(user.id)
+      .then((scenario) => {
+        if (!active || !scenario || requestedPreset) return;
+        if (countryPresets[scenario.preset]) setPreset(scenario.preset);
+        setBudget(scenario.budget);
+        if (currencies[scenario.currency]) setCurrency(scenario.currency);
+        setDuration(scenario.duration);
+        setScholarship(scenario.scholarship);
+      })
+      .catch(() => {
+        if (active) setNotice("Your saved budget could not be loaded. The default estimate is still available.");
+      })
+      .finally(() => {
+        if (active) setIsLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [requestedPreset, user]);
 
   const rate = currencies[currency];
   const monthlyLiving = budget.housing + budget.food + budget.transport + budget.health + budget.personal;
@@ -92,12 +132,25 @@ export function BudgetSimulatorPage() {
     setNotice("");
   };
 
-  const saveScenario = () => {
-    sessionStorage.setItem(
-      "edvora.budget.scenario",
-      JSON.stringify({ budget, currency, duration, preset, scholarship }),
-    );
-    setNotice("Budget scenario saved for this session.");
+  const saveScenario = async () => {
+    if (!user || isSaving) return;
+    setIsSaving(true);
+    setNotice("");
+    try {
+      const scenario = { budget, currency, duration, preset, scholarship };
+
+      if (user.isGuest) {
+        sessionStorage.setItem(GUEST_BUDGET_KEY, JSON.stringify(scenario));
+        setNotice("Budget scenario saved for this guest session.");
+      } else {
+        await saveBudgetScenario(user.id, scenario);
+        setNotice("Budget scenario saved to your account.");
+      }
+    } catch {
+      setNotice("Your budget could not be saved. Check your connection and try again.");
+    } finally {
+      setIsSaving(false);
+    }
   };
   const pieData = [
     { name: "Tuition", value: budget.tuition * duration },
@@ -132,7 +185,7 @@ export function BudgetSimulatorPage() {
             <select value={currency} onChange={(event) => setCurrency(event.target.value)} aria-label="Display currency" className="px-3 py-2 rounded-md text-sm outline-none" style={{ background: "#0e1729", border: "1px solid rgba(124,106,247,0.2)", color: "#a8b4d0" }}>
               {Object.keys(currencies).map((item) => <option key={item}>{item}</option>)}
             </select>
-            <button type="button" onClick={saveScenario} className="glass-interactive w-9 h-9 flex items-center justify-center rounded-md" title="Save scenario" aria-label="Save scenario"><Save size={15} /></button>
+            <button type="button" onClick={() => void saveScenario()} disabled={isLoading || isSaving} className="glass-interactive w-9 h-9 flex items-center justify-center rounded-md disabled:opacity-40" title="Save scenario" aria-label={isSaving ? "Saving scenario" : "Save scenario"}><Save size={15} /></button>
             <button type="button" onClick={resetBudget} className="glass-interactive w-9 h-9 flex items-center justify-center rounded-md" title="Reset budget" aria-label="Reset budget"><RotateCcw size={15} /></button>
           </div>
         </div>

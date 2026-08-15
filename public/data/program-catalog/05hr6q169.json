@@ -1,0 +1,2557 @@
+{
+  "catalogUrl": "https://www.atsu.edu/apply-to-atsu",
+  "generatedAt": "2026-07-29T16:15:58.366780+00:00",
+  "institutionId": "https://ror.org/05hr6q169",
+  "institutionName": "A.T. Still University",
+  "programs": [
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Residential",
+      "degree": "DMD track",
+      "durationMonths": null,
+      "id": "atsu-program-d28aa76678368c28",
+      "language": "English",
+      "level": "Professional",
+      "name": "Advanced Standing International Dentist Track",
+      "officialUrl": "https://www.atsu.edu/missouri-school-of-dentistry-and-oral-health/academics/advanced-standing-dentist-track",
+      "requirementGroupId": "atsu-requirements-d28aa76678368c28",
+      "school": "Missouri School of Dentistry & Oral Health (ATSU-MOSDOH)",
+      "subject": "Dentistry",
+      "summary": "Official ATSU residential professional offering in Dentistry.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "Certificate",
+      "durationMonths": null,
+      "id": "atsu-program-9c7ab97d692d7455",
+      "language": "English",
+      "level": "Certificate",
+      "name": "Certificate in Athletic Training Education",
+      "officialUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/athletic-training-graduate-certificates",
+      "requirementGroupId": "atsu-requirements-9c7ab97d692d7455",
+      "school": "Arizona School of Health Sciences (ATSU-ASHS)",
+      "subject": "Athletic Training",
+      "summary": "Official ATSU online certificate offering in Athletic Training.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "Certificate",
+      "durationMonths": null,
+      "id": "atsu-program-7816370091284d3c",
+      "language": "English",
+      "level": "Certificate",
+      "name": "Certificate in Clinical Decision-Making in Athletic Training",
+      "officialUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/athletic-training-graduate-certificates",
+      "requirementGroupId": "atsu-requirements-7816370091284d3c",
+      "school": "Arizona School of Health Sciences (ATSU-ASHS)",
+      "subject": "Athletic Training",
+      "summary": "Official ATSU online certificate offering in Athletic Training.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "Certificate",
+      "durationMonths": null,
+      "id": "atsu-program-8b586f17bcce67ad",
+      "language": "English",
+      "level": "Certificate",
+      "name": "Certificate in Corrective Exercise and Orthopedic Rehabilitation",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/kinesiology-certificates",
+      "requirementGroupId": "atsu-requirements-8b586f17bcce67ad",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Kinesiology",
+      "summary": "Official ATSU online certificate offering in Kinesiology.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "Certificate",
+      "durationMonths": null,
+      "id": "atsu-program-4053ed571c719ac7",
+      "language": "English",
+      "level": "Certificate",
+      "name": "Certificate in Education for Physician Assistants",
+      "officialUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/pa-graduate-certificates",
+      "requirementGroupId": "atsu-requirements-4053ed571c719ac7",
+      "school": "Arizona School of Health Sciences (ATSU-ASHS)",
+      "subject": "Physician Assistant Studies",
+      "summary": "Official ATSU online certificate offering in Physician Assistant Studies.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "Certificate",
+      "durationMonths": null,
+      "id": "atsu-program-95bb8cfbfbb2f613",
+      "language": "English",
+      "level": "Certificate",
+      "name": "Certificate in Exercise and Sport Psychology",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/kinesiology-certificates",
+      "requirementGroupId": "atsu-requirements-95bb8cfbfbb2f613",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Kinesiology",
+      "summary": "Official ATSU online certificate offering in Kinesiology.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "Certificate",
+      "durationMonths": null,
+      "id": "atsu-program-cb2eb24f19ab8e08",
+      "language": "English",
+      "level": "Certificate",
+      "name": "Certificate in Fundamentals of Education",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/health-sciences-certificates",
+      "requirementGroupId": "atsu-requirements-cb2eb24f19ab8e08",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Health Sciences",
+      "summary": "Official ATSU online certificate offering in Health Sciences.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "Certificate",
+      "durationMonths": null,
+      "id": "atsu-program-aa025fc5ca35d0a8",
+      "language": "English",
+      "level": "Certificate",
+      "name": "Certificate in Global Health",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/health-sciences-certificates",
+      "requirementGroupId": "atsu-requirements-aa025fc5ca35d0a8",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Health Sciences",
+      "summary": "Official ATSU online certificate offering in Health Sciences.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "Certificate",
+      "durationMonths": null,
+      "id": "atsu-program-ce9c542ea1e22643",
+      "language": "English",
+      "level": "Certificate",
+      "name": "Certificate in Health Administration for Community Health Center Leaders",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/certificate-in-health-administration-for-community-health-center-leaders",
+      "requirementGroupId": "atsu-requirements-ce9c542ea1e22643",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Health Administration",
+      "summary": "Official ATSU online certificate offering in Health Administration.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "Certificate",
+      "durationMonths": null,
+      "id": "atsu-program-a66e0983105291ca",
+      "language": "English",
+      "level": "Certificate",
+      "name": "Certificate in Health Professions Education",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/certificate-in-health-professions-education",
+      "requirementGroupId": "atsu-requirements-a66e0983105291ca",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Health Professions Education",
+      "summary": "Official ATSU online certificate offering in Health Professions Education.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "Certificate",
+      "durationMonths": null,
+      "id": "atsu-program-4274a4ac1bc6264b",
+      "language": "English",
+      "level": "Certificate",
+      "name": "Certificate in Interprofessional Education",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/certificate-in-interprofessional-education",
+      "requirementGroupId": "atsu-requirements-4274a4ac1bc6264b",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Health Professions Education",
+      "summary": "Official ATSU online certificate offering in Health Professions Education.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "Certificate",
+      "durationMonths": null,
+      "id": "atsu-program-f30f0deb7d1afb22",
+      "language": "English",
+      "level": "Certificate",
+      "name": "Certificate in Leadership and Organizational Behavior",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/health-sciences-certificates",
+      "requirementGroupId": "atsu-requirements-f30f0deb7d1afb22",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Health Sciences",
+      "summary": "Official ATSU online certificate offering in Health Sciences.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "Certificate",
+      "durationMonths": null,
+      "id": "atsu-program-5ee7af0142096174",
+      "language": "English",
+      "level": "Certificate",
+      "name": "Certificate in Leadership for Physician Assistants",
+      "officialUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/pa-graduate-certificates",
+      "requirementGroupId": "atsu-requirements-5ee7af0142096174",
+      "school": "Arizona School of Health Sciences (ATSU-ASHS)",
+      "subject": "Physician Assistant Studies",
+      "summary": "Official ATSU online certificate offering in Physician Assistant Studies.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "Certificate",
+      "durationMonths": null,
+      "id": "atsu-program-4ab3fa8ff532dbdc",
+      "language": "English",
+      "level": "Certificate",
+      "name": "Certificate in Nurse Education",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/certificate-in-nursing-education",
+      "requirementGroupId": "atsu-requirements-4ab3fa8ff532dbdc",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Nursing",
+      "summary": "Official ATSU online certificate offering in Nursing.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "Certificate",
+      "durationMonths": null,
+      "id": "atsu-program-f7539192f1e21cb7",
+      "language": "English",
+      "level": "Certificate",
+      "name": "Certificate in Orthopaedics",
+      "officialUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/athletic-training-graduate-certificates",
+      "requirementGroupId": "atsu-requirements-f7539192f1e21cb7",
+      "school": "Arizona School of Health Sciences (ATSU-ASHS)",
+      "subject": "Athletic Training",
+      "summary": "Official ATSU online certificate offering in Athletic Training.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "Certificate",
+      "durationMonths": null,
+      "id": "atsu-program-e13d188b0a838f88",
+      "language": "English",
+      "level": "Certificate",
+      "name": "Certificate in Public Health Advocacy and Leadership",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/certificate-in-public-health-advocacy-and-leadership",
+      "requirementGroupId": "atsu-requirements-e13d188b0a838f88",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Public Health",
+      "summary": "Official ATSU online certificate offering in Public Health.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "Certificate",
+      "durationMonths": null,
+      "id": "atsu-program-675d5f84b5bf71b2",
+      "language": "English",
+      "level": "Certificate",
+      "name": "Certificate in Public Health Workforce Preparedness",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/certificate-in-public-health-workforce",
+      "requirementGroupId": "atsu-requirements-675d5f84b5bf71b2",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Public Health",
+      "summary": "Official ATSU online certificate offering in Public Health.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "Certificate",
+      "durationMonths": null,
+      "id": "atsu-program-e52c41e6dbe53076",
+      "language": "English",
+      "level": "Certificate",
+      "name": "Certificate in Public Health, Emergency Preparedness and Disaster Response",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/certificate-in-public-health-emergency",
+      "requirementGroupId": "atsu-requirements-e52c41e6dbe53076",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Public Health",
+      "summary": "Official ATSU online certificate offering in Public Health.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "Certificate",
+      "durationMonths": null,
+      "id": "atsu-program-926f79c8091e568f",
+      "language": "English",
+      "level": "Certificate",
+      "name": "Certificate in Rehabilitation",
+      "officialUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/athletic-training-graduate-certificates",
+      "requirementGroupId": "atsu-requirements-926f79c8091e568f",
+      "school": "Arizona School of Health Sciences (ATSU-ASHS)",
+      "subject": "Athletic Training",
+      "summary": "Official ATSU online certificate offering in Athletic Training.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "Certificate",
+      "durationMonths": null,
+      "id": "atsu-program-9367c30f2f18b072",
+      "language": "English",
+      "level": "Certificate",
+      "name": "Certificate in Sport Neurology and Concussion",
+      "officialUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/athletic-training-graduate-certificates",
+      "requirementGroupId": "atsu-requirements-9367c30f2f18b072",
+      "school": "Arizona School of Health Sciences (ATSU-ASHS)",
+      "subject": "Athletic Training",
+      "summary": "Official ATSU online certificate offering in Athletic Training.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "Certificate",
+      "durationMonths": null,
+      "id": "atsu-program-21b70de75af35803",
+      "language": "English",
+      "level": "Certificate",
+      "name": "Certificate in Sports Conditioning",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/kinesiology-certificates",
+      "requirementGroupId": "atsu-requirements-21b70de75af35803",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Kinesiology",
+      "summary": "Official ATSU online certificate offering in Kinesiology.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "Certificate",
+      "durationMonths": null,
+      "id": "atsu-program-193293b19bd033a3",
+      "language": "English",
+      "level": "Certificate",
+      "name": "Certificate in Sports Science",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/kinesiology-certificates",
+      "requirementGroupId": "atsu-requirements-193293b19bd033a3",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Kinesiology",
+      "summary": "Official ATSU online certificate offering in Kinesiology.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "Certificate",
+      "durationMonths": null,
+      "id": "atsu-program-14b7d4506a3c22b5",
+      "language": "English",
+      "level": "Certificate",
+      "name": "Certificate in Teaching with Simulation",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/certificate-in-teaching-with-simulation",
+      "requirementGroupId": "atsu-requirements-14b7d4506a3c22b5",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Health Professions Education",
+      "summary": "Official ATSU online certificate offering in Health Professions Education.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "DAT",
+      "durationMonths": null,
+      "id": "atsu-program-36486e36e7046f68",
+      "language": "English",
+      "level": "Doctorate",
+      "name": "Doctor of Athletic Training",
+      "officialUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/doctor-of-athletic-training",
+      "requirementGroupId": "atsu-requirements-36486e36e7046f68",
+      "school": "Arizona School of Health Sciences (ATSU-ASHS)",
+      "subject": "Athletic Training",
+      "summary": "Official ATSU online doctorate offering in Athletic Training.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Residential",
+      "degree": "AuD",
+      "durationMonths": null,
+      "id": "atsu-program-b0b6e789f9241bcf",
+      "language": "English",
+      "level": "Doctorate",
+      "name": "Doctor of Audiology, Entry-Level",
+      "officialUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/entry-level-doctor-of-audiology-degree",
+      "requirementGroupId": "atsu-requirements-b0b6e789f9241bcf",
+      "school": "Arizona School of Health Sciences (ATSU-ASHS)",
+      "subject": "Audiology",
+      "summary": "Official ATSU residential doctorate offering in Audiology.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "AuD",
+      "durationMonths": null,
+      "id": "atsu-program-81635a983fd0f5fa",
+      "language": "English",
+      "level": "Doctorate",
+      "name": "Doctor of Audiology, Post-Professional",
+      "officialUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/post-professional-doctor-of-audiology",
+      "requirementGroupId": "atsu-requirements-81635a983fd0f5fa",
+      "school": "Arizona School of Health Sciences (ATSU-ASHS)",
+      "subject": "Audiology",
+      "summary": "Official ATSU online doctorate offering in Audiology.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "Non-degree",
+      "durationMonths": null,
+      "id": "atsu-program-64a24b2da2ffd9c1",
+      "language": "English",
+      "level": "Non-degree",
+      "name": "Doctor of Audiology, Post-Professional (Non-degree)",
+      "officialUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/post-professional-doctor-of-audiology-non-degree",
+      "requirementGroupId": "atsu-requirements-64a24b2da2ffd9c1",
+      "school": "Arizona School of Health Sciences (ATSU-ASHS)",
+      "subject": "Audiology",
+      "summary": "Official ATSU online non-degree offering in Audiology.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Residential",
+      "degree": "DMD",
+      "durationMonths": null,
+      "id": "atsu-program-ca5cf7f159416713",
+      "language": "English",
+      "level": "Doctorate",
+      "name": "Doctor of Dental Medicine (ASDOH)",
+      "officialUrl": "https://www.atsu.edu/arizona-school-of-dentistry-and-oral-health/academics/doctor-of-dental-medicine-dmd-program",
+      "requirementGroupId": "atsu-requirements-ca5cf7f159416713",
+      "school": "Arizona School of Dentistry & Oral Health (ATSU-ASDOH)",
+      "subject": "Dentistry",
+      "summary": "Official ATSU residential doctorate offering in Dentistry.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Residential",
+      "degree": "DMD",
+      "durationMonths": null,
+      "id": "atsu-program-1414b29846633128",
+      "language": "English",
+      "level": "Doctorate",
+      "name": "Doctor of Dental Medicine (MOSDOH)",
+      "officialUrl": "https://www.atsu.edu/missouri-school-of-dentistry-and-oral-health/academics/doctor-of-dental-medicine-program",
+      "requirementGroupId": "atsu-requirements-1414b29846633128",
+      "school": "Missouri School of Dentistry & Oral Health (ATSU-MOSDOH)",
+      "subject": "Dentistry",
+      "summary": "Official ATSU residential doctorate offering in Dentistry.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "EdD",
+      "durationMonths": null,
+      "id": "atsu-program-446afbecc273413b",
+      "language": "English",
+      "level": "Doctorate",
+      "name": "Doctor of Education in Health Professions Education",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/doctor-of-education-in-health-professions-degree",
+      "requirementGroupId": "atsu-requirements-446afbecc273413b",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Health Professions Education",
+      "summary": "Official ATSU online doctorate offering in Health Professions Education.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "DHA",
+      "durationMonths": null,
+      "id": "atsu-program-d1ea7d41f99a3713",
+      "language": "English",
+      "level": "Doctorate",
+      "name": "Doctor of Health Administration",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/doctor-of-health-administration-degree-online",
+      "requirementGroupId": "atsu-requirements-d1ea7d41f99a3713",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Health Administration",
+      "summary": "Official ATSU online doctorate offering in Health Administration.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "DHSc",
+      "durationMonths": null,
+      "id": "atsu-program-43e715550e53f7e8",
+      "language": "English",
+      "level": "Doctorate",
+      "name": "Doctor of Health Sciences",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/doctor-of-health-sciences-degree-online",
+      "requirementGroupId": "atsu-requirements-43e715550e53f7e8",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Health Sciences",
+      "summary": "Official ATSU online doctorate offering in Health Sciences.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "DMSc",
+      "durationMonths": null,
+      "id": "atsu-program-66338c5a235623d8",
+      "language": "English",
+      "level": "Doctorate",
+      "name": "Doctor of Medical Science",
+      "officialUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/doctor-of-medical-science",
+      "requirementGroupId": "atsu-requirements-66338c5a235623d8",
+      "school": "Arizona School of Health Sciences (ATSU-ASHS)",
+      "subject": "Physician Assistant Studies",
+      "summary": "Official ATSU online doctorate offering in Physician Assistant Studies.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "DNP",
+      "durationMonths": null,
+      "id": "atsu-program-5a2ae521b5852a04",
+      "language": "English",
+      "level": "Doctorate",
+      "name": "Doctor of Nursing Practice",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/doctor-of-nursing-practice-online",
+      "requirementGroupId": "atsu-requirements-5a2ae521b5852a04",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Nursing",
+      "summary": "Official ATSU online doctorate offering in Nursing.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Residential",
+      "degree": "OTD",
+      "durationMonths": null,
+      "id": "atsu-program-6375f375f835c29d",
+      "language": "English",
+      "level": "Doctorate",
+      "name": "Doctor of Occupational Therapy, Entry-Level",
+      "officialUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/occupational-therapy-doctorate-entry-level-degree",
+      "requirementGroupId": "atsu-requirements-6375f375f835c29d",
+      "school": "Arizona School of Health Sciences (ATSU-ASHS)",
+      "subject": "Occupational Therapy",
+      "summary": "Official ATSU residential doctorate offering in Occupational Therapy.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Residential",
+      "degree": "DO",
+      "durationMonths": null,
+      "id": "atsu-program-21d29b531b11fffb",
+      "language": "English",
+      "level": "Doctorate",
+      "name": "Doctor of Osteopathic Medicine (KCOM)",
+      "officialUrl": "https://www.atsu.edu/kirksville-college-of-osteopathic-medicine/academics/doctor-of-osteopathic-medicine-program",
+      "requirementGroupId": "atsu-requirements-21d29b531b11fffb",
+      "school": "Kirksville College of Osteopathic Medicine (ATSU-KCOM)",
+      "subject": "Osteopathic Medicine",
+      "summary": "Official ATSU residential doctorate offering in Osteopathic Medicine.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Residential",
+      "degree": "DO",
+      "durationMonths": null,
+      "id": "atsu-program-d7512f2299bb5157",
+      "language": "English",
+      "level": "Doctorate",
+      "name": "Doctor of Osteopathic Medicine (SOMA)",
+      "officialUrl": "https://www.atsu.edu/school-of-osteopathic-medicine-arizona/academics/doctor-of-osteopathic-medicine",
+      "requirementGroupId": "atsu-requirements-d7512f2299bb5157",
+      "school": "School of Osteopathic Medicine in Arizona (ATSU-SOMA)",
+      "subject": "Osteopathic Medicine",
+      "summary": "Official ATSU residential doctorate offering in Osteopathic Medicine.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Residential",
+      "degree": "DPT",
+      "durationMonths": null,
+      "id": "atsu-program-863b67ceb8a0c7b9",
+      "language": "English",
+      "level": "Doctorate",
+      "name": "Doctor of Physical Therapy, Entry-Level",
+      "officialUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/doctor-of-physical-therapy",
+      "requirementGroupId": "atsu-requirements-863b67ceb8a0c7b9",
+      "school": "Arizona School of Health Sciences (ATSU-ASHS)",
+      "subject": "Physical Therapy",
+      "summary": "Official ATSU residential doctorate offering in Physical Therapy.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "DPT",
+      "durationMonths": null,
+      "id": "atsu-program-d84afc01409a460a",
+      "language": "English",
+      "level": "Doctorate",
+      "name": "Doctor of Physical Therapy, Postprofessional",
+      "officialUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/post-professional-doctor-of-physical-therapy",
+      "requirementGroupId": "atsu-requirements-d84afc01409a460a",
+      "school": "Arizona School of Health Sciences (ATSU-ASHS)",
+      "subject": "Physical Therapy",
+      "summary": "Official ATSU online doctorate offering in Physical Therapy.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "Non-degree",
+      "durationMonths": null,
+      "id": "atsu-program-1d694a5d56c0a4cf",
+      "language": "English",
+      "level": "Non-degree",
+      "name": "Doctor of Physical Therapy, Postprofessional (Non-degree)",
+      "officialUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/post-professional-doctor-of-physical-therapy-non-degree",
+      "requirementGroupId": "atsu-requirements-1d694a5d56c0a4cf",
+      "school": "Arizona School of Health Sciences (ATSU-ASHS)",
+      "subject": "Physical Therapy",
+      "summary": "Official ATSU online non-degree offering in Physical Therapy.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Hybrid",
+      "degree": "MAT",
+      "durationMonths": null,
+      "id": "atsu-program-67a4ab85969b2ead",
+      "language": "English",
+      "level": "Master",
+      "name": "Master of Athletic Training, Entry-Level",
+      "officialUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/master-of-athletic-training",
+      "requirementGroupId": "atsu-requirements-67a4ab85969b2ead",
+      "school": "Arizona School of Health Sciences (ATSU-ASHS)",
+      "subject": "Athletic Training",
+      "summary": "Official ATSU hybrid master offering in Athletic Training.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "MEd",
+      "durationMonths": null,
+      "id": "atsu-program-86fafd0b855f07c5",
+      "language": "English",
+      "level": "Master",
+      "name": "Master of Education in Health Professions Education",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/master-of-education-in-health-professions",
+      "requirementGroupId": "atsu-requirements-86fafd0b855f07c5",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Health Professions Education",
+      "summary": "Official ATSU online master offering in Health Professions Education.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "MHA",
+      "durationMonths": null,
+      "id": "atsu-program-22c64faf27027b50",
+      "language": "English",
+      "level": "Master",
+      "name": "Master of Health Administration",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/master-of-health-administration-degree-online",
+      "requirementGroupId": "atsu-requirements-22c64faf27027b50",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Health Administration",
+      "summary": "Official ATSU online master offering in Health Administration.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "MHSc",
+      "durationMonths": null,
+      "id": "atsu-program-5f785f8731ed7ca8",
+      "language": "English",
+      "level": "Master",
+      "name": "Master of Health Sciences",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/master-of-health-sciences-degree",
+      "requirementGroupId": "atsu-requirements-5f785f8731ed7ca8",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Health Sciences",
+      "summary": "Official ATSU online master offering in Health Sciences.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "MPH",
+      "durationMonths": null,
+      "id": "atsu-program-c010a1c338b760e2",
+      "language": "English",
+      "level": "Master",
+      "name": "Master of Public Health",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/master-of-public-health-degree-online",
+      "requirementGroupId": "atsu-requirements-c010a1c338b760e2",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Public Health",
+      "summary": "Official ATSU online master offering in Public Health.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "MPH",
+      "durationMonths": null,
+      "id": "atsu-program-cea49299fd8106c5",
+      "language": "English",
+      "level": "Master",
+      "name": "Master of Public Health - Dental Emphasis",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/master-of-public-health-dental-emphasis-degree",
+      "requirementGroupId": "atsu-requirements-cea49299fd8106c5",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Public Health",
+      "summary": "Official ATSU online master offering in Public Health.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "MPH",
+      "durationMonths": null,
+      "id": "atsu-program-5e64f75d900fc839",
+      "language": "English",
+      "level": "Master",
+      "name": "Master of Public Health - Dental Emphasis with a Dental Public Health Residency Certificate",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/dental-emphasis-dental-public-health-residency",
+      "requirementGroupId": "atsu-requirements-5e64f75d900fc839",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Public Health",
+      "summary": "Official ATSU online master offering in Public Health.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Residential",
+      "degree": "MS",
+      "durationMonths": null,
+      "id": "atsu-program-a3bbcb857df71859",
+      "language": "English",
+      "level": "Master",
+      "name": "Master of Science and Certificate in Orthodontics",
+      "officialUrl": "https://www.atsu.edu/arizona-school-of-dentistry-and-oral-health/academics/master-of-science-in-orthodontics",
+      "requirementGroupId": "atsu-requirements-a3bbcb857df71859",
+      "school": "Arizona School of Dentistry & Oral Health (ATSU-ASDOH)",
+      "subject": "Orthodontics",
+      "summary": "Official ATSU residential master offering in Orthodontics.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "MSAT",
+      "durationMonths": null,
+      "id": "atsu-program-772dc41b24c654c2",
+      "language": "English",
+      "level": "Master",
+      "name": "Master of Science in Athletic Training, Post-Professional",
+      "officialUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/master-of-science-in-athletic-training-online",
+      "requirementGroupId": "atsu-requirements-772dc41b24c654c2",
+      "school": "Arizona School of Health Sciences (ATSU-ASHS)",
+      "subject": "Athletic Training",
+      "summary": "Official ATSU online master offering in Athletic Training.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "MSBMS",
+      "durationMonths": null,
+      "id": "atsu-program-1d4c1680c0611162",
+      "language": "English",
+      "level": "Master",
+      "name": "Master of Science in Biomedical Sciences (ASHS)",
+      "officialUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/master-of-science-in-biomedical-sciences",
+      "requirementGroupId": "atsu-requirements-1d4c1680c0611162",
+      "school": "Arizona School of Health Sciences (ATSU-ASHS)",
+      "subject": "Biomedical Sciences",
+      "summary": "Official ATSU online master offering in Biomedical Sciences.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Residential",
+      "degree": "MS",
+      "durationMonths": null,
+      "id": "atsu-program-89c692707eba87de",
+      "language": "English",
+      "level": "Master",
+      "name": "Master of Science in Biomedical Sciences (KCOM)",
+      "officialUrl": "https://www.atsu.edu/kirksville-college-of-osteopathic-medicine/academics/master-of-science-in-biomedical-sciences",
+      "requirementGroupId": "atsu-requirements-89c692707eba87de",
+      "school": "Kirksville College of Osteopathic Medicine (ATSU-KCOM)",
+      "subject": "Biomedical Sciences",
+      "summary": "Official ATSU residential master offering in Biomedical Sciences.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Online",
+      "degree": "MS",
+      "durationMonths": null,
+      "id": "atsu-program-c0eca3128c790e91",
+      "language": "English",
+      "level": "Master",
+      "name": "Master of Science in Kinesiology",
+      "officialUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/master-of-science-in-kinesiology",
+      "requirementGroupId": "atsu-requirements-c0eca3128c790e91",
+      "school": "College of Graduate Health Studies (ATSU-CGHS)",
+      "subject": "Kinesiology",
+      "summary": "Official ATSU online master offering in Kinesiology.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Residential",
+      "degree": "MSOT",
+      "durationMonths": null,
+      "id": "atsu-program-c104df5556057453",
+      "language": "English",
+      "level": "Master",
+      "name": "Master of Science in Occupational Therapy",
+      "officialUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/occupational-therapy-masters-degree",
+      "requirementGroupId": "atsu-requirements-c104df5556057453",
+      "school": "Arizona School of Health Sciences (ATSU-ASHS)",
+      "subject": "Occupational Therapy",
+      "summary": "Official ATSU residential master offering in Occupational Therapy.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Residential",
+      "degree": "MSPAS",
+      "durationMonths": null,
+      "id": "atsu-program-e644fcd677dd2025",
+      "language": "English",
+      "level": "Master",
+      "name": "Master of Science in Physician Assistant Studies (ASHS)",
+      "officialUrl": "https://www.atsu.edu/physician-assistant-degree",
+      "requirementGroupId": "atsu-requirements-e644fcd677dd2025",
+      "school": "Arizona School of Health Sciences (ATSU-ASHS)",
+      "subject": "Physician Assistant Studies",
+      "summary": "Official ATSU residential master offering in Physician Assistant Studies.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Residential",
+      "degree": "MSPAS",
+      "durationMonths": null,
+      "id": "atsu-program-98f6f51c8b2720b5",
+      "language": "English",
+      "level": "Master",
+      "name": "Master of Science in Physician Assistant Studies (CHC)",
+      "officialUrl": "https://www.atsu.edu/college-for-healthy-communities/academics/master-of-science-in-physician-assistant-studies",
+      "requirementGroupId": "atsu-requirements-98f6f51c8b2720b5",
+      "school": "College for Healthy Communities (ATSU-CHC)",
+      "subject": "Physician Assistant Studies",
+      "summary": "Official ATSU residential master offering in Physician Assistant Studies.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Residential",
+      "degree": "MS",
+      "durationMonths": null,
+      "id": "atsu-program-07be323a5a5389f4",
+      "language": "English",
+      "level": "Master",
+      "name": "Master of Science in Speech-Language Pathology",
+      "officialUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/master-of-science-in-speech-language-pathology",
+      "requirementGroupId": "atsu-requirements-07be323a5a5389f4",
+      "school": "Arizona School of Health Sciences (ATSU-ASHS)",
+      "subject": "Speech-Language Pathology",
+      "summary": "Official ATSU residential master offering in Speech-Language Pathology.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Residential",
+      "degree": "Residency",
+      "durationMonths": null,
+      "id": "atsu-program-71af25f51856ab83",
+      "language": "English",
+      "level": "Residency",
+      "name": "Neurologic Physical Therapy Residency",
+      "officialUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/neurologic-physical-therapy-residency",
+      "requirementGroupId": "atsu-requirements-71af25f51856ab83",
+      "school": "Arizona School of Health Sciences (ATSU-ASHS)",
+      "subject": "Physical Therapy",
+      "summary": "Official ATSU residential residency offering in Physical Therapy.",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "applicationDeadline": "Confirm the current deadline and start date on the official program page",
+      "applicationUrl": "https://www.atsu.edu/apply-to-atsu",
+      "deliveryMode": "Residential",
+      "degree": "Residency",
+      "durationMonths": null,
+      "id": "atsu-program-641f844d138b1706",
+      "language": "English",
+      "level": "Residency",
+      "name": "Orthopedic Physical Therapy Residency",
+      "officialUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/orthopedic-physical-therapy-residency",
+      "requirementGroupId": "atsu-requirements-641f844d138b1706",
+      "school": "Arizona School of Health Sciences (ATSU-ASHS)",
+      "subject": "Physical Therapy",
+      "summary": "Official ATSU residential residency offering in Physical Therapy.",
+      "updatedAt": "2026-07-29"
+    }
+  ],
+  "requirementGroups": [
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-d28aa76678368c28",
+      "level": "Professional",
+      "sourceUrl": "https://www.atsu.edu/missouri-school-of-dentistry-and-oral-health/academics/advanced-standing-dentist-track",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Advanced Standing International Dentist Track",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-9c7ab97d692d7455",
+      "level": "Certificate",
+      "sourceUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/athletic-training-graduate-certificates",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Certificate in Athletic Training Education",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-7816370091284d3c",
+      "level": "Certificate",
+      "sourceUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/athletic-training-graduate-certificates",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Certificate in Clinical Decision-Making in Athletic Training",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-8b586f17bcce67ad",
+      "level": "Certificate",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/kinesiology-certificates",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Certificate in Corrective Exercise and Orthopedic Rehabilitation",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-4053ed571c719ac7",
+      "level": "Certificate",
+      "sourceUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/pa-graduate-certificates",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Certificate in Education for Physician Assistants",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-95bb8cfbfbb2f613",
+      "level": "Certificate",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/kinesiology-certificates",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Certificate in Exercise and Sport Psychology",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-cb2eb24f19ab8e08",
+      "level": "Certificate",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/health-sciences-certificates",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Certificate in Fundamentals of Education",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-aa025fc5ca35d0a8",
+      "level": "Certificate",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/health-sciences-certificates",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Certificate in Global Health",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-ce9c542ea1e22643",
+      "level": "Certificate",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/certificate-in-health-administration-for-community-health-center-leaders",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Certificate in Health Administration for Community Health Center Leaders",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-a66e0983105291ca",
+      "level": "Certificate",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/certificate-in-health-professions-education",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Certificate in Health Professions Education",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-4274a4ac1bc6264b",
+      "level": "Certificate",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/certificate-in-interprofessional-education",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Certificate in Interprofessional Education",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-f30f0deb7d1afb22",
+      "level": "Certificate",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/health-sciences-certificates",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Certificate in Leadership and Organizational Behavior",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-5ee7af0142096174",
+      "level": "Certificate",
+      "sourceUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/pa-graduate-certificates",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Certificate in Leadership for Physician Assistants",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-4ab3fa8ff532dbdc",
+      "level": "Certificate",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/certificate-in-nursing-education",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Certificate in Nurse Education",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-f7539192f1e21cb7",
+      "level": "Certificate",
+      "sourceUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/athletic-training-graduate-certificates",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Certificate in Orthopaedics",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-e13d188b0a838f88",
+      "level": "Certificate",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/certificate-in-public-health-advocacy-and-leadership",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Certificate in Public Health Advocacy and Leadership",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-675d5f84b5bf71b2",
+      "level": "Certificate",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/certificate-in-public-health-workforce",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Certificate in Public Health Workforce Preparedness",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-e52c41e6dbe53076",
+      "level": "Certificate",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/certificate-in-public-health-emergency",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Certificate in Public Health, Emergency Preparedness and Disaster Response",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-926f79c8091e568f",
+      "level": "Certificate",
+      "sourceUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/athletic-training-graduate-certificates",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Certificate in Rehabilitation",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-9367c30f2f18b072",
+      "level": "Certificate",
+      "sourceUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/athletic-training-graduate-certificates",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Certificate in Sport Neurology and Concussion",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-21b70de75af35803",
+      "level": "Certificate",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/kinesiology-certificates",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Certificate in Sports Conditioning",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-193293b19bd033a3",
+      "level": "Certificate",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/kinesiology-certificates",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Certificate in Sports Science",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-14b7d4506a3c22b5",
+      "level": "Certificate",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/certificate-in-teaching-with-simulation",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Certificate in Teaching with Simulation",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [
+        "Official qualifying-degree transcript",
+        "Professional certification",
+        "State license where required",
+        "Recommendation"
+      ],
+      "facts": [
+        {
+          "label": "Prior degree",
+          "scope": "Minimum",
+          "value": "Master's degree or higher"
+        },
+        {
+          "label": "GPA",
+          "scope": "Graduate cumulative",
+          "value": "2.75 on a 4.0 scale"
+        },
+        {
+          "label": "Professional credential",
+          "scope": "Before matriculation",
+          "value": "BOC athletic trainer certification or substantial equivalent"
+        },
+        {
+          "label": "Licensure",
+          "scope": "Where required",
+          "value": "Proof of current state licensure"
+        },
+        {
+          "label": "Recommendation",
+          "scope": "Application",
+          "value": "One official recommendation"
+        }
+      ],
+      "id": "atsu-requirements-36486e36e7046f68",
+      "level": "Doctorate",
+      "sourceUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/doctor-of-athletic-training",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Doctor of Athletic Training",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [
+        "Official transcripts",
+        "Three recommendations",
+        "Resume or equivalent experience record"
+      ],
+      "facts": [
+        {
+          "label": "Prior degree",
+          "scope": "Before matriculation",
+          "value": "Accredited bachelor's degree completed and posted by July 1"
+        },
+        {
+          "label": "GPA",
+          "scope": "Undergraduate",
+          "value": "3.0 cumulative or final 60 credits; 2.50 science GPA"
+        },
+        {
+          "label": "GRE",
+          "scope": "Upcoming application cycle",
+          "value": "Not required"
+        },
+        {
+          "label": "Recommendations",
+          "scope": "CSDCAS",
+          "value": "Three letters"
+        },
+        {
+          "label": "English",
+          "scope": "Applicants required to demonstrate proficiency",
+          "value": "See ATSU international admissions methods"
+        }
+      ],
+      "id": "atsu-requirements-b0b6e789f9241bcf",
+      "level": "Doctorate",
+      "sourceUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/entry-level-doctor-of-audiology-degree",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Doctor of Audiology, Entry-Level",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-81635a983fd0f5fa",
+      "level": "Doctorate",
+      "sourceUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/post-professional-doctor-of-audiology",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Doctor of Audiology, Post-Professional",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-64a24b2da2ffd9c1",
+      "level": "Non-degree",
+      "sourceUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/post-professional-doctor-of-audiology-non-degree",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Doctor of Audiology, Post-Professional (Non-degree)",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [
+        "AADSAS application",
+        "Secondary application and fee",
+        "Official DAT scores",
+        "Two recommendations"
+      ],
+      "facts": [
+        {
+          "label": "GPA",
+          "scope": "Minimum",
+          "value": "2.75 cumulative and science; 3.0 recommended"
+        },
+        {
+          "label": "Admissions test",
+          "scope": "DAT",
+          "value": "Required; scores may not be older than three years"
+        },
+        {
+          "label": "Prior study",
+          "scope": "Minimum",
+          "value": "90 semester or 135 quarter hours; bachelor's degree preferred"
+        },
+        {
+          "label": "Recommendations",
+          "scope": "Minimum",
+          "value": "Two: science faculty or predental committee, and a dentist"
+        },
+        {
+          "label": "Deadlines",
+          "scope": "Official page listing",
+          "value": "AADSAS Nov 15; DAT Dec 1; secondary application Dec 15"
+        }
+      ],
+      "id": "atsu-requirements-ca5cf7f159416713",
+      "level": "Doctorate",
+      "sourceUrl": "https://www.atsu.edu/arizona-school-of-dentistry-and-oral-health/academics/doctor-of-dental-medicine-dmd-program",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Doctor of Dental Medicine (ASDOH)",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-1414b29846633128",
+      "level": "Doctorate",
+      "sourceUrl": "https://www.atsu.edu/missouri-school-of-dentistry-and-oral-health/academics/doctor-of-dental-medicine-program",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Doctor of Dental Medicine (MOSDOH)",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-446afbecc273413b",
+      "level": "Doctorate",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/doctor-of-education-in-health-professions-degree",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Doctor of Education in Health Professions Education",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [
+        "Application and fee",
+        "Official qualifying-degree transcript",
+        "Resume",
+        "Essay"
+      ],
+      "facts": [
+        {
+          "label": "Prior degree",
+          "scope": "Qualifying degree",
+          "value": "Accredited master's degree or higher"
+        },
+        {
+          "label": "GPA",
+          "scope": "Qualifying institution",
+          "value": "2.5 cumulative on a 4.0 scale"
+        },
+        {
+          "label": "Experience",
+          "scope": "Healthcare",
+          "value": "Current leadership position or at least three years of experience"
+        },
+        {
+          "label": "English",
+          "scope": "Where applicable",
+          "value": "English proficiency required"
+        }
+      ],
+      "id": "atsu-requirements-d1ea7d41f99a3713",
+      "level": "Doctorate",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/doctor-of-health-administration-degree-online",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Doctor of Health Administration",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-43e715550e53f7e8",
+      "level": "Doctorate",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/doctor-of-health-sciences-degree-online",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Doctor of Health Sciences",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-66338c5a235623d8",
+      "level": "Doctorate",
+      "sourceUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/doctor-of-medical-science",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Doctor of Medical Science",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-5a2ae521b5852a04",
+      "level": "Doctorate",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/doctor-of-nursing-practice-online",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Doctor of Nursing Practice",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [
+        "OTCAS application",
+        "Official transcripts",
+        "Three recommendations",
+        "Observation-hour evidence"
+      ],
+      "facts": [
+        {
+          "label": "Prior degree",
+          "scope": "Before matriculation",
+          "value": "Bachelor's degree from a U.S. regionally accredited institution"
+        },
+        {
+          "label": "GPA",
+          "scope": "Admission options",
+          "value": "3.0 overall or final 60 credits; holistic review may apply below 3.0"
+        },
+        {
+          "label": "Observation",
+          "scope": "Occupational therapy",
+          "value": "At least 30 contact hours"
+        },
+        {
+          "label": "Recommendations",
+          "scope": "Application",
+          "value": "Three letters with specified academic or professional sources"
+        },
+        {
+          "label": "English",
+          "scope": "Applicants required to demonstrate proficiency",
+          "value": "See ATSU international admissions methods"
+        }
+      ],
+      "id": "atsu-requirements-6375f375f835c29d",
+      "level": "Doctorate",
+      "sourceUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/occupational-therapy-doctorate-entry-level-degree",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Doctor of Occupational Therapy, Entry-Level",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-21d29b531b11fffb",
+      "level": "Doctorate",
+      "sourceUrl": "https://www.atsu.edu/kirksville-college-of-osteopathic-medicine/academics/doctor-of-osteopathic-medicine-program",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Doctor of Osteopathic Medicine (KCOM)",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-d7512f2299bb5157",
+      "level": "Doctorate",
+      "sourceUrl": "https://www.atsu.edu/school-of-osteopathic-medicine-arizona/academics/doctor-of-osteopathic-medicine",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Doctor of Osteopathic Medicine (SOMA)",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [
+        "PTCAS application",
+        "Official transcripts",
+        "Prerequisite evidence",
+        "Observation-hour evidence"
+      ],
+      "facts": [
+        {
+          "label": "Prior degree",
+          "scope": "Before enrollment",
+          "value": "Bachelor's degree from a regionally accredited institution"
+        },
+        {
+          "label": "Prerequisites",
+          "scope": "Before program start",
+          "value": "Program-listed prerequisite courses must be complete"
+        },
+        {
+          "label": "Observation",
+          "scope": "Physical therapy",
+          "value": "At least 30 contact hours across varied settings"
+        },
+        {
+          "label": "English",
+          "scope": "Non-native speakers",
+          "value": "English proficiency required"
+        },
+        {
+          "label": "Interview",
+          "scope": "Selected candidates",
+          "value": "Required; on-site unless video is approved"
+        }
+      ],
+      "id": "atsu-requirements-863b67ceb8a0c7b9",
+      "level": "Doctorate",
+      "sourceUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/doctor-of-physical-therapy",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Doctor of Physical Therapy, Entry-Level",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-d84afc01409a460a",
+      "level": "Doctorate",
+      "sourceUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/post-professional-doctor-of-physical-therapy",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Doctor of Physical Therapy, Postprofessional",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-1d694a5d56c0a4cf",
+      "level": "Non-degree",
+      "sourceUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/post-professional-doctor-of-physical-therapy-non-degree",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Doctor of Physical Therapy, Postprofessional (Non-degree)",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-67a4ab85969b2ead",
+      "level": "Master",
+      "sourceUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/master-of-athletic-training",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Master of Athletic Training, Entry-Level",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-86fafd0b855f07c5",
+      "level": "Master",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/master-of-education-in-health-professions",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Master of Education in Health Professions Education",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-22c64faf27027b50",
+      "level": "Master",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/master-of-health-administration-degree-online",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Master of Health Administration",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-5f785f8731ed7ca8",
+      "level": "Master",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/master-of-health-sciences-degree",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Master of Health Sciences",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [
+        "Application and fee",
+        "Official qualifying-degree transcript",
+        "Resume",
+        "Essay"
+      ],
+      "facts": [
+        {
+          "label": "Prior degree",
+          "scope": "Qualifying degree",
+          "value": "Accredited bachelor's degree"
+        },
+        {
+          "label": "GPA",
+          "scope": "Qualifying institution",
+          "value": "2.5 cumulative on a 4.0 scale"
+        },
+        {
+          "label": "GRE",
+          "scope": "Admission",
+          "value": "Not required"
+        },
+        {
+          "label": "English",
+          "scope": "Where applicable",
+          "value": "English proficiency required"
+        }
+      ],
+      "id": "atsu-requirements-c010a1c338b760e2",
+      "level": "Master",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/master-of-public-health-degree-online",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Master of Public Health",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-cea49299fd8106c5",
+      "level": "Master",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/master-of-public-health-dental-emphasis-degree",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Master of Public Health - Dental Emphasis",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-5e64f75d900fc839",
+      "level": "Master",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/dental-emphasis-dental-public-health-residency",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Master of Public Health - Dental Emphasis with a Dental Public Health Residency Certificate",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-a3bbcb857df71859",
+      "level": "Master",
+      "sourceUrl": "https://www.atsu.edu/arizona-school-of-dentistry-and-oral-health/academics/master-of-science-in-orthodontics",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Master of Science and Certificate in Orthodontics",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-772dc41b24c654c2",
+      "level": "Master",
+      "sourceUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/master-of-science-in-athletic-training-online",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Master of Science in Athletic Training, Post-Professional",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-1d4c1680c0611162",
+      "level": "Master",
+      "sourceUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/master-of-science-in-biomedical-sciences",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Master of Science in Biomedical Sciences (ASHS)",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-89c692707eba87de",
+      "level": "Master",
+      "sourceUrl": "https://www.atsu.edu/kirksville-college-of-osteopathic-medicine/academics/master-of-science-in-biomedical-sciences",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Master of Science in Biomedical Sciences (KCOM)",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-c0eca3128c790e91",
+      "level": "Master",
+      "sourceUrl": "https://www.atsu.edu/college-of-graduate-health-studies/academics/master-of-science-in-kinesiology",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Master of Science in Kinesiology",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-c104df5556057453",
+      "level": "Master",
+      "sourceUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/occupational-therapy-masters-degree",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Master of Science in Occupational Therapy",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-e644fcd677dd2025",
+      "level": "Master",
+      "sourceUrl": "https://www.atsu.edu/physician-assistant-degree",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Master of Science in Physician Assistant Studies (ASHS)",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-98f6f51c8b2720b5",
+      "level": "Master",
+      "sourceUrl": "https://www.atsu.edu/college-for-healthy-communities/academics/master-of-science-in-physician-assistant-studies",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Master of Science in Physician Assistant Studies (CHC)",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [
+        "CSDCAS application",
+        "Official transcripts",
+        "Two recommendations"
+      ],
+      "facts": [
+        {
+          "label": "Prior degree",
+          "scope": "Before matriculation",
+          "value": "Bachelor's degree or higher from a regionally accredited institution"
+        },
+        {
+          "label": "GPA",
+          "scope": "Admission options",
+          "value": "3.0 overall or final 60 credits; holistic review may apply below 3.0"
+        },
+        {
+          "label": "Recommendations",
+          "scope": "CSDCAS",
+          "value": "Two letters, preferably from faculty"
+        },
+        {
+          "label": "English",
+          "scope": "Applicants required to demonstrate proficiency",
+          "value": "See ATSU international admissions methods"
+        }
+      ],
+      "id": "atsu-requirements-07be323a5a5389f4",
+      "level": "Master",
+      "sourceUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/master-of-science-in-speech-language-pathology",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Master of Science in Speech-Language Pathology",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-71af25f51856ab83",
+      "level": "Residency",
+      "sourceUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/neurologic-physical-therapy-residency",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Neurologic Physical Therapy Residency",
+      "updatedAt": "2026-07-29"
+    },
+    {
+      "documents": [],
+      "facts": [
+        {
+          "label": "Requirement scope",
+          "scope": "Official ATSU program page",
+          "value": "Program-specific; review the current admissions section"
+        },
+        {
+          "label": "Applicant category",
+          "scope": "Before applying",
+          "value": "Confirm domestic, international, professional, and prerequisite rules"
+        }
+      ],
+      "id": "atsu-requirements-641f844d138b1706",
+      "level": "Residency",
+      "sourceUrl": "https://www.atsu.edu/arizona-school-of-health-sciences/academics/orthopedic-physical-therapy-residency",
+      "supportingSourceUrls": [
+        "https://www.atsu.edu/student-affairs/admissions",
+        "https://www.atsu.edu/student-affairs/admissions/international-students"
+      ],
+      "title": "Orthopedic Physical Therapy Residency",
+      "updatedAt": "2026-07-29"
+    }
+  ],
+  "sourceCounts": {
+    "exactRequirementSummaries": 8,
+    "liveRequirementPages": 0,
+    "officialPrograms": 58,
+    "programRequirementSources": 58
+  },
+  "sources": [
+    {
+      "label": "ATSU application directory",
+      "url": "https://www.atsu.edu/apply-to-atsu"
+    },
+    {
+      "label": "ATSU admissions",
+      "url": "https://www.atsu.edu/student-affairs/admissions"
+    },
+    {
+      "label": "ATSU international admissions",
+      "url": "https://www.atsu.edu/student-affairs/admissions/international-students"
+    },
+    {
+      "label": "ATSU tuition and fees",
+      "url": "https://www.atsu.edu/tuition-and-fees"
+    }
+  ],
+  "sourceUpdatedAt": "2026-07-29",
+  "syncMode": "reviewed-fallback"
+}

@@ -354,6 +354,15 @@
   color: var(--auth-ink);
 }
 
+.auth-secondary-button:hover {
+  border-color: #aeb8b4;
+  background: #f2f5f3;
+}
+
+.auth-guest-button {
+  margin-top: 12px;
+}
+
 .auth-divider {
   display: flex;
   align-items: center;
@@ -374,7 +383,7 @@
 
 .auth-social-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 9px;
 }
 
@@ -393,6 +402,34 @@
 .auth-social-button svg {
   flex: 0 0 auto;
   font-size: 18px;
+}
+
+.auth-provider-mark {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 18px;
+  font-family: Arial, sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1;
+}
+
+.auth-callback {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 320px;
+  text-align: center;
+}
+
+.auth-callback .auth-header {
+  margin-top: 22px;
+}
+
+.auth-callback .auth-primary-button {
+  margin-top: 8px;
 }
 
 .auth-demo {
@@ -665,4 +702,13 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+.route-loading {
+  align-items: center;
+  background: #080d1a;
+  display: flex;
+  height: 100dvh;
+  justify-content: center;
+  width: 100%;
 }

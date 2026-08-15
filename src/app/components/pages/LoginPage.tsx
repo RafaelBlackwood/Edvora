@@ -1,7 +1,4 @@
 import { useEffect, useState } from "react";
-import AppleIcon from "@mui/icons-material/Apple";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import GoogleIcon from "@mui/icons-material/Google";
 import {
   ArrowLeft,
   ArrowRight,
@@ -11,28 +8,36 @@ import {
   EyeOff,
   LockKeyhole,
   Mail,
+  UserRound,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router";
 import { AuthShell } from "../auth/AuthShell";
 import { normalizeEmail } from "../../lib/security";
-import { useAuth } from "../../providers/AuthProvider";
+import { useAuth, type AuthProviderName } from "../../providers/AuthProvider";
 
 type LoginView = "sign-in" | "forgot" | "reset-sent";
-type Provider = "Google" | "Apple" | "Facebook";
 
 const providers: Array<{
-  icon: typeof GoogleIcon;
-  name: Provider;
+  mark: string;
+  name: AuthProviderName;
 }> = [
-  { icon: GoogleIcon, name: "Google" },
-  { icon: AppleIcon, name: "Apple" },
-  { icon: FacebookIcon, name: "Facebook" },
+  { mark: "G", name: "Google" },
+  { mark: "A", name: "Apple" },
+  { mark: "f", name: "Facebook" },
+  { mark: "X", name: "X" },
 ];
 
 export function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isAuthenticated, signIn, signInWithProvider } = useAuth();
+  const {
+    canUseGuestAccess,
+    continueAsGuest,
+    isAuthenticated,
+    requestPasswordReset,
+    signIn,
+    signInWithProvider,
+  } = useAuth();
   const [view, setView] = useState<LoginView>("sign-in");
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -64,15 +69,20 @@ export function LoginPage() {
     navigate(from, { replace: true });
   };
 
-  const handleProviderLogin = (provider: Provider) => {
-    signInWithProvider(provider);
-    navigate(from, { replace: true });
+  const handleProviderLogin = async (provider: AuthProviderName) => {
+    setError("");
+    setLoading(true);
+    const result = await signInWithProvider(provider, from);
+    setLoading(false);
+
+    if (!result.ok) {
+      setError(result.message ?? `Unable to continue with ${provider}.`);
+    }
   };
 
-  const useDemoAccount = () => {
-    setEmail("alex.rivera@email.com");
-    setPassword("EdvoraDemo1!");
-    setError("");
+  const handleGuestAccess = () => {
+    continueAsGuest();
+    navigate("/dashboard", { replace: true });
   };
 
   const openForgotPassword = () => {
@@ -80,8 +90,18 @@ export function LoginPage() {
     setError("");
   };
 
-  const handleResetRequest = (event: React.FormEvent) => {
+  const handleResetRequest = async (event: React.FormEvent) => {
     event.preventDefault();
+    setError("");
+    setLoading(true);
+    const result = await requestPasswordReset(email);
+    setLoading(false);
+
+    if (!result.ok) {
+      setError(result.message ?? "Unable to send the reset link.");
+      return;
+    }
+
     setView("reset-sent");
   };
 
@@ -185,33 +205,38 @@ export function LoginPage() {
             </button>
           </form>
 
-          <div className="auth-divider">or continue with</div>
+          {providers.length > 0 && (
+            <>
+              <div className="auth-divider">or continue with</div>
+              <div className="auth-social-grid">
+                {providers.map(({ mark, name }) => (
+                  <button
+                    key={name}
+                    type="button"
+                    className="auth-social-button"
+                    onClick={() => void handleProviderLogin(name)}
+                    aria-label={`Continue with ${name}`}
+                    title={`Continue with ${name}`}
+                  >
+                    <span className="auth-provider-mark" aria-hidden="true">{mark}</span>
+                    <span className="auth-social-label">{name}</span>
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
 
-          <div className="auth-social-grid">
-            {providers.map(({ icon: ProviderIcon, name }) => (
-              <button
-                key={name}
-                type="button"
-                className="auth-social-button"
-                onClick={() => handleProviderLogin(name)}
-                aria-label={`Continue with ${name}`}
-                title={`Continue with ${name}`}
-              >
-                <ProviderIcon aria-hidden="true" />
-                <span className="auth-social-label">{name}</span>
-              </button>
-            ))}
-          </div>
-
-          <div className="auth-demo">
-            <div className="auth-demo-copy">
-              <strong>Exploring Edvora?</strong>
-              <span>Use the ready-made student account.</span>
-            </div>
-            <button type="button" className="auth-demo-button" onClick={useDemoAccount}>
-              Fill demo details
+          {canUseGuestAccess && (
+            <button
+              type="button"
+              className="auth-secondary-button auth-guest-button"
+              onClick={handleGuestAccess}
+            >
+              <UserRound size={17} aria-hidden="true" />
+              Continue without account
             </button>
-          </div>
+          )}
+
         </>
       ) : (
         <>
@@ -245,8 +270,14 @@ export function LoginPage() {
                     />
                   </div>
                 </div>
-                <button type="submit" className="auth-primary-button">
-                  Send reset link
+                {error && (
+                  <div className="auth-alert" role="alert" aria-live="polite">
+                    <CircleAlert size={16} aria-hidden="true" />
+                    <span>{error}</span>
+                  </div>
+                )}
+                <button type="submit" className="auth-primary-button" disabled={loading}>
+                  {loading ? "Sending..." : "Send reset link"}
                   <ArrowRight size={17} aria-hidden="true" />
                 </button>
               </form>

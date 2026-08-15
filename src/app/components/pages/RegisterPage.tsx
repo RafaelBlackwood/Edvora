@@ -1,7 +1,4 @@
 import { useState } from "react";
-import AppleIcon from "@mui/icons-material/Apple";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import GoogleIcon from "@mui/icons-material/Google";
 import {
   ArrowLeft,
   ArrowRight,
@@ -15,23 +12,28 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router";
 import { AuthShell } from "../auth/AuthShell";
-import { sanitizeUserText } from "../../lib/security";
-import { useAuth } from "../../providers/AuthProvider";
-
-type Provider = "Google" | "Apple" | "Facebook";
+import { useAuth, type AuthProviderName } from "../../providers/AuthProvider";
 
 const providers: Array<{
-  icon: typeof GoogleIcon;
-  name: Provider;
+  mark: string;
+  name: AuthProviderName;
 }> = [
-  { icon: GoogleIcon, name: "Google" },
-  { icon: AppleIcon, name: "Apple" },
-  { icon: FacebookIcon, name: "Facebook" },
+  { mark: "G", name: "Google" },
+  { mark: "A", name: "Apple" },
+  { mark: "f", name: "Facebook" },
+  { mark: "X", name: "X" },
 ];
 
 export function RegisterPage() {
   const navigate = useNavigate();
-  const { registerAccount, signInWithProvider, verifyEmail } = useAuth();
+  const {
+    canUseGuestAccess,
+    continueAsGuest,
+    registerAccount,
+    resendVerification,
+    signInWithProvider,
+    verifyEmail,
+  } = useAuth();
   const [step, setStep] = useState<"register" | "verify">("register");
   const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState("");
@@ -62,7 +64,12 @@ export function RegisterPage() {
       return;
     }
 
-    setStep("verify");
+    if (result.requiresVerification) {
+      setStep("verify");
+      return;
+    }
+
+    navigate("/onboarding", { replace: true });
   };
 
   const handleVerify = async (verificationCode = code.join("")) => {
@@ -80,9 +87,20 @@ export function RegisterPage() {
     navigate("/onboarding", { replace: true });
   };
 
-  const handleProviderRegister = (provider: Provider) => {
-    signInWithProvider(provider);
-    navigate("/onboarding", { replace: true });
+  const handleProviderRegister = async (provider: AuthProviderName) => {
+    setError("");
+    setLoading(true);
+    const result = await signInWithProvider(provider, "/onboarding");
+    setLoading(false);
+
+    if (!result.ok) {
+      setError(result.message ?? `Unable to continue with ${provider}.`);
+    }
+  };
+
+  const handleGuestAccess = () => {
+    continueAsGuest();
+    navigate("/dashboard", { replace: true });
   };
 
   const handleCodeChange = (index: number, value: string) => {
@@ -126,10 +144,18 @@ export function RegisterPage() {
     }
   };
 
-  const resendCode = () => {
+  const resendCode = async () => {
     setCode(["", "", "", "", "", ""]);
     setError("");
-    setResendMessage("A fresh code was sent to your email.");
+    setResendMessage("");
+    const result = await resendVerification();
+
+    if (!result.ok) {
+      setError(result.message ?? "Unable to resend the code.");
+      return;
+    }
+
+    setResendMessage(result.message ?? "A fresh code was sent to your email.");
     document.getElementById("code-0")?.focus();
   };
 
@@ -161,7 +187,7 @@ export function RegisterPage() {
                   type="text"
                   value={name}
                   onChange={(event) => {
-                    setName(sanitizeUserText(event.target.value, 80));
+                    setName(event.target.value.slice(0, 80));
                     setError("");
                   }}
                   placeholder="Alex Rivera"
@@ -253,23 +279,37 @@ export function RegisterPage() {
             </button>
           </form>
 
-          <div className="auth-divider">or continue with</div>
+          {providers.length > 0 && (
+            <>
+              <div className="auth-divider">or continue with</div>
+              <div className="auth-social-grid">
+                {providers.map(({ mark, name: providerName }) => (
+                  <button
+                    key={providerName}
+                    type="button"
+                    className="auth-social-button"
+                    onClick={() => void handleProviderRegister(providerName)}
+                    aria-label={`Continue with ${providerName}`}
+                    title={`Continue with ${providerName}`}
+                  >
+                    <span className="auth-provider-mark" aria-hidden="true">{mark}</span>
+                    <span className="auth-social-label">{providerName}</span>
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
 
-          <div className="auth-social-grid">
-            {providers.map(({ icon: ProviderIcon, name: providerName }) => (
-              <button
-                key={providerName}
-                type="button"
-                className="auth-social-button"
-                onClick={() => handleProviderRegister(providerName)}
-                aria-label={`Continue with ${providerName}`}
-                title={`Continue with ${providerName}`}
-              >
-                <ProviderIcon aria-hidden="true" />
-                <span className="auth-social-label">{providerName}</span>
-              </button>
-            ))}
-          </div>
+          {canUseGuestAccess && (
+            <button
+              type="button"
+              className="auth-secondary-button auth-guest-button"
+              onClick={handleGuestAccess}
+            >
+              <UserRound size={17} aria-hidden="true" />
+              Continue without account
+            </button>
+          )}
         </>
       ) : (
         <>
@@ -321,7 +361,7 @@ export function RegisterPage() {
             </div>
 
             <p className="auth-code-note">
-              Prototype verification code: <strong>246810</strong>
+              Enter the code from your verification email. It expires after one hour.
             </p>
 
             {error && (
@@ -353,7 +393,7 @@ export function RegisterPage() {
 
           <p className="auth-resend">
             Did not receive it?{" "}
-            <button type="button" className="auth-inline-button" onClick={resendCode}>
+            <button type="button" className="auth-inline-button" onClick={() => void resendCode()}>
               Resend code
             </button>
           </p>

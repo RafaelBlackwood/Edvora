@@ -1348,6 +1348,7 @@
   ],
   "generatedAt": "2026-08-03T00:00:00Z",
   "institutionCount": 26103,
+  "indexFile": "index.json",
   "license": "CC0-1.0",
   "source": {
     "checksum": "md5:8bfb0dc82affb46f331899a7341d34f3",

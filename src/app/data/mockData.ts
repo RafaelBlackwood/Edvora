@@ -281,7 +281,7 @@ export const universities = [
     currency: "USD",
     acceptanceRate: 32,
     type: "Public",
-    programs: ["MSc Computer Science", "MSc Software Engineering", "MSc AI", "Bachelor Business Analytics"],
+    programs: ["Business Analytics (BBA)", "Computer Science (BSCompSci)", "Computer Science - MSCS", "Computer Science - Ph.D."],
     ieltsMin: 6.5,
     gpaMin: 3.3,
     deadline: "2024-12-01",
