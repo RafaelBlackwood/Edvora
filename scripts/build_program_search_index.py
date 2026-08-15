@@ -10,6 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG_DIR = ROOT / "public" / "data" / "program-catalog"
 OUTPUT_PATH = CATALOG_DIR / "search-index.json"
+IPEDS_INDEX_PATH = CATALOG_DIR / "ipeds-search-index.json"
 
 SUBJECT_PATTERNS: tuple[tuple[str, str], ...] = (
     ("Agriculture and forestry", r"agricultur|forestry|forest"),
@@ -95,11 +96,20 @@ def build_record(snapshot: dict) -> dict:
     broad_subjects: set[str] = set()
     modes: set[str] = set()
     languages: set[str] = set()
+    subjects_by_degree_level: dict[str, set[str]] = {}
+    program_counts_by_degree_level: dict[str, int] = {}
 
     for program in programs:
-        levels.update(degree_levels(program))
-        broad_subjects.update(subjects(program))
+        program_levels = degree_levels(program)
+        program_subjects = subjects(program)
+        levels.update(program_levels)
+        broad_subjects.update(program_subjects)
         modes.update(delivery_modes(program))
+        for level in program_levels:
+            subjects_by_degree_level.setdefault(level, set()).update(program_subjects)
+            program_counts_by_degree_level[level] = (
+                program_counts_by_degree_level.get(level, 0) + 1
+            )
         language = str(program.get("language") or "").strip()
         if language:
             languages.add(language)
@@ -109,43 +119,121 @@ def build_record(snapshot: dict) -> dict:
         "deliveryModes": sorted(modes),
         "institutionId": snapshot.get("institutionId") or "",
         "institutionName": snapshot.get("institutionName") or "",
+        "institutionTypes": [],
         "languages": sorted(languages),
+        "officialProgramCount": len(programs),
         "programCount": len(programs),
+        "programCountsByDegreeLevel": dict(sorted(program_counts_by_degree_level.items())),
+        "sourceKinds": ["official-university-catalog"],
         "sourceUpdatedAt": snapshot.get("sourceUpdatedAt") or "",
         "subjects": sorted(broad_subjects),
+        "subjectsByDegreeLevel": {
+            level: sorted(level_subjects)
+            for level, level_subjects in sorted(subjects_by_degree_level.items())
+        },
     }
 
 
+def merge_records(first: dict, second: dict) -> dict:
+    merged = {**first}
+    for field in (
+        "degreeLevels",
+        "deliveryModes",
+        "institutionTypes",
+        "languages",
+        "sourceKinds",
+        "subjects",
+    ):
+        merged[field] = sorted(set(first.get(field) or []).union(second.get(field) or []))
+
+    subject_map: dict[str, set[str]] = {}
+    for source in (first, second):
+        for level, level_subjects in (source.get("subjectsByDegreeLevel") or {}).items():
+            subject_map.setdefault(level, set()).update(level_subjects)
+    merged["subjectsByDegreeLevel"] = {
+        level: sorted(level_subjects)
+        for level, level_subjects in sorted(subject_map.items())
+    }
+
+    count_map: dict[str, int] = {}
+    for source in (first, second):
+        for level, count in (source.get("programCountsByDegreeLevel") or {}).items():
+            count_map[level] = max(count_map.get(level, 0), int(count or 0))
+    merged["programCountsByDegreeLevel"] = dict(sorted(count_map.items()))
+
+    for field in (
+        "ipedsProgramCount",
+        "ipedsUnitIds",
+        "ipedsYear",
+        "matchMethods",
+        "officialProgramCount",
+    ):
+        if second.get(field) is not None:
+            merged[field] = second[field]
+        elif first.get(field) is not None:
+            merged[field] = first[field]
+
+    merged["sourceUpdatedAt"] = max(
+        str(first.get("sourceUpdatedAt") or ""),
+        str(second.get("sourceUpdatedAt") or ""),
+    )
+    merged["programCount"] = (
+        merged.get("officialProgramCount")
+        or merged.get("ipedsProgramCount")
+        or max(int(first.get("programCount") or 0), int(second.get("programCount") or 0))
+    )
+    return merged
+
+
 def main() -> None:
-    records = []
+    records_by_id: dict[str, dict] = {}
 
     for path in sorted(CATALOG_DIR.glob("*.json")):
-        if path.name == OUTPUT_PATH.name:
+        if path.name in {OUTPUT_PATH.name, IPEDS_INDEX_PATH.name}:
             continue
         snapshot = json.loads(path.read_text(encoding="utf-8"))
         if not isinstance(snapshot, dict) or not isinstance(snapshot.get("programs"), list):
             continue
         record = build_record(snapshot)
         if record["institutionId"] and record["programCount"]:
-            records.append(record)
+            records_by_id[record["institutionId"]] = record
 
+    ipeds_payload = None
+    if IPEDS_INDEX_PATH.exists():
+        ipeds_payload = json.loads(IPEDS_INDEX_PATH.read_text(encoding="utf-8"))
+        for record in ipeds_payload.get("records") or []:
+            identifier = record.get("institutionId") or ""
+            if not identifier:
+                continue
+            existing = records_by_id.get(identifier)
+            records_by_id[identifier] = (
+                merge_records(existing, record) if existing else record
+            )
+
+    records = list(records_by_id.values())
     records.sort(key=lambda item: item["institutionName"].casefold())
     source_dates = [record["sourceUpdatedAt"] for record in records if record["sourceUpdatedAt"]]
+    source_names = ["Official university program catalogs"]
+    if ipeds_payload:
+        source = ipeds_payload.get("source") or {}
+        source_names.append(f"{source.get('provider') or 'NCES/IPEDS'} {source.get('year') or ''}".strip())
+
     payload = {
-        "generatedFrom": "Official university program snapshots",
+        "generatedFrom": "Official university catalogs and NCES/IPEDS program offerings",
         "institutionCount": len(records),
         "programCount": sum(record["programCount"] for record in records),
         "records": records,
         "sourceUpdatedAt": max(source_dates, default=""),
-        "version": 1,
+        "sources": source_names,
+        "version": 2,
     }
     OUTPUT_PATH.write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+        json.dumps(payload, ensure_ascii=False, separators=(",", ":")) + "\n",
         encoding="utf-8",
     )
     print(
         f"Indexed {payload['programCount']:,} programs across "
-        f"{payload['institutionCount']} institutions."
+        f"{payload['institutionCount']:,} institutions."
     )
 
 

@@ -30,6 +30,9 @@ jobs:
           ZENODO_API_KEY: ${{ secrets.ZENODO_API_KEY }}
         run: python scripts/sync_ror_catalog.py
 
+      - name: Refresh U.S. IPEDS program offerings
+        run: python scripts/sync_ipeds_program_index.py
+
       - name: Refresh official program catalogs
         run: |
           python scripts/sync_atsu_program_catalog.py --strict

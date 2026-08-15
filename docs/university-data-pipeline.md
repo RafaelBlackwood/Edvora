@@ -13,7 +13,7 @@ The generated catalog is written to `public/data/university-catalog/`:
 - `<country-code>.json` contains normalized institutions for one country or territory.
 - Each institution retains its ROR ID, names, location, domains, website, establishment year, and source modification date.
 
-The scheduled workflow in `.github/workflows/sync-university-catalog.yml` checks for a new release every Monday. When data changes, it commits the updated catalog to `main`; the repository push then triggers the normal Vercel deployment.
+The scheduled workflow in `.github/workflows/sync-university-catalog.yml` checks the connected catalog sources daily. When data changes, it commits the updated catalog to `main`; the repository push then triggers the normal Vercel deployment.
 
 Run the same process locally with:
 
@@ -22,6 +22,28 @@ npm run data:sync
 ```
 
 The public Zenodo record does not require authentication. A `ZENODO_API_KEY` can be configured in GitHub Actions for higher API limits.
+
+## U.S. Program Offering Index
+
+`scripts/sync_ipeds_program_index.py` discovers the newest year for which NCES publishes both the IPEDS institution directory (`HD`) and program-offering (`CDEP`) files. The committed index currently uses the 2025 release.
+
+The importer:
+
+- joins IPEDS institutions to ROR identities through unique official domains, normalized names, or a high-confidence same-location name match;
+- reads only six-digit CIP program rows so institution totals and two-digit subtotals are not double-counted;
+- preserves degree-level-to-subject relationships for combined filters;
+- maps the IPEDS control field to public, private nonprofit, and private for-profit types;
+- rejects a generated index when national or doctoral coverage falls below a safety threshold.
+
+The normalized source snapshot is written to `public/data/program-catalog/ipeds-search-index.json`. `scripts/build_program_search_index.py` merges it with university-owned program catalogs into the browser search index.
+
+Run the refresh locally with:
+
+```bash
+npm run data:sync:ipeds
+```
+
+IPEDS verifies that a program was reported as offered for its release year. It does not establish current admissions requirements, deadlines, test policies, tuition, or funding; those fields still require a university-owned source.
 
 ## Admissions Fact Model
 
@@ -51,12 +73,14 @@ Search filters are published only when the corresponding field has a defined sou
 
 | Unified search fields | Fields | Authoritative source | Refresh status |
 | --- | --- | --- | --- |
-| Institution fields | Identity, country, region, founding year, official website | ROR data dump | Automatic weekly release check |
-| Admissions fields | Program level, subject, tuition, funding, GPA, language tests, entrance exams, university type, research focus | Official university pages, official feeds, or recognized public-sector APIs | Requires a published source observation |
+| Institution fields | Identity, country, region, founding year, official website | ROR data dump | Automatic daily release check |
+| U.S. program offerings | Degree level, broad CIP subject, public/private control | NCES/IPEDS `HD` and `CDEP` complete files | Daily availability check for each annual release |
+| Enriched program fields | Named programs, delivery mode, teaching language | Connected official university catalogs | Daily source refresh |
+| Admissions requirement fields | Tuition, funding, GPA, language tests, entrance exams, deadlines, research focus | Official university pages or feeds | Requires a published source observation |
 
-The search page presents both field groups in one filter panel and one result list. Institution filters apply across the complete catalog. When a user selects an admissions criterion, the result set includes only institutions with matching published admissions facts; institutions with unknown requirements are not treated as matches.
+The search page presents these field groups in one filter panel and one result list. Identity filters apply across the complete ROR catalog. U.S. degree-level, subject, and institution-type selections include only ROR identities matched to the newest IPEDS reporting or a connected official catalog; unknown values are not treated as matches.
 
-Institution metadata must not be used to infer admissions requirements. The admissions filter index must include only facts whose `review_status` is `published`; records without a published fact remain discoverable until an admissions criterion is selected.
+IPEDS program offerings must not be used to infer admissions requirements. Requirement filters remain limited to source-backed university profiles, and records without a published requirement remain discoverable until that criterion is selected.
 
 A changing fact is eligible for publication only when it includes:
 

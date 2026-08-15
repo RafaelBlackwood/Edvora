@@ -5,10 +5,17 @@ export type ProgramSearchRecord = {
   deliveryModes: string[];
   institutionId: string;
   institutionName: string;
+  institutionTypes: string[];
+  ipedsProgramCount?: number;
+  ipedsYear?: number;
   languages: string[];
+  officialProgramCount?: number;
   programCount: number;
+  programCountsByDegreeLevel: Record<string, number>;
+  sourceKinds: string[];
   sourceUpdatedAt: string;
   subjects: string[];
+  subjectsByDegreeLevel: Record<string, string[]>;
 };
 
 type ProgramSearchIndex = {

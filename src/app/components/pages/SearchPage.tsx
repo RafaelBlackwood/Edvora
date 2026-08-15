@@ -599,10 +599,27 @@ function matchesProgramFilters(
     ...(metadata?.deliveryModes ?? []),
     ...(programRecord?.deliveryModes ?? []),
   ];
+  const availableInstitutionTypes = [
+    ...(metadata?.institutionTypes ?? []),
+    ...(programRecord?.institutionTypes ?? []),
+  ];
 
   if (!hasSelectedValue(filters.degreeLevels, availableDegreeLevels)) return false;
   if (!hasSelectedValue(filters.subjects, availableSubjects)) return false;
   if (!hasSelectedValue(filters.deliveryModes, availableDeliveryModes)) return false;
+  if (!hasSelectedValue(filters.institutionTypes, availableInstitutionTypes)) return false;
+
+  if (filters.degreeLevels.length > 0 && filters.subjects.length > 0) {
+    const subjectsByLevel = programRecord?.subjectsByDegreeLevel ?? {};
+    if (
+      Object.keys(subjectsByLevel).length > 0 &&
+      !filters.degreeLevels.some((level) =>
+        filters.subjects.some((subject) => subjectsByLevel[level]?.includes(subject)),
+      )
+    ) {
+      return false;
+    }
+  }
 
   if (filters.englishOnly) {
     const hasEnglishPrograms =
@@ -622,7 +639,6 @@ function requiresProfileData(filters: Filters) {
   return (
     filters.researchFocus.length > 0 ||
     filters.funding.length > 0 ||
-    filters.institutionTypes.length > 0 ||
     filters.applicationMethods.length > 0 ||
     filters.intakes.length > 0 ||
     filters.testPreferences.length > 0 ||
@@ -896,12 +912,6 @@ export function SearchPage() {
           return false;
         }
         if (
-          filters.institutionTypes.length &&
-          !filters.institutionTypes.some((type) => metadata.institutionTypes.includes(type))
-        ) {
-          return false;
-        }
-        if (
           filters.applicationMethods.length &&
           !filters.applicationMethods.some((method) => metadata.applicationMethods.includes(method))
         ) {
@@ -1121,7 +1131,7 @@ export function SearchPage() {
     if (filters.admissionsDataOnly) {
       chips.push({
         key: "admissions-data",
-        label: "Verified admissions data",
+        label: "Source-backed program data",
         remove: () =>
           setFilters((current) => ({ ...current, admissionsDataOnly: false })),
       });
@@ -1224,13 +1234,14 @@ export function SearchPage() {
     return chips;
   }, [filters, query]);
 
-  const filteredProgramCount = unifiedResults.reduce(
-    (total, result) =>
-      total +
-      (result.programRecord?.programCount ?? result.profile?.programs.length ?? 0),
+  const latestIpedsYear = unifiedResults.reduce(
+    (latest, result) => Math.max(latest, result.programRecord?.ipedsYear ?? 0),
     0,
   );
-  const verifiedUniversityCount = unifiedResults.reduce(
+  const programSourceSummary = latestIpedsYear
+    ? "IPEDS " + latestIpedsYear + " and connected catalogs"
+    : "Connected program sources";
+  const sourceBackedUniversityCount = unifiedResults.reduce(
     (total, result) =>
       total + Number(Boolean(result.profile || result.programRecord)),
     0,
@@ -1475,11 +1486,11 @@ export function SearchPage() {
                 </label>
               </FilterSection>
 
-              <FilterSection title="Admissions data">
+              <FilterSection title="Data coverage">
                 <label className="search-switch-row">
                   <span>
-                    <strong>Verified admissions data only</strong>
-                    <small>Programs, requirements, costs, tests, and funding</small>
+                    <strong>Source-backed program data only</strong>
+                    <small>Official catalogs and national program records</small>
                   </span>
                   <input
                     type="checkbox"
@@ -1493,8 +1504,8 @@ export function SearchPage() {
                   />
                 </label>
                 <p className="search-filter-coverage-note">
-                  Admissions filters exclude institutions whose matching fields have not
-                  been verified yet.
+                  Program filters exclude institutions whose selected fields have not
+                  been published by a connected source.
                 </p>
               </FilterSection>
 
@@ -1821,10 +1832,9 @@ export function SearchPage() {
                 </strong>
                 <span>
                   {admissionsFiltersActive
-                    ? verifiedUniversityCount.toLocaleString() +
-                      " verified universities / " +
-                      filteredProgramCount.toLocaleString() +
-                      " indexed programs"
+                    ? sourceBackedUniversityCount.toLocaleString() +
+                      " source-backed universities / " +
+                      programSourceSummary
                     : (manifest?.institutionCount.toLocaleString() ?? "Worldwide") + " in catalog"}
                 </span>
               </div>
@@ -1851,7 +1861,7 @@ export function SearchPage() {
                   <Globe2 size={23} aria-hidden="true" />
                 </span>
                 <h2>Loading universities worldwide</h2>
-                <p>Preparing the searchable institution and admissions index.</p>
+                <p>Preparing the searchable institution and program index.</p>
               </section>
             ) : unifiedResults.length === 0 ? (
               <section className="search-empty">
@@ -1860,7 +1870,7 @@ export function SearchPage() {
                 </span>
                 <h2>
                   {admissionsFiltersActive
-                    ? "No verified universities match every filter"
+                    ? "No source-backed universities match every filter"
                     : "No universities match every filter"}
                 </h2>
                 <p>
@@ -1938,7 +1948,11 @@ export function SearchPage() {
                             </span>
                             <span>
                               <BookOpen size={11} aria-hidden="true" />
-                              {programRecord ? "Official program catalog" : "Degree profile"}
+                              {programRecord
+                                ? programRecord.sourceKinds?.includes("official-university-catalog")
+                                  ? "Official program catalog"
+                                  : "IPEDS " + (programRecord.ipedsYear ?? "") + " program data"
+                                : "Degree profile"}
                             </span>
                           </div>
 
@@ -1947,10 +1961,17 @@ export function SearchPage() {
                             <div>
                               <span>
                                 {programRecord
-                                  ? programRecord.programCount.toLocaleString() +
-                                    " official programs indexed"
+                                  ? programRecord.officialProgramCount
+                                    ? programRecord.officialProgramCount.toLocaleString() +
+                                      " official programs indexed"
+                                    : (
+                                        programRecord.ipedsProgramCount ??
+                                        programRecord.programCount
+                                      ).toLocaleString() +
+                                      " programs reported in IPEDS " +
+                                      (programRecord.ipedsYear ?? "")
                                   : admissionsFiltersActive
-                                    ? "Selected admissions data is being verified"
+                                    ? "Selected program data is being verified"
                                     : "Open the profile for published programs"}
                               </span>
                             </div>
