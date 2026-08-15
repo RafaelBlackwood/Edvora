@@ -95,6 +95,21 @@ DEGREE_COLUMNS: dict[str, tuple[str, ...]] = {
     "Postgraduate certificate": ("PPBACC", "PPMAST"),
 }
 
+UNDERGRADUATE_LEVELS = ("Certificate", "Associate", "Bachelor's / BS")
+
+IPEDS_ADMISSION_POLICIES: dict[str, dict[str, str]] = {
+    "ADMCON6": {
+        "1": "Portfolio / competency evidence required",
+        "5": "Portfolio / competency evidence optional",
+        "3": "Portfolio / competency evidence not considered",
+    },
+    "ADMCON7": {
+        "1": "SAT or ACT required",
+        "5": "Test optional",
+        "3": "SAT or ACT not considered",
+    },
+}
+
 CIP_SUBJECTS: dict[str, tuple[str, ...]] = {
     "01": ("Agriculture and forestry",),
     "03": ("Environmental and earth sciences",),
@@ -206,6 +221,23 @@ def discover_files() -> tuple[int, str, str]:
     raise RuntimeError("No matching recent HD and CDEP files were available from NCES.")
 
 
+def discover_admissions_file() -> tuple[int, str]:
+    print("Discovering the latest NCES/IPEDS admissions file...")
+    current_year = datetime.now(timezone.utc).year
+    for year in range(current_year + 1, current_year - 6, -1):
+        admissions_url = urllib.parse.urljoin(
+            COMPLETE_DATA_BASE_URL, f"ADM{year}.zip"
+        )
+        try:
+            with request(admissions_url, method="HEAD"):
+                return year, admissions_url
+        except urllib.error.HTTPError as error:
+            if error.code != 404:
+                raise
+
+    raise RuntimeError("No recent ADM file was available from NCES.")
+
+
 def download(url: str, target: Path) -> None:
     print(f"Downloading {url}...")
     with request(url) as response, target.open("wb") as output:
@@ -309,14 +341,17 @@ def institution_types(control: str | None) -> list[str]:
 
 def main() -> None:
     year, hd_url, programs_url = discover_files()
+    admissions_year, admissions_url = discover_admissions_file()
     ror_by_id, domain_index, name_index, location_index = load_ror_records()
 
     with tempfile.TemporaryDirectory(prefix="edvora-ipeds-") as directory:
         temp_dir = Path(directory)
         hd_archive = temp_dir / f"HD{year}.zip"
         programs_archive = temp_dir / f"C{year}DEP.zip"
+        admissions_archive = temp_dir / f"ADM{admissions_year}.zip"
         download(hd_url, hd_archive)
         download(programs_url, programs_archive)
+        download(admissions_url, admissions_archive)
 
         unit_to_match: dict[str, tuple[str, str]] = {}
         unit_metadata: dict[str, dict] = {}
@@ -383,12 +418,40 @@ def main() -> None:
                 record["programCountsByDegreeLevel"][level] += count
                 record["subjectsByDegreeLevel"][level].update(cip_subjects)
 
+        admission_policies_by_id: dict[str, set[str]] = defaultdict(set)
+        for row in csv_rows(admissions_archive):
+            unit_id = row.get("UNITID") or ""
+            match = unit_to_match.get(unit_id)
+            if not match:
+                continue
+            identifier, _ = match
+            for column, policy_by_code in IPEDS_ADMISSION_POLICIES.items():
+                policy = policy_by_code.get(row.get(column) or "")
+                if policy:
+                    admission_policies_by_id[identifier].add(policy)
+
     records = []
     for record in aggregated.values():
         if not record["degreeLevels"] or record["ipedsProgramCount"] <= 0:
             continue
+        admission_policies = admission_policies_by_id.get(
+            record["institutionId"], set()
+        )
+        test_policies_by_degree_level = {
+            level: sorted(admission_policies)
+            for level in UNDERGRADUATE_LEVELS
+            if level in record["degreeLevels"] and admission_policies
+        }
+        source_kinds = set(record["sourceKinds"])
+        if admission_policies:
+            source_kinds.add("ipeds-undergraduate-admissions")
         records.append(
             {
+                **(
+                    {"admissionsYear": admissions_year}
+                    if admission_policies
+                    else {}
+                ),
                 "degreeLevels": sorted(record["degreeLevels"]),
                 "deliveryModes": [],
                 "institutionId": record["institutionId"],
@@ -401,13 +464,14 @@ def main() -> None:
                 "matchMethods": sorted(record["matchMethods"]),
                 "programCount": record["ipedsProgramCount"],
                 "programCountsByDegreeLevel": dict(sorted(record["programCountsByDegreeLevel"].items())),
-                "sourceKinds": ["ipeds-program-offerings"],
+                "sourceKinds": sorted(source_kinds),
                 "sourceUpdatedAt": str(year),
                 "subjects": sorted(record["subjects"]),
                 "subjectsByDegreeLevel": {
                     level: sorted(subjects)
                     for level, subjects in sorted(record["subjectsByDegreeLevel"].items())
                 },
+                "testPoliciesByDegreeLevel": test_policies_by_degree_level,
             }
         )
 
@@ -427,6 +491,8 @@ def main() -> None:
         "programCount": sum(record["programCount"] for record in records),
         "records": records,
         "source": {
+            "admissionsDataFile": f"ADM{admissions_year}",
+            "admissionsYear": admissions_year,
             "dataFile": f"C{year}DEP",
             "directoryFile": f"HD{year}",
             "provider": "National Center for Education Statistics (NCES), IPEDS",
@@ -435,11 +501,12 @@ def main() -> None:
         },
         "sourceUpdatedAt": str(year),
         "statistics": {
+            "admissionsPolicyInstitutionCount": len(admission_policies_by_id),
             "doctoralInstitutionCount": doctoral_count,
             "matchMethods": dict(sorted(match_methods.items())),
             "matchedInstitutionCount": len(records),
         },
-        "version": 1,
+        "version": 2,
     }
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT_PATH.write_text(

@@ -31,6 +31,14 @@ SUBJECT_PATTERNS: tuple[tuple[str, str], ...] = (
     ("Social and behavioral sciences", r"social science|psychology|behavior|sociolog|politic|anthropolog"),
 )
 
+GRADUATE_LEVELS = {
+    "Master's / MS",
+    "MBA / EMBA",
+    "Doctorate / PhD",
+    "Professional degree",
+    "Postgraduate certificate",
+}
+
 
 def degree_levels(program: dict) -> set[str]:
     text = " ".join(
@@ -90,6 +98,98 @@ def delivery_modes(program: dict) -> set[str]:
     return modes
 
 
+def requirement_statements(group: dict) -> list[str]:
+    statements = []
+    for document in group.get("documents") or []:
+        if document:
+            statements.append(f"Required document: {document}")
+    for fact in group.get("facts") or []:
+        label = str(fact.get("label") or "").strip()
+        value = str(fact.get("value") or "").strip()
+        value_names_a_policy = re.search(
+            r"\b(?:gre|gmat|portfolio)\b|\bsat\s*(?:/|or)\s*act\b",
+            value,
+            flags=re.IGNORECASE,
+        )
+        statement = value if value_names_a_policy else ": ".join(
+            part for part in (label, value) if part
+        )
+        if statement:
+            statements.append(statement)
+    return statements
+
+
+def classify_named_test(statement: str, test_name: str) -> set[str]:
+    text = re.sub(r"\s+", " ", statement.casefold())
+    token = rf"\b{re.escape(test_name.casefold())}\b"
+    if not re.search(token, text):
+        return set()
+
+    label = test_name.upper()
+    if re.search(
+        rf"(?:{token}.{{0,60}}\bnot required\b|\bnot required\b.{{0,60}}{token})",
+        text,
+    ):
+        return {f"{label} not required"}
+    if re.search(
+        r"\brequired only when\b|\bif required\b|\bwhen required\b|"
+        r"\bvar(?:y|ies)\b|\bdepend(?:s|ing)?\b",
+        text,
+    ):
+        return {f"{label} varies by program"}
+    if re.search(r"\boptional\b|\brecommend(?:ed|ation)?\b|\bone of\b|\beither\b", text):
+        return {f"{label} optional or accepted"}
+    if re.search(
+        rf"(?:{token}.{{0,40}}\brequired\b|\brequired\b.{{0,40}}{token})",
+        text,
+    ):
+        return {f"{label} required"}
+    return set()
+
+
+def classify_test_policies(group: dict) -> set[str]:
+    policies: set[str] = set()
+    for statement in requirement_statements(group):
+        text = re.sub(r"\s+", " ", statement.casefold())
+        policies.update(classify_named_test(statement, "gre"))
+        policies.update(classify_named_test(statement, "gmat"))
+
+        if re.search(r"\bsat\s*(?:/|or)\s*act\b", text):
+            if "test blind" in text or "not considered" in text:
+                policies.add("SAT or ACT not considered")
+            elif "test optional" in text or "not required" in text:
+                policies.add("Test optional")
+            elif re.search(r"\brequired\b|\bat least one\b", text):
+                policies.add("SAT or ACT required")
+
+        if "portfolio" in text:
+            if re.search(r"\bif required\b|\bwhen required\b|\bvar(?:y|ies)\b", text):
+                policies.add("Portfolio / competency evidence varies by program")
+            elif "not considered" in text:
+                policies.add("Portfolio / competency evidence not considered")
+            elif re.search(r"\bnot required\b|\boptional\b|\brecommended\b", text):
+                policies.add("Portfolio / competency evidence optional")
+            elif re.search(r"\brequired\b|\bmust\b", text):
+                policies.add("Portfolio / competency evidence required")
+    return policies
+
+
+def requirement_group_levels(group: dict, available_levels: set[str]) -> set[str]:
+    levels = degree_levels(
+        {
+            "degree": group.get("title"),
+            "level": group.get("level"),
+            "name": group.get("title"),
+        }
+    )
+    level_text = str(group.get("level") or "").casefold()
+    if "graduate" in level_text and not levels:
+        levels.update(available_levels.intersection(GRADUATE_LEVELS))
+    if not levels:
+        levels.update(available_levels)
+    return levels.intersection(available_levels)
+
+
 def build_record(snapshot: dict) -> dict:
     programs = snapshot.get("programs") or []
     levels: set[str] = set()
@@ -114,6 +214,14 @@ def build_record(snapshot: dict) -> dict:
         if language:
             languages.add(language)
 
+    test_policies_by_degree_level: dict[str, set[str]] = {}
+    for group in snapshot.get("requirementGroups") or []:
+        policies = classify_test_policies(group)
+        if not policies:
+            continue
+        for level in requirement_group_levels(group, levels):
+            test_policies_by_degree_level.setdefault(level, set()).update(policies)
+
     return {
         "degreeLevels": sorted(levels),
         "deliveryModes": sorted(modes),
@@ -131,7 +239,23 @@ def build_record(snapshot: dict) -> dict:
             level: sorted(level_subjects)
             for level, level_subjects in sorted(subjects_by_degree_level.items())
         },
+        "testPoliciesByDegreeLevel": {
+            level: sorted(policies)
+            for level, policies in sorted(test_policies_by_degree_level.items())
+        },
     }
+
+
+def test_policy_family(policy: str) -> str:
+    if policy.startswith("GRE "):
+        return "gre"
+    if policy.startswith("GMAT "):
+        return "gmat"
+    if policy.startswith("SAT or ACT ") or policy == "Test optional":
+        return "sat-act"
+    if policy.startswith("Portfolio / competency evidence "):
+        return "portfolio"
+    return policy
 
 
 def merge_records(first: dict, second: dict) -> dict:
@@ -155,6 +279,41 @@ def merge_records(first: dict, second: dict) -> dict:
         for level, level_subjects in sorted(subject_map.items())
     }
 
+    first_policy_map = first.get("testPoliciesByDegreeLevel") or {}
+    second_policy_map = second.get("testPoliciesByDegreeLevel") or {}
+    first_is_official = "official-university-catalog" in (first.get("sourceKinds") or [])
+    second_is_official = "official-university-catalog" in (second.get("sourceKinds") or [])
+    policy_map: dict[str, set[str]] = {}
+    for level in set(first_policy_map).union(second_policy_map):
+        first_policies = set(first_policy_map.get(level) or [])
+        second_policies = set(second_policy_map.get(level) or [])
+        families = {
+            test_policy_family(policy)
+            for policy in first_policies.union(second_policies)
+        }
+        for family in families:
+            first_family = {
+                policy
+                for policy in first_policies
+                if test_policy_family(policy) == family
+            }
+            second_family = {
+                policy
+                for policy in second_policies
+                if test_policy_family(policy) == family
+            }
+            if first_is_official and first_family:
+                selected = first_family
+            elif second_is_official and second_family:
+                selected = second_family
+            else:
+                selected = first_family.union(second_family)
+            policy_map.setdefault(level, set()).update(selected)
+    merged["testPoliciesByDegreeLevel"] = {
+        level: sorted(policies)
+        for level, policies in sorted(policy_map.items())
+    }
+
     count_map: dict[str, int] = {}
     for source in (first, second):
         for level, count in (source.get("programCountsByDegreeLevel") or {}).items():
@@ -162,6 +321,7 @@ def merge_records(first: dict, second: dict) -> dict:
     merged["programCountsByDegreeLevel"] = dict(sorted(count_map.items()))
 
     for field in (
+        "admissionsYear",
         "ipedsProgramCount",
         "ipedsUnitIds",
         "ipedsYear",
@@ -225,7 +385,7 @@ def main() -> None:
         "records": records,
         "sourceUpdatedAt": max(source_dates, default=""),
         "sources": source_names,
-        "version": 2,
+        "version": 3,
     }
     OUTPUT_PATH.write_text(
         json.dumps(payload, ensure_ascii=False, separators=(",", ":")) + "\n",

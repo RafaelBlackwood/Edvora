@@ -406,16 +406,28 @@ const applicationMethods = [
   "Common App",
   "University Admissions Sweden",
 ];
-const testPreferences = [
-  "GRE required",
-  "GRE not required",
-  "GMAT required",
-  "GMAT not required",
-  "SAT or ACT required",
-  "Test optional",
-  "Portfolio required",
-  "Portfolio not required",
+const testPreferenceFamilies = [
+  [
+    "GRE required",
+    "GRE not required",
+    "GRE optional or accepted",
+    "GRE varies by program",
+  ],
+  [
+    "GMAT required",
+    "GMAT not required",
+    "GMAT optional or accepted",
+    "GMAT varies by program",
+  ],
+  ["SAT or ACT required", "Test optional", "SAT or ACT not considered"],
+  [
+    "Portfolio / competency evidence required",
+    "Portfolio / competency evidence optional",
+    "Portfolio / competency evidence not considered",
+    "Portfolio / competency evidence varies by program",
+  ],
 ];
+const testPreferences = testPreferenceFamilies.flat();
 const intakeOptions = ["Fall", "Spring", "Summer"];
 
 const countryCodes: Record<string, string> = {
@@ -512,73 +524,31 @@ function hasSelectedValue(selected: string[], available: Iterable<string>) {
   return selected.length === 0 || selected.some((value) => availableValues.has(value));
 }
 
-function matchesBinaryPreference(
-  selected: string[],
-  requiredLabel: string,
-  notRequiredLabel: string,
-  actual: boolean,
-) {
-  const relevant = selected.filter(
-    (value) => value === requiredLabel || value === notRequiredLabel,
-  );
-
-  return (
-    relevant.length === 0 ||
-    relevant.some((value) => (value === requiredLabel ? actual : !actual))
-  );
-}
-
 function matchesTestPreferences(
-  university: University,
-  metadata: UniversitySearchMetadata,
+  programRecord: ProgramSearchRecord | undefined,
   selected: string[],
+  selectedDegreeLevels: string[],
 ) {
-  if (
-    !matchesBinaryPreference(
-      selected,
-      "GRE required",
-      "GRE not required",
-      university.greRequired,
-    )
-  ) {
-    return false;
-  }
-  if (
-    !matchesBinaryPreference(
-      selected,
-      "GMAT required",
-      "GMAT not required",
-      university.gmatRequired,
-    )
-  ) {
-    return false;
-  }
-  if (
-    !matchesBinaryPreference(
-      selected,
-      "Portfolio required",
-      "Portfolio not required",
-      metadata.portfolioRequired,
-    )
-  ) {
-    return false;
-  }
+  if (selected.length === 0) return true;
 
-  const generalTestPolicies = selected.filter(
-    (value) => value === "SAT or ACT required" || value === "Test optional",
+  const policiesByLevel = programRecord?.testPoliciesByDegreeLevel;
+  if (!policiesByLevel) return false;
+
+  const applicableLevels =
+    selectedDegreeLevels.length > 0
+      ? selectedDegreeLevels
+      : Object.keys(policiesByLevel);
+  const availablePolicies = new Set(
+    applicableLevels.flatMap((level) => policiesByLevel[level] ?? []),
   );
-  if (
-    generalTestPolicies.length > 0 &&
-    !generalTestPolicies.some((value) =>
-      value === "SAT or ACT required"
-        ? university.id === "10"
-        : !university.greRequired && !university.gmatRequired,
-    )
-  ) {
-    return false;
-  }
 
-  return true;
+  return testPreferenceFamilies.every((family) => {
+    const selectedInFamily = family.filter((policy) => selected.includes(policy));
+    return (
+      selectedInFamily.length === 0 ||
+      selectedInFamily.some((policy) => availablePolicies.has(policy))
+    );
+  });
 }
 
 function matchesProgramFilters(
@@ -608,6 +578,15 @@ function matchesProgramFilters(
   if (!hasSelectedValue(filters.subjects, availableSubjects)) return false;
   if (!hasSelectedValue(filters.deliveryModes, availableDeliveryModes)) return false;
   if (!hasSelectedValue(filters.institutionTypes, availableInstitutionTypes)) return false;
+  if (
+    !matchesTestPreferences(
+      programRecord,
+      filters.testPreferences,
+      filters.degreeLevels,
+    )
+  ) {
+    return false;
+  }
 
   if (filters.degreeLevels.length > 0 && filters.subjects.length > 0) {
     const subjectsByLevel = programRecord?.subjectsByDegreeLevel ?? {};
@@ -641,7 +620,6 @@ function requiresProfileData(filters: Filters) {
     filters.funding.length > 0 ||
     filters.applicationMethods.length > 0 ||
     filters.intakes.length > 0 ||
-    filters.testPreferences.length > 0 ||
     filters.maxTuition < MAX_TUITION ||
     filters.maxRanking < MAX_RANKING ||
     filters.gpaScore !== gpaSystems[filters.gpaSystem].defaultScore ||
@@ -819,6 +797,21 @@ export function SearchPage() {
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [showFilters, setShowFilters] = useState(false);
   const workspaceRef = useRef<HTMLDivElement>(null);
+  const testPolicyCoverage = useMemo(() => {
+    let count = 0;
+    let latestAdmissionsYear = 0;
+
+    programSearchRecords.forEach((record) => {
+      const policies = Object.values(record.testPoliciesByDegreeLevel ?? {});
+      if (policies.some((values) => values.length > 0)) count += 1;
+      latestAdmissionsYear = Math.max(
+        latestAdmissionsYear,
+        record.admissionsYear ?? 0,
+      );
+    });
+
+    return { count, latestAdmissionsYear };
+  }, [programSearchRecords]);
 
   const [page, setPage] = useState(1);
   const compareUniversities = universities.filter((university) =>
@@ -937,9 +930,6 @@ export function SearchPage() {
         if (university.internationalPercent < filters.minInternational) return false;
         if (filters.scholarshipOnly && !university.scholarshipAvailable) return false;
         if (filters.tuitionFreeOnly && getAnnualTuition(university) !== 0) return false;
-        if (!matchesTestPreferences(university, metadata, filters.testPreferences)) {
-          return false;
-        }
 
         return true;
       })
@@ -1738,6 +1728,13 @@ export function SearchPage() {
                   selected={filters.testPreferences}
                   onToggle={(value) => toggleListFilter("testPreferences", value)}
                 />
+                <p className="search-filter-coverage-note">
+                  {testPolicyCoverage.count.toLocaleString()} institutions have connected
+                  test-policy data. SAT/ACT and competency evidence use IPEDS{" "}
+                  {testPolicyCoverage.latestAdmissionsYear || "current"} first-time
+                  undergraduate admissions. GRE, GMAT, and portfolio policies only match
+                  explicit official program statements.
+                </p>
               </FilterSection>
 
               <FilterSection title="University type" defaultOpen={false}>
@@ -1869,14 +1866,18 @@ export function SearchPage() {
                   <Search size={23} aria-hidden="true" />
                 </span>
                 <h2>
-                  {admissionsFiltersActive
-                    ? "No source-backed universities match every filter"
-                    : "No universities match every filter"}
+                  {filters.testPreferences.length > 0
+                    ? "No published test policy matches this selection"
+                    : admissionsFiltersActive
+                      ? "No source-backed universities match every filter"
+                      : "No universities match every filter"}
                 </h2>
                 <p>
-                  {admissionsFiltersActive
-                    ? "No connected source verifies every selected criterion. Remove a constraint or reset the filters."
-                    : "Remove one or two constraints, or reset the search to see all available options."}
+                  {filters.testPreferences.length > 0
+                    ? "Unpublished policies are treated as unknown, never as not required. Try another policy or program level."
+                    : admissionsFiltersActive
+                      ? "No connected source verifies every selected criterion. Remove a constraint or reset the filters."
+                      : "Remove one or two constraints, or reset the search to see all available options."}
                 </p>
                 <button type="button" onClick={resetFilters}>
                   Reset all filters

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 export type ProgramSearchRecord = {
+  admissionsYear?: number;
   degreeLevels: string[];
   deliveryModes: string[];
   institutionId: string;
@@ -16,6 +17,7 @@ export type ProgramSearchRecord = {
   sourceUpdatedAt: string;
   subjects: string[];
   subjectsByDegreeLevel: Record<string, string[]>;
+  testPoliciesByDegreeLevel?: Record<string, string[]>;
 };
 
 type ProgramSearchIndex = {
