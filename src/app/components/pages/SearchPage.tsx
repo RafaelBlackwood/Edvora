@@ -94,6 +94,7 @@ type Filters = ListFilters & {
   region: string;
   scholarshipOnly: boolean;
   tuitionFreeOnly: boolean;
+  verifiedTestPoliciesOnly: boolean;
   websiteOnly: boolean;
 };
 
@@ -213,6 +214,7 @@ const defaultFilters: Filters = {
   subjects: [],
   testPreferences: [],
   tuitionFreeOnly: false,
+  verifiedTestPoliciesOnly: false,
   websiteOnly: false,
 };
 
@@ -524,15 +526,23 @@ function hasSelectedValue(selected: string[], available: Iterable<string>) {
   return selected.length === 0 || selected.some((value) => availableValues.has(value));
 }
 
-function matchesTestPreferences(
+type TestPolicyMatch = "confirmed" | "incompatible" | "unknown";
+
+const testPolicyMatchOrder: Record<TestPolicyMatch, number> = {
+  confirmed: 0,
+  unknown: 1,
+  incompatible: 2,
+};
+
+function getTestPolicyMatch(
   programRecord: ProgramSearchRecord | undefined,
   selected: string[],
   selectedDegreeLevels: string[],
-) {
-  if (selected.length === 0) return true;
+): TestPolicyMatch {
+  if (selected.length === 0) return "confirmed";
 
   const policiesByLevel = programRecord?.testPoliciesByDegreeLevel;
-  if (!policiesByLevel) return false;
+  if (!policiesByLevel) return "unknown";
 
   const applicableLevels =
     selectedDegreeLevels.length > 0
@@ -542,13 +552,41 @@ function matchesTestPreferences(
     applicableLevels.flatMap((level) => policiesByLevel[level] ?? []),
   );
 
-  return testPreferenceFamilies.every((family) => {
+  let hasUnknownFamily = false;
+
+  for (const family of testPreferenceFamilies) {
     const selectedInFamily = family.filter((policy) => selected.includes(policy));
-    return (
-      selectedInFamily.length === 0 ||
-      selectedInFamily.some((policy) => availablePolicies.has(policy))
-    );
-  });
+    if (selectedInFamily.length === 0) continue;
+
+    const availableInFamily = family.filter((policy) => availablePolicies.has(policy));
+    if (availableInFamily.length === 0) {
+      hasUnknownFamily = true;
+      continue;
+    }
+
+    if (selectedInFamily.some((policy) => availablePolicies.has(policy))) {
+      continue;
+    }
+
+    if (availableInFamily.some((policy) => policy.endsWith("varies by program"))) {
+      hasUnknownFamily = true;
+      continue;
+    }
+
+    return "incompatible";
+  }
+
+  return hasUnknownFamily ? "unknown" : "confirmed";
+}
+
+function matchesTestPreferences(
+  programRecord: ProgramSearchRecord | undefined,
+  selected: string[],
+  selectedDegreeLevels: string[],
+  verifiedOnly: boolean,
+) {
+  const match = getTestPolicyMatch(programRecord, selected, selectedDegreeLevels);
+  return match === "confirmed" || (!verifiedOnly && match === "unknown");
 }
 
 function matchesProgramFilters(
@@ -583,6 +621,7 @@ function matchesProgramFilters(
       programRecord,
       filters.testPreferences,
       filters.degreeLevels,
+      filters.verifiedTestPoliciesOnly,
     )
   ) {
     return false;
@@ -1035,6 +1074,25 @@ export function SearchPage() {
         return true;
       })
       .sort((first, second) => {
+        if (filters.testPreferences.length > 0) {
+          const policyDifference =
+            testPolicyMatchOrder[
+              getTestPolicyMatch(
+                first.programRecord,
+                filters.testPreferences,
+                filters.degreeLevels,
+              )
+            ] -
+            testPolicyMatchOrder[
+              getTestPolicyMatch(
+                second.programRecord,
+                filters.testPreferences,
+                filters.degreeLevels,
+              )
+            ];
+          if (policyDifference !== 0) return policyDifference;
+        }
+
         if (first.profile && second.profile) {
           if (sortMode === "ranking") return first.profile.ranking - second.profile.ranking;
           if (sortMode === "tuition") {
@@ -1056,6 +1114,24 @@ export function SearchPage() {
         return first.institution.name.localeCompare(second.institution.name);
       });
   }, [admissionsFiltersActive, catalogEntries, filteredUniversities, filters, query, sortMode]);
+
+  const testPolicyResultSummary = useMemo(() => {
+    if (filters.testPreferences.length === 0) return null;
+
+    return unifiedResults.reduce(
+      (summary, result) => {
+        const match = getTestPolicyMatch(
+          result.programRecord,
+          filters.testPreferences,
+          filters.degreeLevels,
+        );
+        if (match === "confirmed") summary.confirmed += 1;
+        if (match === "unknown") summary.unknown += 1;
+        return summary;
+      },
+      { confirmed: 0, unknown: 0 },
+    );
+  }, [filters.degreeLevels, filters.testPreferences, unifiedResults]);
 
   const pageCount = Math.max(1, Math.ceil(unifiedResults.length / PAGE_SIZE));
   const visibleResults = unifiedResults.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -1124,6 +1200,14 @@ export function SearchPage() {
         label: "Source-backed program data",
         remove: () =>
           setFilters((current) => ({ ...current, admissionsDataOnly: false })),
+      });
+    }
+    if (filters.testPreferences.length > 0 && filters.verifiedTestPoliciesOnly) {
+      chips.push({
+        key: "verified-test-policies",
+        label: "Verified test policies only",
+        remove: () =>
+          setFilters((current) => ({ ...current, verifiedTestPoliciesOnly: false })),
       });
     }
 
@@ -1728,12 +1812,30 @@ export function SearchPage() {
                   selected={filters.testPreferences}
                   onToggle={(value) => toggleListFilter("testPreferences", value)}
                 />
+                {filters.testPreferences.length > 0 && (
+                  <label className="search-switch-row">
+                    <span>
+                      <strong>Verified test policies only</strong>
+                    </span>
+                    <input
+                      type="checkbox"
+                      checked={filters.verifiedTestPoliciesOnly}
+                      onChange={(event) =>
+                        setFilters((current) => ({
+                          ...current,
+                          verifiedTestPoliciesOnly: event.target.checked,
+                        }))
+                      }
+                    />
+                  </label>
+                )}
                 <p className="search-filter-coverage-note">
                   {testPolicyCoverage.count.toLocaleString()} institutions have connected
                   test-policy data. SAT/ACT and competency evidence use IPEDS{" "}
                   {testPolicyCoverage.latestAdmissionsYear || "current"} first-time
-                  undergraduate admissions. GRE, GMAT, and portfolio policies only match
-                  explicit official program statements.
+                  undergraduate admissions. GRE, GMAT, and portfolio policies use explicit
+                  official statements. Unpublished policies remain listed as awaiting
+                  verification.
                 </p>
               </FilterSection>
 
@@ -1828,11 +1930,17 @@ export function SearchPage() {
                   {unifiedResults.length.toLocaleString()} universities
                 </strong>
                 <span>
-                  {admissionsFiltersActive
-                    ? sourceBackedUniversityCount.toLocaleString() +
-                      " source-backed universities / " +
-                      programSourceSummary
-                    : (manifest?.institutionCount.toLocaleString() ?? "Worldwide") + " in catalog"}
+                  {filters.testPreferences.length > 0 && testPolicyResultSummary
+                    ? testPolicyResultSummary.confirmed.toLocaleString() +
+                      " verified / " +
+                      testPolicyResultSummary.unknown.toLocaleString() +
+                      " awaiting verification"
+                    : admissionsFiltersActive
+                      ? sourceBackedUniversityCount.toLocaleString() +
+                        " source-backed universities / " +
+                        programSourceSummary
+                      : (manifest?.institutionCount.toLocaleString() ?? "Worldwide") +
+                        " in catalog"}
                 </span>
               </div>
               <span>
@@ -1867,14 +1975,18 @@ export function SearchPage() {
                 </span>
                 <h2>
                   {filters.testPreferences.length > 0
-                    ? "No published test policy matches this selection"
+                    ? filters.verifiedTestPoliciesOnly
+                      ? "No verified test policy matches this selection"
+                      : "No compatible test-policy candidates found"
                     : admissionsFiltersActive
                       ? "No source-backed universities match every filter"
                       : "No universities match every filter"}
                 </h2>
                 <p>
                   {filters.testPreferences.length > 0
-                    ? "Unpublished policies are treated as unknown, never as not required. Try another policy or program level."
+                    ? filters.verifiedTestPoliciesOnly
+                      ? "No connected official source confirms every selected policy. Turn off verified-only or change a policy."
+                      : "Every source-backed candidate has an explicitly incompatible published policy. Try another policy or program level."
                     : admissionsFiltersActive
                       ? "No connected source verifies every selected criterion. Remove a constraint or reset the filters."
                       : "Remove one or two constraints, or reset the search to see all available options."}
@@ -1887,6 +1999,15 @@ export function SearchPage() {
               <>
                 <div className={"search-result-grid " + (viewMode === "list" ? "is-list" : "")}>
                 {visibleResults.map(({ institution, profile, programRecord }) => {
+                  const testPolicyMatch =
+                    filters.testPreferences.length > 0
+                      ? getTestPolicyMatch(
+                          programRecord,
+                          filters.testPreferences,
+                          filters.degreeLevels,
+                        )
+                      : null;
+
                   if (!profile) {
                     const location = [
                       institution.city,
@@ -1943,6 +2064,14 @@ export function SearchPage() {
                           </div>
 
                           <div className="search-result-tags">
+                            {testPolicyMatch && (
+                              <span className={testPolicyMatch === "confirmed" ? "is-free" : ""}>
+                                <Check size={11} aria-hidden="true" />
+                                {testPolicyMatch === "confirmed"
+                                  ? "Test policy verified"
+                                  : "Policy verification pending"}
+                              </span>
+                            )}
                             <span>
                               <Globe2 size={11} aria-hidden="true" />
                               {institution.website ? "Official site" : "ROR record"}
@@ -2088,6 +2217,14 @@ export function SearchPage() {
                         </div>
 
                         <div className="search-result-tags">
+                          {testPolicyMatch && (
+                            <span className={testPolicyMatch === "confirmed" ? "is-free" : ""}>
+                              <Check size={11} aria-hidden="true" />
+                              {testPolicyMatch === "confirmed"
+                                ? "Test policy verified"
+                                : "Policy verification pending"}
+                            </span>
+                          )}
                           {university.scholarshipAvailable && (
                             <span className="is-funding">
                               <Award size={11} aria-hidden="true" />

@@ -98,6 +98,10 @@ type ProfileRow = {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+const GUEST_ACCESS_ENABLED =
+  import.meta.env.DEV ||
+  import.meta.env.VITE_ENABLE_GUEST_ACCESS === "true" ||
+  ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
 const DEV_GUEST_SESSION_KEY = "edvora.dev.guest";
 const DEV_GUEST_USER: AuthUser = {
   avatar: userProfile.avatar,
@@ -110,7 +114,7 @@ const DEV_GUEST_USER: AuthUser = {
 };
 
 function getDevGuestUser() {
-  if (!import.meta.env.DEV || window.sessionStorage.getItem(DEV_GUEST_SESSION_KEY) !== "true") {
+  if (!GUEST_ACCESS_ENABLED || window.sessionStorage.getItem(DEV_GUEST_SESSION_KEY) !== "true") {
     return null;
   }
 
@@ -261,7 +265,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [hydrateSession]);
 
   const continueAsGuest = () => {
-    if (!import.meta.env.DEV) {
+    if (!GUEST_ACCESS_ENABLED) {
       return;
     }
 
@@ -500,7 +504,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const value = useMemo<AuthContextValue>(
     () => ({
-      canUseGuestAccess: import.meta.env.DEV,
+      canUseGuestAccess: GUEST_ACCESS_ENABLED,
       continueAsGuest,
       isAuthenticated: Boolean(user),
       isLoading,
